@@ -14,6 +14,7 @@
 #include "device_fem_data.cuh"
 
 #include "PCG_SOLVER.cuh"
+#include <gipc/runtime_config.h>
 #include <gipc/abd_fem_count_info.h>
 namespace gipc
 {
@@ -136,6 +137,11 @@ class GIPC
     double pcg_threshold           = 0.0;
 
     gipc::ABDFEMCountInfo abd_fem_count_info{};
+    gipc::RuntimeBackendConfig runtime_backend_config{};
+    bool                      benchmark_mode             = false;
+    bool                      verbose_output             = true;
+    bool                      write_legacy_time_cost_file = true;
+    bool                      write_statistics_file      = true;
 
   public:
     GIPC();

@@ -20,6 +20,7 @@ class Statistics
     auto  frame(int i) { m_frame = i; }
     auto  frame() { return m_frame; }
     auto& at_current_frame() { return m_json["frames"][m_frame]; }
+    void reset();
     void write_to_file(const std::string& filename);
 };
 }  // namespace gipc

@@ -13,6 +13,7 @@
 #include <thrust/device_ptr.h>
 #include <thrust/sort.h>
 
+#include <algorithm>
 #include <vector>
 #include <bitset>
 
@@ -23,7 +24,6 @@ using namespace cooperative_groups;
 //#include "Eigen/Eigen"
 using namespace std;
 #define SYME
-#define GROUP
 
 
 __global__ void _buildCML0(const unsigned int* _neighborStart,
@@ -740,7 +740,7 @@ __global__ void __buildMultiLevelR_optimized_new(const double3* _R,
         return;
 
     Eigen::Vector3f r;
-    int             idx = _partId_map_real[pdx];
+    int             idx = _partId_map_real ? _partId_map_real[pdx] : pdx;
     if(idx >= 0)
     {
 
@@ -859,7 +859,7 @@ __global__ void __collectFinalZ_new(double3*                  _Z,
         return;
 
     Precision_T3 cz;  // = d_multiLevelZ[idx];
-    int          rdx            = _real_map_partId[idx];
+    int          rdx            = _real_map_partId ? _real_map_partId[idx] : idx;
     cz.x                        = d_multiLevelZ[rdx].x;
     cz.y                        = d_multiLevelZ[rdx].y;
     cz.z                        = d_multiLevelZ[rdx].z;
@@ -1168,7 +1168,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
         {
             for(int i = 0; i < 4; i++)
                 if(collitionPairStartId[i] >= 0)
-                    cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                    cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                : collitionPairStartId[i];
                 else
                     cpVid[i] = -1;
         }
@@ -1240,7 +1241,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
                 {
                     for(int i = 0; i < 4; i++)
                         if(collitionPairStartId[i] >= 0)
-                            cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                            cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                        : collitionPairStartId[i];
                         else
                             cpVid[i] = -1;
                 }
@@ -1303,7 +1305,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
                 {
                     for(int i = 0; i < 2; i++)
                         if(collitionPairStartId[i] >= 0)
-                            cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                            cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                        : collitionPairStartId[i];
                         else
                             cpVid[i] = -1;
                 }
@@ -1370,7 +1373,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
                 {
                     for(int i = 0; i < 4; i++)
                         if(collitionPairStartId[i] >= 0)
-                            cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                            cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                        : collitionPairStartId[i];
                         else
                             cpVid[i] = -1;
                 }
@@ -1432,7 +1436,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
                 {
                     for(int i = 0; i < 3; i++)
                         if(collitionPairStartId[i] >= 0)
-                            cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                            cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                        : collitionPairStartId[i];
                         else
                             cpVid[i] = -1;
                 }
@@ -1495,7 +1500,8 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
             {
                 for(int i = 0; i < 4; i++)
                     if(collitionPairStartId[i] >= 0)
-                        cpVid[i] = _real_map_partId[collitionPairStartId[i]];
+                        cpVid[i] = _real_map_partId ? _real_map_partId[collitionPairStartId[i]]
+                                                    : collitionPairStartId[i];
                     else
                         cpVid[i] = -1;
             }
@@ -1544,83 +1550,84 @@ __global__ void _buildCollisionConnection_new(unsigned int* _pConnect,
 
 void MASPreconditioner::BuildConnectMaskL0()
 {
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        int number = totalMapNodes;
+        if(number < 1)
+            return;
+        int blockSize = DEFAULT_BLOCKSIZE;
+        int numBlocks = (number + blockSize - 1) / blockSize;
 
-    //int number = totalNodes;
-#ifdef GROUP
-    int number    = totalMapNodes;
-    if(number < 1)
+        _buildCML0_new<<<numBlocks, blockSize>>>(d_neighborStart,
+                                                 d_neighborNum,
+                                                 d_neighborList,
+                                                 d_fineConnectMask,
+                                                 d_partId_map_real,
+                                                 d_real_map_partId,
+                                                 number);
         return;
-    int blockSize = DEFAULT_BLOCKSIZE;
-    int numBlocks = (number + blockSize - 1) / blockSize;
+    }
 
-    _buildCML0_new<<<numBlocks, blockSize>>>(d_neighborStart,
-                                             d_neighborNum,
-                                             d_neighborList,
-                                             d_fineConnectMask,
-                                             d_partId_map_real,
-                                             d_real_map_partId,
-                                             number);
-#else
     int number    = totalNodes;
     int blockSize = DEFAULT_BLOCKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
 
     _buildCML0<<<numBlocks, blockSize>>>(
         d_neighborStart, d_neighborNum, d_neighborList, d_fineConnectMask, number);
-#endif
 }
 
 void MASPreconditioner::PreparePrefixSumL0()
 {
-    //int number = totalNodes;
-#ifdef GROUP
-    int number    = totalMapNodes;
-    if(number < 1)
-        return;
-    int blockSize = DEFAULT_BLOCKSIZE;
-    int numBlocks = (number + blockSize - 1) / blockSize;
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        int number = totalMapNodes;
+        if(number < 1)
+            return;
+        int blockSize = DEFAULT_BLOCKSIZE;
+        int numBlocks = (number + blockSize - 1) / blockSize;
 
-    _preparePrefixSumL0_new<<<numBlocks, blockSize>>>(
-        d_prefixOriginal, d_fineConnectMask, d_partId_map_real, number);
-#else
-    int number    = totalNodes;
+        _preparePrefixSumL0_new<<<numBlocks, blockSize>>>(
+            d_prefixOriginal, d_fineConnectMask, d_partId_map_real, number);
+        return;
+    }
+
+    int number = totalNodes;
     if(number < 1)
         return;
     int blockSize = DEFAULT_BLOCKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
 
     _preparePrefixSumL0<<<numBlocks, blockSize>>>(d_prefixOriginal, d_fineConnectMask, number);
-#endif
 }
 
 void MASPreconditioner::BuildLevel1()
 {
-    //int number = totalNodes;
-#ifdef GROUP
-    int number    = totalMapNodes;
-    if(number < 1)
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        int number = totalMapNodes;
+        if(number < 1)
+            return;
+        int blockSize = BANKSIZE * BANKSIZE;
+        int numBlocks = (number + blockSize - 1) / blockSize;
+        int warpNum   = (number + BANKSIZE - 1) / BANKSIZE;
+        thrust::exclusive_scan(thrust::device_ptr<int>(d_prefixOriginal),
+                               thrust::device_ptr<int>(d_prefixOriginal) + warpNum,
+                               thrust::device_ptr<int>(d_prefixSumOriginal));
+        _buildLevel1_new<<<numBlocks, blockSize>>>(d_levelSize,
+                                                   d_coarseSpaceTables,
+                                                   d_goingNext,
+                                                   d_fineConnectMask,
+                                                   d_prefixSumOriginal,
+                                                   d_prefixOriginal,
+                                                   d_partId_map_real,
+                                                   number);
         return;
-    int blockSize = BANKSIZE * BANKSIZE;
-    int numBlocks = (number + blockSize - 1) / blockSize;
-    //exclusive(d_prefixOriginal, d_prefixSumOriginal); wait to do;
-    int warpNum = (number + BANKSIZE - 1) / BANKSIZE;
-    thrust::exclusive_scan(thrust::device_ptr<int>(d_prefixOriginal),
-                           thrust::device_ptr<int>(d_prefixOriginal) + warpNum,
-                           thrust::device_ptr<int>(d_prefixSumOriginal));
-    _buildLevel1_new<<<numBlocks, blockSize>>>(d_levelSize,
-                                               d_coarseSpaceTables,
-                                               d_goingNext,
-                                               d_fineConnectMask,
-                                               d_prefixSumOriginal,
-                                               d_prefixOriginal,
-                                               d_partId_map_real,
-                                               number);
-#else
+    }
+
     int number    = totalNodes;
     int blockSize = BANKSIZE * BANKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
-    //exclusive(d_prefixOriginal, d_prefixSumOriginal); wait to do;
-    int warpNum = (number + BANKSIZE - 1) / BANKSIZE;
+    int warpNum   = (number + BANKSIZE - 1) / BANKSIZE;
     thrust::exclusive_scan(thrust::device_ptr<int>(d_prefixOriginal),
                            thrust::device_ptr<int>(d_prefixOriginal) + warpNum,
                            thrust::device_ptr<int>(d_prefixSumOriginal));
@@ -1631,30 +1638,31 @@ void MASPreconditioner::BuildLevel1()
                                            d_prefixSumOriginal,
                                            d_prefixOriginal,
                                            number);
-#endif
 }
 
 void MASPreconditioner::BuildConnectMaskLx(int level)
 {
-    //int number = totalNodes;
-#ifdef GROUP
-    int number    = totalMapNodes;
-    if(number < 1)
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        int number = totalMapNodes;
+        if(number < 1)
+            return;
+        int blockSize = DEFAULT_BLOCKSIZE;
+        int numBlocks = (number + blockSize - 1) / blockSize;
+        _buildConnectMaskLx_new<<<numBlocks, blockSize>>>(d_neighborStart,
+                                                          d_neighborNum,
+                                                          d_neighborList,
+                                                          d_coarseSpaceTables,
+                                                          d_nextConnectMask,
+                                                          d_fineConnectMask,
+                                                          level,
+                                                          d_partId_map_real,
+                                                          totalNodes,
+                                                          number);
         return;
-    int blockSize = DEFAULT_BLOCKSIZE;
-    int numBlocks = (number + blockSize - 1) / blockSize;
-    _buildConnectMaskLx_new<<<numBlocks, blockSize>>>(d_neighborStart,
-                                                      d_neighborNum,
-                                                      d_neighborList,
-                                                      d_coarseSpaceTables,
-                                                      d_nextConnectMask,
-                                                      d_fineConnectMask,
-                                                      level,
-                                                      d_partId_map_real,
-                                                      totalNodes,
-                                                      number);
-#else
-    int number    = totalNodes;
+    }
+
+    int number = totalNodes;
     if(number < 1)
         return;
     int blockSize = DEFAULT_BLOCKSIZE;
@@ -1667,7 +1675,6 @@ void MASPreconditioner::BuildConnectMaskLx(int level)
                                                   d_fineConnectMask,
                                                   level,
                                                   number);
-#endif
 }
 
 void MASPreconditioner::NextLevelCluster(int level)
@@ -1752,21 +1759,27 @@ void MASPreconditioner::BuildCollisionConnection(unsigned int* connectionMsk,
         return;
     int blockSize = DEFAULT_BLOCKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
-#ifdef GROUP
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        _buildCollisionConnection_new<<<numBlocks, blockSize>>>(connectionMsk,
+                                                                coarseTableSpace,
+                                                                _collisonPairs,
+                                                                d_real_map_partId,
+                                                                level,
+                                                                collision_node_Offset,
+                                                                totalNodes,
+                                                                number);
+        return;
+    }
+
     _buildCollisionConnection_new<<<numBlocks, blockSize>>>(connectionMsk,
                                                             coarseTableSpace,
                                                             _collisonPairs,
-                                                            d_real_map_partId,
+                                                            nullptr,
                                                             level,
                                                             collision_node_Offset,
                                                             totalNodes,
                                                             number);
-
-#else
-    _buildCollisionConnection<<<numBlocks, blockSize>>>(
-        connectionMsk, coarseTableSpace, _collisonPairs, level, collision_node_Offset, totalNodes, number);
-
-#endif
 }
 #include <fstream>
 int MASPreconditioner::ReorderRealtime(int cpNum)
@@ -2095,26 +2108,37 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
 
 void MASPreconditioner::BuildMultiLevelR(const double3* R)
 {
-
-
-#ifdef GROUP
-    int number = totalMapNodes;
-    if(number < 1)
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        int number = totalMapNodes;
+        if(number < 1)
+            return;
+        int blockSize = DEFAULT_BLOCKSIZE;
+        int numBlocks = (number + blockSize - 1) / blockSize;
+        __buildMultiLevelR_optimized_new<<<numBlocks, blockSize>>>(R,
+                                                                   d_multiLevelR,
+                                                                   d_goingNext,
+                                                                   d_prefixOriginal,
+                                                                   d_fineConnectMask,
+                                                                   d_partId_map_real,
+                                                                   levelnum,
+                                                                   number);
         return;
-    int blockSize = DEFAULT_BLOCKSIZE;
-    int numBlocks = (number + blockSize - 1) / blockSize;
-    __buildMultiLevelR_optimized_new<<<numBlocks, blockSize>>>(
-        R, d_multiLevelR, d_goingNext, d_prefixOriginal, d_fineConnectMask, d_partId_map_real, levelnum, number);
+    }
 
-#else
     int number = totalNodes;
     if(number < 1)
         return;
     int blockSize = DEFAULT_BLOCKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
-    __buildMultiLevelR_optimized<<<numBlocks, blockSize>>>(
-        R, d_multiLevelR, d_goingNext, d_fineConnectMask, levelnum, number);
-#endif
+    __buildMultiLevelR_optimized_new<<<numBlocks, blockSize>>>(R,
+                                                               d_multiLevelR,
+                                                               d_goingNext,
+                                                               d_prefixOriginal,
+                                                               d_fineConnectMask,
+                                                               nullptr,
+                                                               levelnum,
+                                                               number);
 }
 
 void MASPreconditioner::SchwarzLocalXSym()
@@ -2166,12 +2190,15 @@ void MASPreconditioner::CollectFinalZ(double3* Z)
         return;
     int blockSize = DEFAULT_BLOCKSIZE;
     int numBlocks = (number + blockSize - 1) / blockSize;
-#ifdef GROUP
+    if(m_backend == gipc::MasBackend::CEMAS)
+    {
+        __collectFinalZ_new<<<numBlocks, blockSize>>>(
+            Z, d_multiLevelZ, d_coarseTable, d_real_map_partId, levelnum, number);
+        return;
+    }
+
     __collectFinalZ_new<<<numBlocks, blockSize>>>(
-        Z, d_multiLevelZ, d_coarseTable, d_real_map_partId, levelnum, number);
-#else
-    __collectFinalZ<<<numBlocks, blockSize>>>(Z, d_multiLevelZ, d_coarseTable, levelnum, number);
-#endif
+        Z, d_multiLevelZ, d_coarseTable, nullptr, levelnum, number);
 
 }
 
@@ -2314,48 +2341,58 @@ void MASPreconditioner::initPreconditioner_Matrix()
                               totalNodes * sizeof(unsigned int),
                               cudaMemcpyDeviceToDevice));
 
-    int totalCluster = ReorderRealtime(0) * 1.05;
+    int totalCluster = std::max(1, static_cast<int>(ReorderRealtime(0) * 1.05));
+    int matrixCount  = std::max(1, (totalCluster + BANKSIZE - 1) / BANKSIZE);
 #ifdef SYME
     CUDA_SAFE_CALL(cudaMalloc((void**)&d_inverseMatMas,
-                              totalCluster / BANKSIZE * sizeof(__GEIGEN__::MasMatrixSymT)));
+                              matrixCount * sizeof(__GEIGEN__::MasMatrixSymT)));
 #else
     CUDA_SAFE_CALL(cudaMalloc((void**)&d_MatMas,
-                              totalCluster / BANKSIZE * sizeof(__GEIGEN__::MasMatrixT)));
+                              matrixCount * sizeof(__GEIGEN__::MasMatrixT)));
 #endif
 
     CUDA_SAFE_CALL(cudaMalloc((void**)&d_precondMatMas,
-                              totalCluster / BANKSIZE * sizeof(__GEIGEN__::MasMatrixSymf)));
+                              matrixCount * sizeof(__GEIGEN__::MasMatrixSymf)));
     CUDA_SAFE_CALL(cudaMalloc((void**)&d_multiLevelR, totalCluster * sizeof(Eigen::Vector3f)));
     CUDA_SAFE_CALL(cudaMalloc((void**)&d_multiLevelZ, totalCluster * sizeof(Precision_T3)));
 }
 
 void MASPreconditioner::FreeMAS()
 {
-    CUDA_SAFE_CALL(cudaFree(d_denseLevel));
-    CUDA_SAFE_CALL(cudaFree(d_coarseSpaceTables));
-    CUDA_SAFE_CALL(cudaFree(d_levelSize));
-    CUDA_SAFE_CALL(cudaFree(d_goingNext));
-    CUDA_SAFE_CALL(cudaFree(d_prefixOriginal));
-    CUDA_SAFE_CALL(cudaFree(d_nextPrefix));
-    CUDA_SAFE_CALL(cudaFree(d_nextPrefixSum));
-    CUDA_SAFE_CALL(cudaFree(d_prefixSumOriginal));
-    CUDA_SAFE_CALL(cudaFree(d_fineConnectMask));
-    CUDA_SAFE_CALL(cudaFree(d_nextConnectMask));
-    CUDA_SAFE_CALL(cudaFree(d_neighborList));
-    CUDA_SAFE_CALL(cudaFree(d_neighborListInit));
-    CUDA_SAFE_CALL(cudaFree(d_neighborStart));
-    CUDA_SAFE_CALL(cudaFree(d_neighborStartTemp));
-    CUDA_SAFE_CALL(cudaFree(d_neighborNum));
-    CUDA_SAFE_CALL(cudaFree(d_neighborNumInit));
-    CUDA_SAFE_CALL(cudaFree(d_partId_map_real));
-    CUDA_SAFE_CALL(cudaFree(d_real_map_partId));
+    auto safe_free = [](auto*& ptr)
+    {
+        if(ptr)
+        {
+            CUDA_SAFE_CALL(cudaFree(ptr));
+            ptr = nullptr;
+        }
+    };
+
+    safe_free(d_denseLevel);
+    safe_free(d_coarseSpaceTables);
+    safe_free(d_levelSize);
+    safe_free(d_goingNext);
+    safe_free(d_prefixOriginal);
+    safe_free(d_nextPrefix);
+    safe_free(d_nextPrefixSum);
+    safe_free(d_prefixSumOriginal);
+    safe_free(d_fineConnectMask);
+    safe_free(d_nextConnectMask);
+    safe_free(d_neighborList);
+    safe_free(d_neighborListInit);
+    safe_free(d_neighborStart);
+    safe_free(d_neighborStartTemp);
+    safe_free(d_neighborNum);
+    safe_free(d_neighborNumInit);
+    safe_free(d_partId_map_real);
+    safe_free(d_real_map_partId);
 #ifdef SYME
-    CUDA_SAFE_CALL(cudaFree(d_inverseMatMas));
+    safe_free(d_inverseMatMas);
 #else
-    CUDA_SAFE_CALL(cudaFree(d_MatMas));
+    safe_free(d_MatMas);
 #endif
 
-    CUDA_SAFE_CALL(cudaFree(d_precondMatMas));
-    CUDA_SAFE_CALL(cudaFree(d_multiLevelR));
-    CUDA_SAFE_CALL(cudaFree(d_multiLevelZ));
+    safe_free(d_precondMatMas);
+    safe_free(d_multiLevelR);
+    safe_free(d_multiLevelZ);
 }

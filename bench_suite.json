@@ -1,0 +1,22 @@
+{
+  "output_root": "Output/benchmarks",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "settings": "Assets/scene/parameterSetting.txt"
+  },
+  "runs": [
+    {
+      "scene": "wrecking_ball",
+      "baseline": "GIPC"
+    },
+    {
+      "scene": "wrecking_ball",
+      "baseline": "StiffGIPC_SRBK"
+    },
+    {
+      "scene": "wrecking_ball",
+      "baseline": "StiffGIPC_CEMAS_SRBK"
+    }
+  ]
+}

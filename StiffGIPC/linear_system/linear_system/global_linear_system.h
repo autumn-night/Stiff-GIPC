@@ -5,6 +5,7 @@
 #include <linear_system/linear_system/linear_subsystem.h>
 #include <linear_system/linear_system/i_linear_system_solver.h>
 #include <linear_system/linear_system/i_preconditioner.h>
+#include <linear_system/linear_system/global_linear_system_options.h>
 #include <muda/ext/linear_system.h>
 #include <gipc/utils/json.h>
 
@@ -21,7 +22,12 @@ class GlobalLinearSystem
     friend class LocalPreconditioner;
 
   public:
-    GlobalLinearSystem() {}
+    GlobalLinearSystem() = default;
+
+    GlobalLinearSystem(const GlobalLinearSystemOptions& options)
+        : m_options{options}
+    {
+    }
 
     ~GlobalLinearSystem();
 
@@ -66,6 +72,7 @@ class GlobalLinearSystem
     GIPCTripletMatrix* gipc_global_triplet = nullptr;
 
   private:
+    GlobalLinearSystemOptions          m_options;
     std::vector<U<ILinearSubsystem>> m_subsystems;
     std::vector<DiagonalSubsystem*>  m_inner_subsystems;
 
@@ -85,6 +92,8 @@ class GlobalLinearSystem
     Spmv                           m_spmv;
     Converter                      m_converter;
     muda::DeviceDenseVector<Float> fake_y;
+    muda::DeviceBCOOMatrix<Float, 3> m_symmetric_bcoo_A;
+    muda::DeviceBCOOMatrix<Float, 3> m_legacy_bcoo_A;
 
 
     bool build_linear_system();

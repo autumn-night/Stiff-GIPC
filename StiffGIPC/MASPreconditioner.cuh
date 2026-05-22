@@ -8,50 +8,52 @@
 
 #include "device_fem_data.cuh"
 #include "eigen_data.h"
+#include <gipc/runtime_config.h>
 #include <muda/ext/linear_system/bcoo_matrix_view.h>
 #include "linear_system/linear_system/global_matrix.h"
 
 class MASPreconditioner
 {
 
-    int totalNodes;
-    int totalMapNodes;
-    int levelnum;
-    int collision_node_Offset;
-    int totalNumberClusters;
+    int totalNodes            = 0;
+    int totalMapNodes         = 0;
+    int levelnum              = 0;
+    int collision_node_Offset = 0;
+    int totalNumberClusters   = 0;
     //int bankSize;
-    int2  h_clevelSize;
-    int4* _collisonPairs;
+    int2  h_clevelSize{};
+    int4* _collisonPairs = nullptr;
 
-    int2*               d_levelSize;
-    int*                d_coarseSpaceTables;
-    int*                d_prefixOriginal;
-    int*                d_prefixSumOriginal;
-    int*                d_goingNext;
-    int*                d_denseLevel;
-    __GEIGEN__::itable* d_coarseTable;
-    unsigned int*       d_fineConnectMask;
-    unsigned int*       d_nextConnectMask;
-    unsigned int*       d_nextPrefix;
-    unsigned int*       d_nextPrefixSum;
+    int2*               d_levelSize         = nullptr;
+    int*                d_coarseSpaceTables = nullptr;
+    int*                d_prefixOriginal    = nullptr;
+    int*                d_prefixSumOriginal = nullptr;
+    int*                d_goingNext         = nullptr;
+    int*                d_denseLevel        = nullptr;
+    __GEIGEN__::itable* d_coarseTable       = nullptr;
+    unsigned int*       d_fineConnectMask   = nullptr;
+    unsigned int*       d_nextConnectMask   = nullptr;
+    unsigned int*       d_nextPrefix        = nullptr;
+    unsigned int*       d_nextPrefixSum     = nullptr;
 
 
-    __GEIGEN__::MasMatrixT*    d_MatMas;
-    __GEIGEN__::MasMatrixSymT* d_inverseMatMas;
-    __GEIGEN__::MasMatrixSymf* d_precondMatMas;
-    Eigen::Vector3f*              d_multiLevelR;
-    Precision_T3*              d_multiLevelZ;
+    __GEIGEN__::MasMatrixT*    d_MatMas        = nullptr;
+    __GEIGEN__::MasMatrixSymT* d_inverseMatMas = nullptr;
+    __GEIGEN__::MasMatrixSymf* d_precondMatMas = nullptr;
+    Eigen::Vector3f*           d_multiLevelR   = nullptr;
+    Precision_T3*              d_multiLevelZ   = nullptr;
+    gipc::MasBackend           m_backend       = gipc::MasBackend::CEMAS;
 
   public:
-    int           neighborListSize;
-    unsigned int* d_neighborList;
-    unsigned int* d_neighborStart;
-    unsigned int* d_neighborStartTemp;
-    unsigned int* d_neighborNum;
-    unsigned int* d_neighborListInit;
-    unsigned int* d_neighborNumInit;
-    int*          d_partId_map_real;
-    int*          d_real_map_partId;
+    int           neighborListSize   = 0;
+    unsigned int* d_neighborList     = nullptr;
+    unsigned int* d_neighborStart    = nullptr;
+    unsigned int* d_neighborStartTemp = nullptr;
+    unsigned int* d_neighborNum      = nullptr;
+    unsigned int* d_neighborListInit = nullptr;
+    unsigned int* d_neighborNumInit  = nullptr;
+    int*          d_partId_map_real  = nullptr;
+    int*          d_real_map_partId  = nullptr;
 
   public:
     void initPreconditioner_Neighbor(int   vertNum,
@@ -62,6 +64,9 @@ class MASPreconditioner
     void computeNumLevels(int vertNum);  // called in initPreconditioner_Neighbor
 
     void initPreconditioner_Matrix();
+
+    void set_backend(gipc::MasBackend backend) { m_backend = backend; }
+    auto backend() const { return m_backend; }
 
 
     int  ReorderRealtime(int cpNum);

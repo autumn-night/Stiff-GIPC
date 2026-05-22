@@ -1,5 +1,6 @@
 #include <GIPC.cuh>
 #include <gipc/gipc.h>
+#include <linear_system/linear_system/global_linear_system_options.h>
 #include <gipc/utils/timer.h>
 #include <gipc/utils/json.h>
 #include <fstream>
@@ -28,7 +29,10 @@ void GIPC::build_gipc_system(device_TetraData& tet)
 
     std::cout << "- create Global Linear System ..." << std::endl;
 
-    m_global_linear_system = std::make_unique<gipc::GlobalLinearSystem>();
+    gipc::GlobalLinearSystemOptions options;
+    options.assembly_backend = runtime_backend_config.assembly_backend;
+    options.spmv_backend     = runtime_backend_config.spmv_backend;
+    m_global_linear_system   = std::make_unique<gipc::GlobalLinearSystem>(options);
 
     std::cout << "* Finished building GIPC system." << std::endl;
 }
@@ -59,6 +63,7 @@ void GIPC::create_LinearSystem(device_TetraData& tet)
 
     if(pcg_data.P_type == 1)
     {
+        pcg_data.MP.set_backend(runtime_backend_config.mas_backend);
 
         m_global_linear_system->create<gipc::MAS_Preconditioner>(
             fem, pcg_data.MP, tet.masses, h_cpNum);

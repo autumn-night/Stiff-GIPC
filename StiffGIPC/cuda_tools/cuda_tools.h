@@ -47,6 +47,7 @@ inline void cuda_safe_call_(cudaError err, const char* file_name, const int num_
 
 
 
+#ifdef __CUDACC__
 template <typename... Arguments>
 void LaunchCudaKernal(int gs, int bs, size_t mem, void (*f)(Arguments...), Arguments... args)
 {
@@ -93,3 +94,4 @@ void LaunchCudaKernal_default(int total, int bs, size_t mem, void (*f)(Arguments
         exit(0);
     }
 }
+#endif

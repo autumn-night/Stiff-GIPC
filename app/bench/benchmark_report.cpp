@@ -1,0 +1,141 @@
+#include "app/bench/benchmark_report.h"
+
+#include <cuda_runtime.h>
+
+#include <cmath>
+#include <fstream>
+#include <numeric>
+
+namespace app::bench
+{
+namespace
+{
+double average(const std::vector<double>& values)
+{
+    if(values.empty())
+        return 0.0;
+    return std::accumulate(values.begin(), values.end(), 0.0) / values.size();
+}
+
+double stddev(const std::vector<double>& values, double mean)
+{
+    if(values.empty())
+        return 0.0;
+
+    double accum = 0.0;
+    for(double value : values)
+    {
+        double delta = value - mean;
+        accum += delta * delta;
+    }
+    return std::sqrt(accum / values.size());
+}
+}  // namespace
+
+BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,
+                                     const gipc::Json& frames_json)
+{
+    std::vector<double> hess_values;
+    std::vector<double> lsolver_values;
+    std::vector<double> lines_values;
+    std::vector<double> misc_values;
+    std::vector<double> total_values;
+    std::vector<double> newton_values;
+    std::vector<double> cg_values;
+    std::vector<double> contact_values;
+
+    for(const auto& frame : frames_json)
+    {
+        hess_values.push_back(frame.value("time_hess_ms", 0.0));
+        lsolver_values.push_back(frame.value("time_lsolver_ms", 0.0));
+        lines_values.push_back(frame.value("time_lines_ms", 0.0));
+        misc_values.push_back(frame.value("time_misc_ms", 0.0));
+        total_values.push_back(frame.value("time_tot_ms", 0.0));
+        newton_values.push_back(frame.value("newton_count", 0.0));
+        cg_values.push_back(frame.value("cg_total", 0.0));
+        contact_values.push_back(frame.value("contact_pairs_avg", 0.0));
+    }
+
+    BenchmarkSummaryRow row;
+    row.scene             = run_config.scene;
+    row.baseline          = baseline_display_name(run_config.baseline);
+    row.frames            = static_cast<int>(frames_json.size());
+    row.warmup            = run_config.warmup;
+    row.avg_hess_ms       = average(hess_values);
+    row.avg_lsolver_ms    = average(lsolver_values);
+    row.avg_lines_ms      = average(lines_values);
+    row.avg_misc_ms       = average(misc_values);
+    row.avg_time_tot_ms   = average(total_values);
+    row.avg_newton        = average(newton_values);
+    row.avg_cg            = average(cg_values);
+    row.avg_contact_pairs = average(contact_values);
+    row.std_time_tot_ms   = stddev(total_values, row.avg_time_tot_ms);
+    return row;
+}
+
+gipc::Json make_raw_report(const BenchmarkRunConfig& run_config,
+                           const gipc::Json& frames_json)
+{
+    gipc::Json report;
+    report["scene"]      = run_config.scene;
+    report["baseline"]   = baseline_display_name(run_config.baseline);
+    report["frames"]     = frames_json;
+    report["frame_start"] = run_config.frame_start;
+    report["warmup"]     = run_config.warmup;
+    report["requested_frames"] = run_config.frames;
+    report["settings"]   = run_config.settings_path;
+    report["task_id"]    = run_config.task_id;
+    report["dataset"]    = run_config.dataset;
+    report["asset_root"] = run_config.asset_root;
+    report["notes"]      = run_config.notes;
+    return report;
+}
+
+gipc::Json make_meta_report(const BenchmarkRunConfig& run_config,
+                            const std::vector<std::string>& command_args)
+{
+    gipc::Json meta;
+    meta["scene"]      = run_config.scene;
+    meta["baseline"]   = baseline_display_name(run_config.baseline);
+    meta["git_hash"]   = GIPC_GIT_HASH;
+    meta["build_type"] = GIPC_BUILD_TYPE;
+    meta["command_args"] = command_args;
+
+    int runtime_version = 0;
+    if(cudaRuntimeGetVersion(&runtime_version) == cudaSuccess)
+        meta["cuda_runtime_version"] = runtime_version;
+
+    cudaDeviceProp device_prop{};
+    if(cudaGetDeviceProperties(&device_prop, 0) == cudaSuccess)
+        meta["gpu_name"] = std::string(device_prop.name);
+
+    return meta;
+}
+
+void write_raw_report(const std::string& path, const gipc::Json& raw_report)
+{
+    std::ofstream output(path);
+    output << raw_report.dump(2);
+}
+
+void write_meta_report(const std::string& path, const gipc::Json& meta_report)
+{
+    std::ofstream output(path);
+    output << meta_report.dump(2);
+}
+
+void write_summary_csv(const std::string& path,
+                       const std::vector<BenchmarkSummaryRow>& rows)
+{
+    std::ofstream output(path);
+    output << "scene,baseline,frames,warmup,avg_Hess_ms,avg_LSolver_ms,avg_LineS_ms,avg_Misc_ms,avg_TimeTot_ms,avg_newton,avg_cg,avg_contact_pairs,std_TimeTot_ms\n";
+    for(const auto& row : rows)
+    {
+        output << row.scene << ',' << row.baseline << ',' << row.frames << ',' << row.warmup
+               << ',' << row.avg_hess_ms << ',' << row.avg_lsolver_ms << ','
+               << row.avg_lines_ms << ',' << row.avg_misc_ms << ',' << row.avg_time_tot_ms
+               << ',' << row.avg_newton << ',' << row.avg_cg << ','
+               << row.avg_contact_pairs << ',' << row.std_time_tot_ms << '\n';
+    }
+}
+}  // namespace app::bench

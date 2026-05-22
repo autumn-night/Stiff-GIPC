@@ -76,6 +76,18 @@ Support platforms: Windows, Linux
 
 We use CMake to build the project.
 
+Main targets:
+
+- `stiffgipc_core`: shared simulation and benchmark core
+- `gipc_viewer`: original OpenGL viewer entry
+- `gipc_bench`: headless benchmark entry
+
+For headless benchmark-only environments, configure with:
+
+```bash
+cmake -S . -B build -DBUILD_GIPC_VIEWER=OFF
+```
+
 ```bash
 sudo apt install libglew-dev freeglut3-dev libeigen3-dev nlohmann-json3-dev
 ```
@@ -98,4 +110,3 @@ Copyrights are retained by the original authors.
 - **muda**: https://github.com/KemengHuang/muda (fork of https://github.com/MuGdxy/muda)
 - **METIS**: https://github.com/KemengHuang/METIS (fork of https://github.com/KarypisLab/METIS)  
 - **GKlib**: https://github.com/KemengHuang/GKlib (fork of https://github.com/KarypisLab/GKlib)
-

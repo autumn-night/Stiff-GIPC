@@ -17,6 +17,7 @@
 #include "mlbvh.cuh"
 #include <stdio.h>
 #include "load_mesh.h"
+#include "app/common/sim_bootstrap.h"
 #include "cuda_tools/cuda_tools.h"
 #include <queue>
 //#include "timer.h"
@@ -1553,7 +1554,7 @@ void display(void)
 
 void init(void)
 {
-    Init_CUDA();
+    app::common::initialize_cuda();
 
     //main2();
 
@@ -1567,11 +1568,19 @@ void init(void)
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
 
-    LoadSettings();
-
-    ipc.build_gipc_system(d_tetMesh);
-
-    initScene();
+    app::common::SimulationContext context{ipc,
+                                           d_tetMesh,
+                                           tetMesh,
+                                           collision_detection_buff_scale,
+                                           motion_rate,
+                                           linear_system_buff_scale,
+                                           assets_dir,
+                                           metis_dir};
+    app::common::SimulationBootstrapOptions options;
+    options.scene_name             = "mat_twist";
+    options.settings_path          = std::string{gipc::assets_dir()} + "scene/parameterSetting.txt";
+    options.runtime_backend_config = ipc.runtime_backend_config;
+    app::common::bootstrap_simulation(context, options);
 
     if(!isSetShader)
     {
@@ -1742,7 +1751,7 @@ void SpecialKey(GLint key, GLint x, GLint y)
 }
 
 
-int main(int argc, char** argv)
+int run_viewer(int argc, char** argv)
 {
     glutInit(&argc, argv);
     //glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);

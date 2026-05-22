@@ -8649,6 +8649,8 @@ GIPC::GIPC()
     IPC_dt            = 0.01;
     animation_subRate = 1.0;
     animation         = false;
+    runtime_backend_config =
+        gipc::resolve_runtime_backend_config(gipc::BenchmarkBaseline::StiffGIPC_CEMAS_SRBK);
 
     h_cpNum_last[0] = 0;
     h_cpNum_last[1] = 0;
@@ -10835,8 +10837,11 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
                       double&           time4)
 {
     auto& stats_at_current_frame = gipc::Statistics::instance().at_current_frame();
-    std::cout << "solve_subIP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-              << std::endl;
+    if(verbose_output)
+    {
+        std::cout << "solve_subIP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+                  << std::endl;
+    }
 
     stats_at_current_frame["newton"] = gipc::Json::array();
 
@@ -10847,6 +10852,7 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
     for(; k < iterCap; ++k)
     {
         stats_at_current_frame["newton"].push_back(gipc::Json::object());
+        stats_at_current_frame["newton"].back()["contact_pairs"] = h_cpNum[0];
 
         totalCollisionPairs += h_cpNum[0];
         maxCOllisionPairNum =
@@ -10971,7 +10977,10 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
     //    outiter << iterV[ii] << std::endl;
     //}
     //outiter.close();
-    printf("\n\n      Kappa: %f                               iteration k:  %d\n", Kappa, k);
+    if(verbose_output)
+    {
+        printf("\n\n      Kappa: %f                               iteration k:  %d\n", Kappa, k);
+    }
     return k;
 }
 
@@ -11201,7 +11210,10 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     cudaEventElapsedTime(&tttime, start, end0);
     totalTime += tttime;
     total_Frames++;
-    printf("average time cost:     %f,    frame id:   %d\n", totalTime / totalNT, total_Frames);
+    if(verbose_output)
+    {
+        printf("average time cost:     %f,    frame id:   %d\n", totalTime / totalNT, total_Frames);
+    }
 
 
     ttime0 += time0;
@@ -11211,32 +11223,77 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     ttime4 += time4;
 
 
-    std::ofstream outTime("timeCost.txt");
-
-    outTime << "time0: " << ttime0 / 1000.0 << std::endl;
-    outTime << "time1: " << ttime1 / 1000.0 << std::endl;
-    outTime << "time2: " << ttime2 / 1000.0 << std::endl;
-    outTime << "time3: " << ttime3 / 1000.0 << std::endl;
-    outTime << "time4: " << ttime4 / 1000.0 << std::endl;
-    outTime << "time_makePD: " << timemakePd / 1000.0 << std::endl;
-
-    outTime << "totalTime: " << totalTime / 1000.0 << std::endl;
-    outTime << "total iter: " << totalNT << std::endl;
-    outTime << "frames: " << total_Frames << std::endl;
-    outTime << "totalCollisionNum: " << totalCollisionPairs << std::endl;
-    outTime << "averageCollision: " << totalCollisionPairs / totalNT << std::endl;
-    outTime << "maxCOllisionPairNum: " << maxCOllisionPairNum << std::endl;
-    outTime << "totalCgTime: " << total_Cg_count << std::endl;
-    outTime.close();
-
-
     auto& stats = gipc::Statistics::instance();
+    auto& frame_stats = stats.at_current_frame();
+
+    double cg_total_frame    = 0.0;
+    double contact_pairs_sum = 0.0;
+    double contact_pairs_max = 0.0;
+    auto   newton_count      = frame_stats["newton"].size();
+    for(const auto& newton_stats : frame_stats["newton"])
+    {
+        cg_total_frame += newton_stats.value("pcg", gipc::Json::object()).value("iterations", 0.0);
+        double contact_pairs = newton_stats.value("contact_pairs", 0.0);
+        contact_pairs_sum += contact_pairs;
+        contact_pairs_max = std::max(contact_pairs_max, contact_pairs);
+    }
+
+    double misc_time = tttime - time0 - time1 - time3;
+    frame_stats["frame_id"]            = stats.frame();
+    frame_stats["baseline"]            = std::string(gipc::to_string(runtime_backend_config.baseline));
+    frame_stats["time_hess_ms"]        = time0;
+    frame_stats["time_lsolver_ms"]     = time1;
+    frame_stats["time_ccd_raw_ms"]     = time2;
+    frame_stats["time_lines_ms"]       = time3;
+    frame_stats["time_post_ls_raw_ms"] = time4;
+    frame_stats["time_tot_ms"]         = tttime;
+    frame_stats["time_misc_ms"]        = misc_time;
+    frame_stats["newton_count"]        = newton_count;
+    frame_stats["cg_total"]            = cg_total_frame;
+    frame_stats["contact_pairs_avg"] = newton_count ? (contact_pairs_sum / newton_count) : 0.0;
+    frame_stats["contact_pairs_max"] = contact_pairs_max;
+    frame_stats["runtime_backend"]["assembly"] =
+        std::string(gipc::to_string(runtime_backend_config.assembly_backend));
+    frame_stats["runtime_backend"]["spmv"] =
+        std::string(gipc::to_string(runtime_backend_config.spmv_backend));
+    frame_stats["runtime_backend"]["mas"] =
+        std::string(gipc::to_string(runtime_backend_config.mas_backend));
+    if(misc_time < 0.0)
+    {
+        frame_stats["warnings"]["negative_misc"] = true;
+    }
+
+    if(write_legacy_time_cost_file)
+    {
+        std::ofstream outTime("timeCost.txt");
+
+        outTime << "time0: " << ttime0 / 1000.0 << std::endl;
+        outTime << "time1: " << ttime1 / 1000.0 << std::endl;
+        outTime << "time2: " << ttime2 / 1000.0 << std::endl;
+        outTime << "time3: " << ttime3 / 1000.0 << std::endl;
+        outTime << "time4: " << ttime4 / 1000.0 << std::endl;
+        outTime << "time_makePD: " << timemakePd / 1000.0 << std::endl;
+
+        outTime << "totalTime: " << totalTime / 1000.0 << std::endl;
+        outTime << "total iter: " << totalNT << std::endl;
+        outTime << "frames: " << total_Frames << std::endl;
+        outTime << "totalCollisionNum: " << totalCollisionPairs << std::endl;
+        outTime << "averageCollision: " << totalCollisionPairs / totalNT << std::endl;
+        outTime << "maxCOllisionPairNum: " << maxCOllisionPairNum << std::endl;
+        outTime << "totalCgTime: " << total_Cg_count << std::endl;
+    }
 
     stats.at_current_frame()["timer"] =
         gipc::GlobalTimer::current()->report_merged_as_json();
-    gipc::GlobalTimer::current()->print_merged_timings();
+    if(verbose_output)
+    {
+        gipc::GlobalTimer::current()->print_merged_timings();
+    }
     gipc::GlobalTimer::current()->clear();
-    stats.write_to_file(std::string{gipc::output_dir()} + "/stats.json");
+    if(write_statistics_file)
+    {
+        stats.write_to_file(std::string{gipc::output_dir()} + "/stats.json");
+    }
 
     auto f = stats.frame();
     stats.frame(f + 1);

@@ -2,6 +2,7 @@
 #include <muda/cub/device/device_run_length_encode.h>
 #include <muda/cub/device/device_scan.h>
 #include <muda/cub/device/device_radix_sort.h>
+#include <muda/cub/device/device_partition.h>
 #include <gipc/utils/timer.h>
 #include <gipc/utils/parallel_algorithm/fast_segmental_reduce.h>
 
@@ -21,9 +22,17 @@ constexpr bool UseRadixSort   = true;
 constexpr bool UseReduceByKey = false;
 
 void Converter::convert(GIPCTripletMatrix& global_triplets,
-                        const int&                          start,
-                        const int&                          length,
-                        const int&                          out_start_id)
+                        const int&         start,
+                        const int&         length,
+                        const int&         out_start_id)
+{
+    srbk_convert(global_triplets, start, length, out_start_id);
+}
+
+void Converter::srbk_convert(GIPCTripletMatrix& global_triplets,
+                             const int&         start,
+                             const int&         length,
+                             const int&         out_start_id)
 {
     gipc::Timer timer("convert3x3");
     if(length < 1)
@@ -39,6 +48,39 @@ void Converter::convert(GIPCTripletMatrix& global_triplets,
 
     _make_unique_block_warp_reduction(global_triplets, start, length, out_start_id);
     //CUDA_SAFE_CALL(cudaDeviceSynchronize());
+}
+
+void Converter::legacy_gipc_convert(GIPCTripletMatrix&                global_triplets,
+                                    muda::DeviceBCOOMatrix<Float, 3>& symmetric_bcoo,
+                                    muda::DeviceBCOOMatrix<Float, 3>& legacy_bcoo)
+{
+    const auto triplet_count = global_triplets.h_unique_key_number;
+
+    symmetric_bcoo.reshape(global_triplets.block_rows(), global_triplets.block_cols());
+    symmetric_bcoo.resize_triplets(triplet_count);
+
+    if(triplet_count == 0)
+    {
+        legacy_bcoo.reshape(global_triplets.block_rows(), global_triplets.block_cols());
+        legacy_bcoo.resize_triplets(0);
+        return;
+    }
+
+    auto symmetric_view = symmetric_bcoo.view();
+    CUDA_SAFE_CALL(cudaMemcpy(symmetric_view.block_row_indices(),
+                              global_triplets.block_row_indices(),
+                              triplet_count * sizeof(int),
+                              cudaMemcpyDeviceToDevice));
+    CUDA_SAFE_CALL(cudaMemcpy(symmetric_view.block_col_indices(),
+                              global_triplets.block_col_indices(),
+                              triplet_count * sizeof(int),
+                              cudaMemcpyDeviceToDevice));
+    CUDA_SAFE_CALL(cudaMemcpy(symmetric_view.block_values(),
+                              global_triplets.block_values(),
+                              triplet_count * sizeof(BlockMatrix),
+                              cudaMemcpyDeviceToDevice));
+
+    sym2ge(symmetric_bcoo, legacy_bcoo);
 }
 
 
@@ -259,6 +301,136 @@ void Converter::ge2sym(GIPCTripletMatrix& global_triplets)
                               global_triplets.d_unique_key_number,
                               sizeof(int),
                               cudaMemcpyDeviceToHost));
+}
+
+void Converter::_radix_sort_indices_and_blocks(muda::DeviceBCOOMatrix<T, N>& to)
+{
+    using namespace muda;
+
+    auto src_row_indices = to.block_row_indices();
+    auto src_col_indices = to.block_col_indices();
+    auto src_blocks      = to.block_values();
+
+    loose_resize(ij_hash_input, src_row_indices.size());
+    loose_resize(sort_index_input, src_row_indices.size());
+
+    loose_resize(ij_hash, src_row_indices.size());
+    loose_resize(sort_index, src_row_indices.size());
+    loose_resize(ij_pairs, src_row_indices.size());
+
+    ParallelFor(256)
+        .file_line(__FILE__, __LINE__)
+        .apply(src_row_indices.size(),
+               [row_indices = src_row_indices.cviewer().name("row_indices"),
+                col_indices = src_col_indices.cviewer().name("col_indices"),
+                ij_hash     = ij_hash_input.viewer().name("ij_hash"),
+                sort_index = sort_index_input.viewer().name("sort_index")] __device__(int i) mutable
+               {
+                   ij_hash(i) =
+                       (uint64_t{row_indices(i)} << 32) + uint64_t{col_indices(i)};
+                   sort_index(i) = i;
+               });
+
+    DeviceRadixSort().SortPairs(ij_hash_input.data(),
+                                ij_hash.data(),
+                                sort_index_input.data(),
+                                sort_index.data(),
+                                ij_hash.size());
+
+    ParallelFor(256)
+        .kernel_name("set col row indices")
+        .apply(src_row_indices.size(),
+               [ij_hash = ij_hash.viewer().name("ij_hash"),
+                ij_pairs = ij_pairs.viewer().name("ij_pairs")] __device__(int i) mutable
+               {
+                   auto hash      = ij_hash(i);
+                   auto row_index = int{hash >> 32};
+                   auto col_index = int{hash & 0xFFFFFFFF};
+                   ij_pairs(i).x  = row_index;
+                   ij_pairs(i).y  = col_index;
+               });
+
+    loose_resize(blocks_sorted, src_blocks.size());
+    ParallelFor(256)
+        .kernel_name(__FUNCTION__)
+        .apply(src_blocks.size(),
+               [src_blocks = src_blocks.cviewer().name("blocks"),
+                sort_index = sort_index.cviewer().name("sort_index"),
+                ij_pairs   = ij_pairs.cviewer().name("ij_pairs"),
+                dst_row = to.block_row_indices().viewer().name("row_indices"),
+                dst_col = to.block_col_indices().viewer().name("col_indices"),
+                dst_blocks = blocks_sorted.viewer().name("block_values")] __device__(int i) mutable
+               {
+                   dst_blocks(i) = src_blocks(sort_index(i));
+                   dst_row(i)    = ij_pairs(i).x;
+                   dst_col(i)    = ij_pairs(i).y;
+               });
+
+    to.block_values().copy_from(blocks_sorted);
+}
+
+void Converter::sym2ge(const muda::DeviceBCOOMatrix<T, N>& from,
+                       muda::DeviceBCOOMatrix<T, N>&       to)
+{
+    using namespace muda;
+
+    auto sym_size   = from.non_zero_blocks();
+    auto diag_count = from.block_rows();
+
+    auto& flags                 = offsets;
+    auto& partitioned           = blocks_sorted;
+    auto& partition_index_input = sort_index_input;
+    auto& partition_index       = sort_index;
+    auto& selected_count        = count;
+
+    loose_resize(flags, sym_size);
+    loose_resize(partitioned, sym_size);
+    loose_resize(partition_index_input, sym_size);
+    loose_resize(partition_index, sym_size);
+
+    ParallelFor()
+        .file_line(__FILE__, __LINE__)
+        .apply(sym_size,
+               [flags = flags.viewer().name("flags"),
+                row_indices = from.block_row_indices().cviewer().name("row_indices"),
+                col_indices = from.block_col_indices().cviewer().name("col_indices"),
+                partition_index = partition_index_input.viewer().name("partitioned")] __device__(int i) mutable
+               {
+                   flags(i) = (row_indices(i) == col_indices(i)) ? 1 : 0;
+                   partition_index(i) = i;
+               });
+
+    muda::DevicePartition().Flagged(partition_index_input.data(),
+                                    flags.data(),
+                                    partition_index.data(),
+                                    selected_count.data(),
+                                    sym_size);
+
+    auto general_bcoo_size = 2 * (sym_size - diag_count) + diag_count;
+    to.resize(from.block_rows(), from.block_cols(), general_bcoo_size);
+
+    ParallelFor()
+        .file_line(__FILE__, __LINE__)
+        .apply(sym_size,
+               [to   = to.viewer().name("to"),
+                from = from.cviewer().name("from"),
+                partition_index = partition_index.cviewer().name("partition_index"),
+                diag_count = diag_count,
+                sym_size   = sym_size] __device__(int i) mutable
+               {
+                   auto index = partition_index(i);
+                   auto f     = from(index);
+                   to(i).write(f.block_row_index, f.block_col_index, f.block_value);
+                   if(i >= diag_count)
+                   {
+                       to(i + sym_size - diag_count)
+                           .write(f.block_col_index,
+                                  f.block_row_index,
+                                  f.block_value.transpose());
+                   }
+               });
+
+    _radix_sort_indices_and_blocks(to);
 }
 
 }  // namespace gipc

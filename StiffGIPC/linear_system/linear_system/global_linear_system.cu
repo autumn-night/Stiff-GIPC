@@ -168,13 +168,17 @@ void GlobalLinearSystem::apply_preconditioner(muda::DenseVectorView<Float>  z,
 
 void GlobalLinearSystem::convert_new()
 {
-    m_converter.convert(*gipc_global_triplet,
-                        0,
-                        gipc_global_triplet->global_triplet_offset,
-                        gipc_global_triplet->global_triplet_offset);
-//#ifndef SymGH
-//    m_converter.ge2sym(*gipc_global_triplet);
-//#endif
+    m_converter.srbk_convert(*gipc_global_triplet,
+                             0,
+                             gipc_global_triplet->global_triplet_offset,
+                             gipc_global_triplet->global_triplet_offset);
+
+    if(m_options.assembly_backend == LinearAssemblyBackend::LegacyGipc)
+    {
+        m_converter.legacy_gipc_convert(*gipc_global_triplet,
+                                        m_symmetric_bcoo_A,
+                                        m_legacy_bcoo_A);
+    }
 }
 
 
@@ -184,14 +188,19 @@ void GlobalLinearSystem::spmv(Float                         a,
                               Float                         b,
                               muda::DenseVectorView<Float>  y)
 {
+    if(m_options.spmv_backend == SpmvBackend::LegacyGipc)
+    {
+        m_spmv.legacy_gipc_spmv(a, m_legacy_bcoo_A.cview(), x, b, y);
+        return;
+    }
 
-    m_spmv.warp_reduce_sym_spmv(a,
-                                gipc_global_triplet->block_values(),
-                                gipc_global_triplet->block_row_indices(),
-                                gipc_global_triplet->block_col_indices(),
-                                gipc_global_triplet->h_unique_key_number,
-                                x,
-                                b,
-                                y);
+    m_spmv.srbk_spmv(a,
+                     gipc_global_triplet->block_values(),
+                     gipc_global_triplet->block_row_indices(),
+                     gipc_global_triplet->block_col_indices(),
+                     gipc_global_triplet->h_unique_key_number,
+                     x,
+                     b,
+                     y);
 }
 }  // namespace gipc
