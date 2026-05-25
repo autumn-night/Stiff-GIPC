@@ -2,4 +2,6 @@
 build*
 Output/*
 *.pdf
-target.md
+*.md
+datasets/
+*.tar.gz
