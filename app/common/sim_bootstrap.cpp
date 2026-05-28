@@ -361,7 +361,14 @@ void bootstrap_simulation(SimulationContext& context,
                                     context.tet_mesh,
                                     context.assets_dir,
                                     context.linear_system_buff_scale};
-    configure_builtin_scene(options.scene_name, scene_context);
+
+    if(!options.manifest_path.empty())
+        configure_external_manifest_scene(options.manifest_path, scene_context);
+    else if(!options.dataset.empty() && !options.task_id.empty())
+        configure_local_dataset_scene(
+            options.dataset, options.task_id, options.asset_root, scene_context);
+    else
+        configure_builtin_scene(options.scene_name, scene_context);
 
     set_mas_partition(context.tet_mesh);
     context.tet_mesh.getSurface();

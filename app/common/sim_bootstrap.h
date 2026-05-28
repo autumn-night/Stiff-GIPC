@@ -26,6 +26,10 @@ struct SimulationBootstrapOptions
 {
     std::string                scene_name;
     std::string                settings_path;
+    std::string                manifest_path;
+    std::string                dataset;
+    std::string                task_id;
+    std::string                asset_root;
     gipc::RuntimeBackendConfig runtime_backend_config{};
 };
 

@@ -53,14 +53,24 @@ app::bench::BenchmarkRunConfig parse_single_run(int argc, char** argv)
             run.frame_cap = std::stoi(require_value(arg));
         else if(arg == "--no-save-surface")
             run.save_surface = false;
+        else if(arg == "--manifest")
+            run.manifest_path = require_value(arg);
+        else if(arg == "--dataset")
+            run.dataset = require_value(arg);
+        else if(arg == "--task-id")
+            run.task_id = require_value(arg);
+        else if(arg == "--asset-root")
+            run.asset_root = require_value(arg);
+        else if(arg == "--notes")
+            run.notes = require_value(arg);
         else if(arg == "--suite")
             throw std::runtime_error("`--suite` should be handled before single-run parsing");
         else
             throw std::runtime_error("unknown argument: " + arg);
     }
 
-    if(run.scene.empty())
-        throw std::runtime_error("`--scene` is required for single benchmark run");
+    if(run.scene.empty() && run.manifest_path.empty())
+        throw std::runtime_error("`--scene` or `--manifest` is required for single benchmark run");
     return run;
 }
 }  // namespace
@@ -82,12 +92,45 @@ int main(int argc, char** argv)
                 std::string                     error_message;
                 if(!app::bench::load_benchmark_suite(argv[i + 1], suite, error_message))
                     throw std::runtime_error("failed to load suite: " + error_message);
+                std::cout << "Loaded suite: " << argv[i + 1] << '\n'
+                          << "  output_root: " << suite.output_root << '\n'
+                          << "  datasets_root: " << suite.datasets_root << '\n'
+                          << "  run_count: " << suite.runs.size() << std::endl;
                 runner.run_suite(suite);
                 return 0;
             }
         }
 
-        runner.run_single(parse_single_run(argc, argv));
+        auto run_config = parse_single_run(argc, argv);
+        // If --manifest was given, load it and merge with CLI overrides
+        if(!run_config.manifest_path.empty())
+        {
+            app::bench::BenchmarkRunConfig manifest_run;
+            std::string                   error_message;
+            if(!app::bench::load_manifest_run(run_config.manifest_path,
+                                              manifest_run,
+                                              error_message))
+                throw std::runtime_error("failed to load manifest: " + error_message);
+
+            // CLI arguments take precedence over manifest values.
+            // Only fill in fields that were NOT explicitly provided via CLI.
+            if(run_config.scene.empty())
+                run_config.scene = manifest_run.scene;
+            // baseline: CLI default is always set, so we always use CLI value
+            if(run_config.settings_path.empty())
+                run_config.settings_path = manifest_run.settings_path;
+            if(run_config.task_id.empty())
+                run_config.task_id = manifest_run.task_id;
+            if(run_config.dataset.empty())
+                run_config.dataset = manifest_run.dataset;
+            if(run_config.asset_root.empty())
+                run_config.asset_root = manifest_run.asset_root;
+            if(run_config.notes.empty())
+                run_config.notes = manifest_run.notes;
+            if(run_config.manifest_path.empty())
+                run_config.manifest_path = manifest_run.manifest_path;
+        }
+        runner.run_single(run_config);
         return 0;
     }
     catch(const std::exception& e)

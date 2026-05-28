@@ -59,6 +59,10 @@ BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,
     BenchmarkSummaryRow row;
     row.scene             = run_config.scene;
     row.baseline          = baseline_display_name(run_config.baseline);
+    row.dataset           = run_config.dataset;
+    row.task_id           = run_config.task_id;
+    row.asset_root        = run_config.asset_root;
+    row.notes             = run_config.notes;
     row.frames            = static_cast<int>(frames_json.size());
     row.warmup            = run_config.warmup;
     row.avg_hess_ms       = average(hess_values);
@@ -127,15 +131,36 @@ void write_meta_report(const std::string& path, const gipc::Json& meta_report)
 void write_summary_csv(const std::string& path,
                        const std::vector<BenchmarkSummaryRow>& rows)
 {
+    // Helper to quote CSV fields that may contain commas or quotes
+    auto csv_field = [](const std::string& s) -> std::string {
+        if(s.find(',') != std::string::npos || s.find('"') != std::string::npos
+           || s.find('\n') != std::string::npos)
+        {
+            std::string escaped = s;
+            // Escape double quotes by doubling
+            for(size_t pos = escaped.find('"'); pos != std::string::npos;
+                pos = escaped.find('"', pos + 2))
+                escaped.insert(pos, 1, '"');
+            return '"' + escaped + '"';
+        }
+        return s;
+    };
+
     std::ofstream output(path);
-    output << "scene,baseline,frames,warmup,avg_Hess_ms,avg_LSolver_ms,avg_LineS_ms,avg_Misc_ms,avg_TimeTot_ms,avg_newton,avg_cg,avg_contact_pairs,std_TimeTot_ms\n";
+    output << "dataset,task_id,scene,baseline,frames,warmup,avg_Hess_ms,avg_LSolver_ms,avg_LineS_ms,avg_Misc_ms,avg_TimeTot_ms,avg_newton,avg_cg,avg_contact_pairs,std_TimeTot_ms,asset_root,notes\n";
     for(const auto& row : rows)
     {
-        output << row.scene << ',' << row.baseline << ',' << row.frames << ',' << row.warmup
+        output << csv_field(row.dataset) << ','
+               << csv_field(row.task_id) << ','
+               << csv_field(row.scene) << ','
+               << csv_field(row.baseline) << ','
+               << row.frames << ',' << row.warmup
                << ',' << row.avg_hess_ms << ',' << row.avg_lsolver_ms << ','
                << row.avg_lines_ms << ',' << row.avg_misc_ms << ',' << row.avg_time_tot_ms
                << ',' << row.avg_newton << ',' << row.avg_cg << ','
-               << row.avg_contact_pairs << ',' << row.std_time_tot_ms << '\n';
+               << row.avg_contact_pairs << ',' << row.std_time_tot_ms
+               << ',' << csv_field(row.asset_root)
+               << ',' << csv_field(row.notes) << '\n';
     }
 }
 }  // namespace app::bench

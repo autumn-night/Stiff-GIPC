@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <iostream>
 
 namespace app::bench
 {
@@ -28,6 +29,14 @@ struct BenchmarkSimulationState
 std::string run_output_directory(const BenchmarkRunConfig& run_config)
 {
     std::filesystem::path output_root = run_config.output_root;
+
+    // When dataset + task_id are available, organize by dataset/task_id/baseline
+    if(!run_config.dataset.empty() && !run_config.task_id.empty())
+        return (output_root / run_config.dataset / run_config.task_id
+                / baseline_directory_name(run_config.baseline))
+            .string();
+
+    // Fallback to scene/baseline for backward compatibility
     return (output_root / run_config.scene / baseline_directory_name(run_config.baseline)).string();
 }
 
@@ -62,6 +71,10 @@ BenchmarkSummaryRow BenchmarkRunner::run_single(const BenchmarkRunConfig& run_co
     app::common::SimulationBootstrapOptions options;
     options.scene_name             = run_config.scene;
     options.settings_path          = run_config.settings_path;
+    options.manifest_path          = run_config.manifest_path;
+    options.dataset                = run_config.dataset;
+    options.task_id                = run_config.task_id;
+    options.asset_root             = run_config.asset_root;
     options.runtime_backend_config = gipc::resolve_runtime_backend_config(run_config.baseline);
     app::common::bootstrap_simulation(context, options);
 
@@ -85,7 +98,6 @@ BenchmarkSummaryRow BenchmarkRunner::run_single(const BenchmarkRunConfig& run_co
     std::filesystem::create_directories(output_dir);
     write_raw_report(output_dir + "/raw.json", make_raw_report(run_config, frames));
     write_meta_report(output_dir + "/meta.json", make_meta_report(run_config, m_command_args));
-    write_summary_csv(run_config.output_root + "/summary.csv", {row});
     return row;
 }
 
@@ -94,12 +106,21 @@ std::vector<BenchmarkSummaryRow> BenchmarkRunner::run_suite(const BenchmarkSuite
     std::vector<BenchmarkSummaryRow> rows;
     rows.reserve(suite_config.runs.size());
     std::filesystem::create_directories(suite_config.output_root);
-    for(auto run : suite_config.runs)
+    std::cout << "Running benchmark suite with " << suite_config.runs.size()
+              << " run(s)" << std::endl;
+    for(size_t i = 0; i < suite_config.runs.size(); ++i)
     {
+        auto run = suite_config.runs[i];
         run.output_root = suite_config.output_root;
+
+        std::cout << "[" << (i + 1) << "/" << suite_config.runs.size() << "] "
+                  << (run.dataset.empty() ? run.scene : run.dataset + "/" + run.task_id)
+                  << " baseline=" << baseline_directory_name(run.baseline) << std::endl;
         rows.push_back(run_single(run));
+        write_summary_csv(suite_config.output_root + "/summary.csv", rows);
     }
-    write_summary_csv(suite_config.output_root + "/summary.csv", rows);
+    std::cout << "Suite complete. Summary: " << suite_config.output_root + "/summary.csv"
+              << std::endl;
     return rows;
 }
 }  // namespace app::bench

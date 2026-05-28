@@ -23,11 +23,16 @@ struct BenchmarkRunConfig
     std::string dataset;
     std::string asset_root;
     std::string notes;
+    std::string manifest_path;
 };
 
 struct BenchmarkSuiteConfig
 {
-    std::string                 output_root = "Output/benchmarks";
+    std::string                 output_root   = "Output/benchmarks";
+    std::string                 datasets_root = "datasets";
+    std::string                 dataset_selector;
+    std::string                 task_selector;
+    bool                        auto_discover = false;
     BenchmarkRunConfig          defaults;
     std::vector<BenchmarkRunConfig> runs;
 };
@@ -35,6 +40,10 @@ struct BenchmarkSuiteConfig
 bool load_benchmark_suite(const std::string& path,
                           BenchmarkSuiteConfig& suite,
                           std::string& error_message);
+
+bool load_manifest_run(const std::string& manifest_path,
+                       BenchmarkRunConfig& run,
+                       std::string& error_message);
 
 std::string baseline_directory_name(gipc::BenchmarkBaseline baseline);
 std::string baseline_display_name(gipc::BenchmarkBaseline baseline);

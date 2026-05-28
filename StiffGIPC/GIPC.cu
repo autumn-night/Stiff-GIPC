@@ -10747,8 +10747,16 @@ bool GIPC::lineSearch(device_TetraData& TetMesh, double& alpha, const double& cf
         testingE = computeEnergy(TetMesh);
     }
     if(numOfLineSearch > report_line_search_threshold)
+    {
+        CUDA_SAFE_CALL(cudaMemcpy(TetMesh.vertexes,
+                                  TetMesh.temp_double3Mem,
+                                  vertexNum * sizeof(double3),
+                                  cudaMemcpyDeviceToDevice));
+        stopped = true;
         printf("!!!!!!!!!!!!!!!!!!!linesearch number is a bit high, lineSearchCount=%d !!!!!!!!!!!!!!!!!!!!!!\n",
                numOfLineSearch);
+        return stopped;
+    }
 
 
     if(alpha < LFStepSize)
@@ -10936,6 +10944,8 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
         //printf("alpha:  %f\n", alpha);
 
         bool isStop = lineSearch(TetMesh, alpha, alpha_CFL);
+        if(isStop)
+            break;
 
         cudaEventRecord(end3);
         postLineSearch(TetMesh, alpha);

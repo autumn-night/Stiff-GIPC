@@ -1,0 +1,15 @@
+{
+  "output_root": "Output/benchmarks",
+  "datasets_root": "datasets",
+  "dataset_selector": "stanford",
+  "task_selector": "",
+  "auto_discover": true,
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "settings": "Assets/scene/parameterSetting.txt",
+    "baseline": "StiffGIPC_CEMAS_SRBK"
+  },
+  "runs": [],
+  "_comment": "Set dataset_selector to `stanford` or `ipc-sim`. For ipc-sim, task_selector should match the example path relative to datasets/ipc-sim without the .txt suffix, e.g. tutorialExamples/2cubesFall."
+}

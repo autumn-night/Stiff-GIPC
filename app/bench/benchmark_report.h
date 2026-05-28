@@ -13,6 +13,10 @@ struct BenchmarkSummaryRow
 {
     std::string scene;
     std::string baseline;
+    std::string dataset;
+    std::string task_id;
+    std::string asset_root;
+    std::string notes;
     int         frames = 0;
     int         warmup = 0;
     double avg_hess_ms          = 0.0;
