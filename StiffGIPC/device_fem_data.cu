@@ -77,43 +77,106 @@ device_TetraData::~device_TetraData()
 
 void device_TetraData::FREE_DEVICE_MEM()
 {
-    CUDA_SAFE_CALL(cudaFree(vertexes));
-    CUDA_SAFE_CALL(cudaFree(o_vertexes));
-    CUDA_SAFE_CALL(cudaFree(temp_double3Mem));
-    CUDA_SAFE_CALL(cudaFree(velocities));
-    CUDA_SAFE_CALL(cudaFree(rest_vertexes));
-    CUDA_SAFE_CALL(cudaFree(xTilta));
-    CUDA_SAFE_CALL(cudaFree(fb));
-    CUDA_SAFE_CALL(cudaFree(apply_gravity));
-    CUDA_SAFE_CALL(cudaFree(shape_grads));
-    CUDA_SAFE_CALL(cudaFree(tetrahedras));
-    CUDA_SAFE_CALL(cudaFree(tempTetrahedras));
-    CUDA_SAFE_CALL(cudaFree(volum));
-    CUDA_SAFE_CALL(cudaFree(masses));
-    CUDA_SAFE_CALL(cudaFree(lengthRate));
-    CUDA_SAFE_CALL(cudaFree(volumeRate));
-    CUDA_SAFE_CALL(cudaFree(DmInverses));
-    CUDA_SAFE_CALL(cudaFree(tempDouble));
-    CUDA_SAFE_CALL(cudaFree(BoundaryType));
+    if(vertexes)
+        CUDA_SAFE_CALL(cudaFree(vertexes));
+    if(o_vertexes)
+        CUDA_SAFE_CALL(cudaFree(o_vertexes));
+    if(temp_double3Mem)
+        CUDA_SAFE_CALL(cudaFree(temp_double3Mem));
+    if(velocities)
+        CUDA_SAFE_CALL(cudaFree(velocities));
+    if(rest_vertexes)
+        CUDA_SAFE_CALL(cudaFree(rest_vertexes));
+    if(xTilta)
+        CUDA_SAFE_CALL(cudaFree(xTilta));
+    if(fb)
+        CUDA_SAFE_CALL(cudaFree(fb));
+    if(apply_gravity)
+        CUDA_SAFE_CALL(cudaFree(apply_gravity));
+    if(shape_grads)
+        CUDA_SAFE_CALL(cudaFree(shape_grads));
+    if(tetrahedras)
+        CUDA_SAFE_CALL(cudaFree(tetrahedras));
+    if(tempTetrahedras)
+        CUDA_SAFE_CALL(cudaFree(tempTetrahedras));
+    if(volum)
+        CUDA_SAFE_CALL(cudaFree(volum));
+    if(masses)
+        CUDA_SAFE_CALL(cudaFree(masses));
+    if(lengthRate)
+        CUDA_SAFE_CALL(cudaFree(lengthRate));
+    if(volumeRate)
+        CUDA_SAFE_CALL(cudaFree(volumeRate));
+    if(DmInverses)
+        CUDA_SAFE_CALL(cudaFree(DmInverses));
+    if(tempDouble)
+        CUDA_SAFE_CALL(cudaFree(tempDouble));
+    if(BoundaryType)
+        CUDA_SAFE_CALL(cudaFree(BoundaryType));
 
-    CUDA_SAFE_CALL(cudaFree(totalForce));
-    CUDA_SAFE_CALL(cudaFree(targetIndex));
-    CUDA_SAFE_CALL(cudaFree(targetVert));
-    CUDA_SAFE_CALL(cudaFree(triDmInverses));
-    CUDA_SAFE_CALL(cudaFree(area));
-    CUDA_SAFE_CALL(cudaFree(triangles));
+    if(totalForce)
+        CUDA_SAFE_CALL(cudaFree(totalForce));
+    if(targetIndex)
+        CUDA_SAFE_CALL(cudaFree(targetIndex));
+    if(targetVert)
+        CUDA_SAFE_CALL(cudaFree(targetVert));
+    if(triDmInverses)
+        CUDA_SAFE_CALL(cudaFree(triDmInverses));
+    if(area)
+        CUDA_SAFE_CALL(cudaFree(area));
+    if(triangles)
+        CUDA_SAFE_CALL(cudaFree(triangles));
 
-    CUDA_SAFE_CALL(cudaFree(tri_edges));
-    CUDA_SAFE_CALL(cudaFree(tri_edge_adj_vertex));
+    if(tri_edges)
+        CUDA_SAFE_CALL(cudaFree(tri_edges));
+    if(tri_edge_adj_vertex)
+        CUDA_SAFE_CALL(cudaFree(tri_edge_adj_vertex));
 
 #ifdef USE_QUADRATIC_BENDING
-    CUDA_SAFE_CALL(cudaFree(quad_bending_Q));
+    if(quad_bending_Q)
+        CUDA_SAFE_CALL(cudaFree(quad_bending_Q));
 #endif
 
-    CUDA_SAFE_CALL(cudaFree(body_id_to_boundary_type));
-    CUDA_SAFE_CALL(cudaFree(point_id_to_body_id));
-    CUDA_SAFE_CALL(cudaFree(tet_id_to_body_id));
+    if(body_id_to_boundary_type)
+        CUDA_SAFE_CALL(cudaFree(body_id_to_boundary_type));
+    if(point_id_to_body_id)
+        CUDA_SAFE_CALL(cudaFree(point_id_to_body_id));
+    if(tet_id_to_body_id)
+        CUDA_SAFE_CALL(cudaFree(tet_id_to_body_id));
 
+    // Reset all pointers to nullptr
+    vertexes                  = nullptr;
+    o_vertexes                = nullptr;
+    temp_double3Mem           = nullptr;
+    velocities                = nullptr;
+    rest_vertexes             = nullptr;
+    xTilta                    = nullptr;
+    fb                        = nullptr;
+    apply_gravity             = nullptr;
+    shape_grads               = nullptr;
+    tetrahedras               = nullptr;
+    tempTetrahedras           = nullptr;
+    volum                     = nullptr;
+    masses                    = nullptr;
+    lengthRate                = nullptr;
+    volumeRate                = nullptr;
+    DmInverses                = nullptr;
+    tempDouble                = nullptr;
+    BoundaryType              = nullptr;
+    totalForce                = nullptr;
+    targetIndex               = nullptr;
+    targetVert                = nullptr;
+    triDmInverses             = nullptr;
+    area                      = nullptr;
+    triangles                 = nullptr;
+    tri_edges                 = nullptr;
+    tri_edge_adj_vertex       = nullptr;
+#ifdef USE_QUADRATIC_BENDING
+    quad_bending_Q            = nullptr;
+#endif
+    body_id_to_boundary_type  = nullptr;
+    point_id_to_body_id       = nullptr;
+    tet_id_to_body_id         = nullptr;
 }
 
 void device_TetraData::update_soft_constraint_target_position(int step_id, double ipc_dt)

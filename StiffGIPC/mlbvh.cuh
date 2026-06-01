@@ -59,7 +59,23 @@ class lbvh
     int*      _bodyId;
 
   public:
-    lbvh() {}
+    lbvh()
+        : vert_number(0)
+        , _vertexes(nullptr)
+        , _bvs(nullptr)
+        , _tempLeafBox(nullptr)
+        , _nodes(nullptr)
+        , _MChash(nullptr)
+        , _indices(nullptr)
+        , _collisionPair(nullptr)
+        , _ccd_collisionPair(nullptr)
+        , _cpNum(nullptr)
+        , _MatIndex(nullptr)
+        , _flags(nullptr)
+        , _btype(nullptr)
+        , _bodyId(nullptr)
+    {
+    }
     ~lbvh();
     void MALLOC_DEVICE_MEM(const int& number);
     void FREE_DEVICE_MEM();
@@ -75,6 +91,7 @@ class lbvh_f : public lbvh
     uint32_t* _surfVerts;
 
   public:
+    lbvh_f() : face_number(0), _faces(nullptr), _surfVerts(nullptr) {}
     void   init(int*       _bodyID,
                 int*       _btype,
                 double3*   _mVerts,
@@ -101,6 +118,7 @@ class lbvh_e : public lbvh
     uint2*   _edges;
 
   public:
+    lbvh_e() : _rest_vertexes(nullptr), edge_number(0), _edges(nullptr) {}
     void   init(int*       _bodyID,
                 int*       _btype,
                 double3*   _mVerts,

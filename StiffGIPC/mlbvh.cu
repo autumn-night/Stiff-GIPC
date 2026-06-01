@@ -1983,12 +1983,24 @@ void fullCCDselfQuery_vf(const int*      _bodyID,
 
 void lbvh::FREE_DEVICE_MEM()
 {
-    CUDA_SAFE_CALL(cudaFree(_indices));
-    CUDA_SAFE_CALL(cudaFree(_MChash));
-    CUDA_SAFE_CALL(cudaFree(_nodes));
-    CUDA_SAFE_CALL(cudaFree(_bvs));
-    CUDA_SAFE_CALL(cudaFree(_flags));
-    CUDA_SAFE_CALL(cudaFree(_tempLeafBox));
+    if(_indices)
+        CUDA_SAFE_CALL(cudaFree(_indices));
+    if(_MChash)
+        CUDA_SAFE_CALL(cudaFree(_MChash));
+    if(_nodes)
+        CUDA_SAFE_CALL(cudaFree(_nodes));
+    if(_bvs)
+        CUDA_SAFE_CALL(cudaFree(_bvs));
+    if(_flags)
+        CUDA_SAFE_CALL(cudaFree(_flags));
+    if(_tempLeafBox)
+        CUDA_SAFE_CALL(cudaFree(_tempLeafBox));
+    _indices      = nullptr;
+    _MChash       = nullptr;
+    _nodes        = nullptr;
+    _bvs          = nullptr;
+    _flags        = nullptr;
+    _tempLeafBox  = nullptr;
 }
 
 void lbvh::MALLOC_DEVICE_MEM(const int& number)

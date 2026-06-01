@@ -5,3 +5,4 @@ Output/*
 *.md
 datasets/
 *.tar.gz
+*.sh

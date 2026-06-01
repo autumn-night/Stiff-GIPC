@@ -18,9 +18,9 @@ namespace
 {
 struct BenchmarkSimulationState
 {
-    GIPC             ipc;
-    device_TetraData device_tet_mesh;
     tetrahedra_obj   tet_mesh;
+    device_TetraData device_tet_mesh;
+    GIPC             ipc;
     double           collision_detection_buff_scale = 1.0;
     double           motion_rate                    = 1.0;
     double           linear_system_buff_scale       = 1.0;

@@ -102,6 +102,13 @@ __device__ inline void write_triplet(Eigen::Matrix3d*    triplet_value,
 #else
             int kk = ii * rown + jj;  // - ii * (ii + 1) / 2;
 #endif
+            // Bounds check: if offset+kk is negative or very large, skip to avoid
+            // illegal memory access that crashes with cudaErrorIllegalAddress.
+            // This can happen when collision pair counts exceed buffer capacity
+            // (e.g., with large dhat values).
+            if(offset + kk < 0)
+                continue;
+
             int row = index[ii];
             int col = index[jj];
 #ifdef SymGH
@@ -1615,7 +1622,7 @@ __global__ void _calFrictionHessian(const double3*          _vertexes,
 
             int Hidx   = atomicAdd(_cpNum + 2, 1);
             int offset = global_offset + f_offset4 * M12_Off
-                         + f_offset3 * M9_Off + Hidx * M6_Off;
+                          + f_offset3 * M9_Off + Hidx * M6_Off;
             //Hidx += cd_offset2;
             //H6x6[Hidx]    = HessianBlock;
             uint2 global_index = make_uint2(MMCVIDI.x, MMCVIDI.y);
@@ -8503,20 +8510,48 @@ __global__ void _calFrictionLastH_DistAndTan(const double3*    _vertexes,
 /// </summary>
 void GIPC::FREE_DEVICE_MEM()
 {
-    CUDA_SAFE_CALL(cudaFree(_MatIndex));
-    CUDA_SAFE_CALL(cudaFree(_collisonPairs));
-    CUDA_SAFE_CALL(cudaFree(_ccd_collisonPairs));
-    CUDA_SAFE_CALL(cudaFree(_cpNum));
-    CUDA_SAFE_CALL(cudaFree(_close_cpNum));
-    CUDA_SAFE_CALL(cudaFree(_close_gpNum));
-    CUDA_SAFE_CALL(cudaFree(_environment_collisionPair));
-    CUDA_SAFE_CALL(cudaFree(_gpNum));
-    CUDA_SAFE_CALL(cudaFree(_groundNormal));
-    CUDA_SAFE_CALL(cudaFree(_groundOffset));
+    if(_MatIndex)
+        CUDA_SAFE_CALL(cudaFree(_MatIndex));
+    if(_collisonPairs)
+        CUDA_SAFE_CALL(cudaFree(_collisonPairs));
+    if(_ccd_collisonPairs)
+        CUDA_SAFE_CALL(cudaFree(_ccd_collisonPairs));
+    if(_cpNum)
+        CUDA_SAFE_CALL(cudaFree(_cpNum));
+    if(_close_cpNum)
+        CUDA_SAFE_CALL(cudaFree(_close_cpNum));
+    if(_close_gpNum)
+        CUDA_SAFE_CALL(cudaFree(_close_gpNum));
+    if(_environment_collisionPair)
+        CUDA_SAFE_CALL(cudaFree(_environment_collisionPair));
+    if(_gpNum)
+        CUDA_SAFE_CALL(cudaFree(_gpNum));
+    if(_groundNormal)
+        CUDA_SAFE_CALL(cudaFree(_groundNormal));
+    if(_groundOffset)
+        CUDA_SAFE_CALL(cudaFree(_groundOffset));
 
-    CUDA_SAFE_CALL(cudaFree(_faces));
-    CUDA_SAFE_CALL(cudaFree(_edges));
-    CUDA_SAFE_CALL(cudaFree(_surfVerts));
+    if(_faces)
+        CUDA_SAFE_CALL(cudaFree(_faces));
+    if(_edges)
+        CUDA_SAFE_CALL(cudaFree(_edges));
+    if(_surfVerts)
+        CUDA_SAFE_CALL(cudaFree(_surfVerts));
+
+    // Reset pointers to nullptr
+    _MatIndex                = nullptr;
+    _collisonPairs           = nullptr;
+    _ccd_collisonPairs       = nullptr;
+    _cpNum                   = nullptr;
+    _close_cpNum             = nullptr;
+    _close_gpNum             = nullptr;
+    _environment_collisionPair = nullptr;
+    _gpNum                   = nullptr;
+    _groundNormal            = nullptr;
+    _groundOffset            = nullptr;
+    _faces                   = nullptr;
+    _edges                   = nullptr;
+    _surfVerts               = nullptr;
 
     pcg_data.FREE_DEVICE_MEM();
 
@@ -8619,8 +8654,10 @@ void GIPC::init(double m_meanMass, double m_meanVolumn, double3 minConer, double
     long long unsigned total_max_collision_triplet_num =
         minCollisionBuffer4 * 16 + minCollisionBuffer3 * 9
         + minCollisionBuffer2 * 4 + minCollisionBuffer1;
+    long long unsigned total_max_external_triplet_num =
+        total_max_collision_triplet_num * 2;
     long long unsigned total_max_global_triplet_num =
-        total_internal_triplet_num * 2 + total_max_collision_triplet_num;
+        total_internal_triplet_num * 2 + total_max_external_triplet_num;
 
     gipc_global_triplet.init_var();
 
@@ -8628,10 +8665,21 @@ void GIPC::init(double m_meanMass, double m_meanVolumn, double3 minConer, double
                                global_matrix_block3_size,
                                total_max_global_triplet_num * buffScale);
 
-    gipc_global_triplet.global_external_max_capcity =
-        total_internal_triplet_num + total_max_collision_triplet_num;
+    gipc_global_triplet.global_external_max_capcity = total_max_external_triplet_num;
     gipc_global_triplet.resize_collision_hash_size(
         gipc_global_triplet.global_external_max_capcity * buffScale);
+
+    // Diagnostic output: log buffer sizes for debugging OOM / overflow issues
+    std::cout << "[GIPC::init] buffScale=" << buffScale
+              << " total_max_global_triplet_num=" << total_max_global_triplet_num
+              << " capacity=" << (total_max_global_triplet_num * buffScale)
+              << " minCollisionBuffer4=" << minCollisionBuffer4
+              << " minCollisionBuffer3=" << minCollisionBuffer3
+              << " minCollisionBuffer2=" << minCollisionBuffer2
+              << " minCollisionBuffer1=" << minCollisionBuffer1
+              << " surf_vertexNum=" << surf_vertexNum
+              << " edge_Num=" << edge_Num
+              << std::endl;
 
 
     m_global_linear_system->gipc_global_triplet = &(gipc_global_triplet);
@@ -8641,6 +8689,9 @@ void GIPC::init(double m_meanMass, double m_meanVolumn, double3 minConer, double
 
 GIPC::~GIPC()
 {
+    m_global_linear_system.reset();
+    m_abd_system.reset();
+    m_abd_sim_data.reset();
     FREE_DEVICE_MEM();
 }
 
@@ -9080,6 +9131,24 @@ void GIPC::buildCP()
     //CUDA_SAFE_CALL(cudaDeviceSynchronize());
     CUDA_SAFE_CALL(cudaMemcpy(&h_cpNum, _cpNum, 5 * sizeof(uint32_t), cudaMemcpyDeviceToHost));
     CUDA_SAFE_CALL(cudaMemcpy(&h_gpNum, _gpNum, sizeof(uint32_t), cudaMemcpyDeviceToHost));
+
+    // Diagnostic: log actual collision pair counts for debugging buffer overflow
+    std::cout << "[GIPC::buildCP] h_cpNum[0..4]=" << h_cpNum[0] << " " << h_cpNum[1] << " "
+              << h_cpNum[2] << " " << h_cpNum[3] << " " << h_cpNum[4]
+              << " h_gpNum=" << h_gpNum
+              << " MAX_COLLITION_PAIRS_NUM=" << MAX_COLLITION_PAIRS_NUM
+              << std::endl;
+
+    // Safety check: detect collision pair buffer overflow before it causes
+    // a cryptic cudaErrorIllegalAddress later during simulation.
+    if(h_cpNum[0] > (uint32_t)MAX_COLLITION_PAIRS_NUM)
+    {
+        std::cerr << "ERROR: Collision pair count " << h_cpNum[0]
+                  << " exceeds MAX_COLLITION_PAIRS_NUM " << MAX_COLLITION_PAIRS_NUM
+                  << ". Increase collision_detection_buff_scale in the parameter file."
+                  << std::endl;
+        std::abort();
+    }
     /*CUDA_SAFE_CALL(cudaMemset(_cpNum, 0, 5 * sizeof(uint32_t)));
     CUDA_SAFE_CALL(cudaMemset(_gpNum, 0, sizeof(uint32_t)));*/
 }
@@ -10149,6 +10218,7 @@ float GIPC::computeGradientAndHessian(device_TetraData& TetMesh)
         calFrictionGradient(contact_grads, TetMesh);
         //CUDA_SAFE_CALL(cudaDeviceSynchronize());
         calFrictionHessian(TetMesh);
+        CUDA_SAFE_CALL(cudaDeviceSynchronize());  // catch friction hessian kernel errors early
         gipc_global_triplet.global_triplet_offset +=
             h_cpNum_last[4] * M12_Off + h_cpNum_last[3] * M9_Off
             + h_cpNum_last[2] * M6_Off + h_gpNum_last;

@@ -14,6 +14,40 @@
 #define M6_Off 4
 #endif
 
+#ifdef __CUDACC__
+static __global__ void _gipc_triplet_matrix_set_hash_value(const int* row_ids,
+                                                           const int* col_ids,
+                                                           uint32_t*  index,
+                                                           uint64_t*  hashValue,
+                                                           int        abd_vert_num,
+                                                           int        number)
+{
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if(idx >= number)
+        return;
+    index[idx] = idx;
+
+    uint64_t self_hash;
+    if(row_ids[idx] < abd_vert_num && col_ids[idx] < abd_vert_num)
+    {
+        self_hash = 3;
+    }
+    else if(row_ids[idx] < abd_vert_num && col_ids[idx] >= abd_vert_num)
+    {
+        self_hash = 1;
+    }
+    else if(row_ids[idx] >= abd_vert_num && col_ids[idx] < abd_vert_num)
+    {
+        self_hash = 2;
+    }
+    else
+    {
+        self_hash = 0;
+    }
+    hashValue[idx] = self_hash;
+}
+#endif
+
 
 class GIPCTripletMatrix
 {
@@ -36,10 +70,10 @@ class GIPCTripletMatrix
   public:
     GIPCTripletMatrix()                                    = default;
     ~GIPCTripletMatrix() { free_var(); }
-    GIPCTripletMatrix(const GIPCTripletMatrix&)            = default;
-    GIPCTripletMatrix(GIPCTripletMatrix&&)                 = default;
-    GIPCTripletMatrix& operator=(const GIPCTripletMatrix&) = default;
-    GIPCTripletMatrix& operator=(GIPCTripletMatrix&&)      = default;
+    GIPCTripletMatrix(const GIPCTripletMatrix&)            = delete;
+    GIPCTripletMatrix(GIPCTripletMatrix&&)                 = delete;
+    GIPCTripletMatrix& operator=(const GIPCTripletMatrix&) = delete;
+    GIPCTripletMatrix& operator=(GIPCTripletMatrix&&)      = delete;
 
     void reshape(int row, int col)
     {
@@ -166,28 +200,44 @@ class GIPCTripletMatrix
     int global_external_max_capcity     = 0;
     int global_internal_capcity         = 0;
 
-    int* d_abd_abd_contact_start_id;
-    int* d_abd_fem_contact_start_id;
-    int* d_fem_abd_contact_start_id;
-    int* d_fem_fem_contact_start_id;
-    int* d_unique_key_number;
+    int* d_abd_abd_contact_start_id = nullptr;
+    int* d_abd_fem_contact_start_id = nullptr;
+    int* d_fem_abd_contact_start_id = nullptr;
+    int* d_fem_fem_contact_start_id = nullptr;
+    int* d_unique_key_number        = nullptr;
 
     void init_var()
     {
-        CUDA_SAFE_CALL(cudaMalloc((void**)&d_abd_abd_contact_start_id, sizeof(int)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&d_abd_fem_contact_start_id, sizeof(int)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&d_fem_abd_contact_start_id, sizeof(int)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&d_fem_fem_contact_start_id, sizeof(int)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&d_unique_key_number, sizeof(int)));
+        if(!d_abd_abd_contact_start_id)
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_abd_abd_contact_start_id, sizeof(int)));
+        if(!d_abd_fem_contact_start_id)
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_abd_fem_contact_start_id, sizeof(int)));
+        if(!d_fem_abd_contact_start_id)
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_fem_abd_contact_start_id, sizeof(int)));
+        if(!d_fem_fem_contact_start_id)
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_fem_fem_contact_start_id, sizeof(int)));
+        if(!d_unique_key_number)
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_unique_key_number, sizeof(int)));
     }
 
     void free_var()
     {
-        CUDA_SAFE_CALL(cudaFree(d_abd_abd_contact_start_id));
-        CUDA_SAFE_CALL(cudaFree(d_abd_fem_contact_start_id));
-        CUDA_SAFE_CALL(cudaFree(d_fem_abd_contact_start_id));
-        CUDA_SAFE_CALL(cudaFree(d_fem_fem_contact_start_id));
-        CUDA_SAFE_CALL(cudaFree(d_unique_key_number));
+        if(d_abd_abd_contact_start_id)
+            CUDA_SAFE_CALL(cudaFree(d_abd_abd_contact_start_id));
+        if(d_abd_fem_contact_start_id)
+            CUDA_SAFE_CALL(cudaFree(d_abd_fem_contact_start_id));
+        if(d_fem_abd_contact_start_id)
+            CUDA_SAFE_CALL(cudaFree(d_fem_abd_contact_start_id));
+        if(d_fem_fem_contact_start_id)
+            CUDA_SAFE_CALL(cudaFree(d_fem_fem_contact_start_id));
+        if(d_unique_key_number)
+            CUDA_SAFE_CALL(cudaFree(d_unique_key_number));
+
+        d_abd_abd_contact_start_id = nullptr;
+        d_abd_fem_contact_start_id = nullptr;
+        d_fem_abd_contact_start_id = nullptr;
+        d_fem_fem_contact_start_id = nullptr;
+        d_unique_key_number        = nullptr;
     }
 
     int h_abd_abd_contact_start_id = -1;
@@ -201,3 +251,28 @@ class GIPCTripletMatrix
     uint32_t fem_fem_contact_num = 0;
     uint32_t fem_abd_contact_num = 0;
 };
+
+#ifdef __CUDACC__
+inline void GIPCTripletMatrix::update_hash_value(int fem_offset)
+{
+    int threadNum = 256;
+    int blockNum  = (global_collision_triplet_offset + threadNum - 1) / threadNum;
+
+    if(global_collision_triplet_offset > global_external_max_capcity)
+    {
+        global_external_max_capcity = global_collision_triplet_offset;
+        resize_collision_hash_size(global_collision_triplet_offset);
+    }
+
+    LaunchCudaKernal(blockNum,
+                     threadNum,
+                     0,
+                     _gipc_triplet_matrix_set_hash_value,
+                     (const int*)m_block_row_indices.data(),
+                     (const int*)m_block_col_indices.data(),
+                     m_block_index.data(),
+                     m_block_hash_value.data(),
+                     fem_offset,
+                     global_collision_triplet_offset);
+}
+#endif

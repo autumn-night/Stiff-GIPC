@@ -26,6 +26,17 @@ std::string resolve_suite_relative_path(const std::filesystem::path& suite_dir,
     if(path_value.is_absolute())
         return normalize_path_string(path_value);
 
+    const auto first_component = path_value.begin();
+    if(first_component != path_value.end())
+    {
+        const auto& root_relative_hint = first_component->string();
+        if(root_relative_hint == "Assets" || root_relative_hint == "datasets"
+           || root_relative_hint == "Output")
+        {
+            return normalize_path_string(std::filesystem::current_path() / path_value);
+        }
+    }
+
     return normalize_path_string(suite_dir / path_value);
 }
 

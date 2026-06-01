@@ -118,6 +118,31 @@ void upload_host_mesh_to_device(SimulationContext& context)
     auto& tet_mesh        = context.tet_mesh;
     auto& device_tet_mesh = context.device_tet_mesh;
 
+    const double relative_dhat_scale =
+        ipc.relative_dhat > 0.0 ? std::max(1.0, ipc.relative_dhat / 1e-3) : 1.0;
+    const double time_step_scale =
+        ipc.IPC_dt > 0.0 ? std::max(1.0, ipc.IPC_dt / 1e-2) : 1.0;
+    const double contact_complexity_scale =
+        std::max(relative_dhat_scale, time_step_scale);
+
+    // Use contact_complexity_scale directly to ensure buffers scale proportionally
+    // with the actual increase in collision pairs. With dhat 10x larger, the
+    // effective barrier radius grows by sqrt(10)≈3.16x, and the number of
+    // collision pairs within that radius grows roughly with the surface area
+    // (quadratic) or volume (cubic), so sqrt-scaling is insufficient.
+    // The collision pair buffer scales linearly (capped at 8x) and the triplet
+    // buffer scales at sqrt rate (capped at 4x) to keep GPU memory manageable.
+    const double collision_buffer_growth =
+        std::min(8.0, contact_complexity_scale);
+    const double linear_system_buffer_growth =
+        std::min(4.0, std::max(1.0, std::sqrt(contact_complexity_scale)));
+
+    const double collision_buffer_scale =
+        context.collision_detection_buff_scale * collision_buffer_growth;
+
+    context.linear_system_buff_scale =
+        std::max(context.linear_system_buff_scale, linear_system_buffer_growth);
+
     device_tet_mesh.Malloc_DEVICE_MEM(tet_mesh.vertexNum,
                                       tet_mesh.tetrahedraNum,
                                       tet_mesh.triangleNum,
@@ -229,11 +254,11 @@ void upload_host_mesh_to_device(SimulationContext& context)
     ipc.abd_fem_count_info = tet_mesh.abd_fem_count_info;
 
     ipc.MAX_CCD_COLLITION_PAIRS_NUM =
-        1 * context.collision_detection_buff_scale
+        1 * collision_buffer_scale
         * (((double)(ipc.surface_Num * 15 + ipc.edge_Num * 10))
            * std::max((ipc.IPC_dt / 0.01), 2.0));
     ipc.MAX_COLLITION_PAIRS_NUM =
-        (ipc.surf_vertexNum * 3 + ipc.edge_Num * 2) * 3 * context.collision_detection_buff_scale;
+        (ipc.surf_vertexNum * 3 + ipc.edge_Num * 2) * 3 * collision_buffer_scale;
 
     ipc.MALLOC_DEVICE_MEM();
 
