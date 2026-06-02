@@ -3,6 +3,5 @@ build*
 Output/*
 *.pdf
 *.md
-datasets/
 *.tar.gz
 *.sh

@@ -1,0 +1,38 @@
+{
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_friction/friction_0.0",
+      "settings": "settings/parameterSetting_friction_0.0.txt",
+      "notes": "friction=0.0"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_friction/friction_0.1",
+      "settings": "settings/parameterSetting_friction_0.1.txt",
+      "notes": "friction=0.1"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_friction/friction_0.2",
+      "settings": "settings/parameterSetting_friction_0.2.txt",
+      "notes": "friction=0.2 (default)"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_friction/friction_0.5",
+      "settings": "settings/parameterSetting_friction_0.5.txt",
+      "notes": "friction=0.5"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_friction/friction_1.0",
+      "settings": "settings/parameterSetting_friction_1.0.txt",
+      "notes": "friction=1.0"
+    }
+  ]
+}

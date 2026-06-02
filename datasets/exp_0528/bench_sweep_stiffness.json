@@ -1,0 +1,38 @@
+{
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_stiffness/poisson_0.2",
+      "settings": "settings/parameterSetting_poisson_0.2.txt",
+      "notes": "poisson=0.2"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_stiffness/poisson_0.3",
+      "settings": "settings/parameterSetting_poisson_0.3.txt",
+      "notes": "poisson=0.3"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_stiffness/poisson_0.4",
+      "settings": "settings/parameterSetting_poisson_0.4.txt",
+      "notes": "poisson=0.4"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_stiffness/poisson_0.45",
+      "settings": "settings/parameterSetting_poisson_0.45.txt",
+      "notes": "poisson=0.45"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_stiffness/poisson_0.49",
+      "settings": "settings/parameterSetting_poisson_0.49.txt",
+      "notes": "poisson=0.49 (default)"
+    }
+  ]
+}

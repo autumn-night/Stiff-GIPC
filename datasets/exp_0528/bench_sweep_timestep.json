@@ -1,0 +1,33 @@
+{
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_timestep/dt_5e-3",
+      "settings": "settings/parameterSetting_dt_5e-3.txt",
+      "notes": "dt=5e-3"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_timestep/dt_1e-2",
+      "settings": "settings/parameterSetting_dt_1e-2.txt",
+      "notes": "dt=1e-2 (default)"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_timestep/dt_2e-2",
+      "settings": "settings/parameterSetting_dt_2e-2.txt",
+      "notes": "dt=2e-2"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_timestep/dt_5e-2",
+      "settings": "settings/parameterSetting_dt_5e-2.txt",
+      "notes": "dt=5e-2"
+    }
+  ]
+}

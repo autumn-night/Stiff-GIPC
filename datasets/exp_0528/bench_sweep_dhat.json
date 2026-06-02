@@ -1,0 +1,38 @@
+{
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_dhat/dhat_2e-3",
+      "settings": "settings/parameterSetting_dhat_2e-3.txt",
+      "notes": "dhat=2e-3"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_dhat/dhat_5e-3",
+      "settings": "settings/parameterSetting_dhat_5e-3.txt",
+      "notes": "dhat=5e-3"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_dhat/dhat_1e-3",
+      "settings": "settings/parameterSetting_dhat_1e-3.txt",
+      "notes": "dhat=1e-3 (default)"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_dhat/dhat_5e-4",
+      "settings": "settings/parameterSetting_dhat_5e-4.txt",
+      "notes": "dhat=5e-4"
+    },
+    {
+      "output_root": "../../Output/experiments/exp_0528/exp_sweep_dhat/dhat_1e-4",
+      "settings": "settings/parameterSetting_dhat_1e-4.txt",
+      "notes": "dhat=1e-4"
+    }
+  ]
+}
