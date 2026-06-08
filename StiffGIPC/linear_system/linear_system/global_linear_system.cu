@@ -7,67 +7,79 @@ namespace gipc
 {
 bool GlobalLinearSystem::build_linear_system()
 {
-    auto hessian_provider_count  = m_subsystems.size();
-    auto gradient_provider_count = m_inner_subsystems.size();
-
-    // right hand side can only be provided by both LinearSubsystem
-    m_rhs_count_per_subsystem.resize(gradient_provider_count);
-    m_rhs_offset_per_subsystem.resize(gradient_provider_count);
-
-    for(auto& subsystem : m_subsystems)
-        subsystem->report_subsystem_info();
-
-    for(auto& gp : m_inner_subsystems)
     {
-        auto i                       = gp->gid();
-        m_rhs_count_per_subsystem[i] = gp->right_hand_side_dof();
+        Timer timer{"lsolver_subsystem_assemble"};
+
+        auto gradient_provider_count = m_inner_subsystems.size();
+
+        // right hand side can only be provided by both LinearSubsystem
+        m_rhs_count_per_subsystem.resize(gradient_provider_count);
+        m_rhs_offset_per_subsystem.resize(gradient_provider_count);
+
+        for(auto& subsystem : m_subsystems)
+            subsystem->report_subsystem_info();
+
+        for(auto& gp : m_inner_subsystems)
+        {
+            auto i                       = gp->gid();
+            m_rhs_count_per_subsystem[i] = gp->right_hand_side_dof();
+        }
+
+        std::exclusive_scan(m_rhs_count_per_subsystem.begin(),
+                            m_rhs_count_per_subsystem.end(),
+                            m_rhs_offset_per_subsystem.begin(),
+                            0);
+
+        for(auto& gp : m_inner_subsystems)
+        {
+            auto i = gp->gid();
+            gp->dof_offset(m_rhs_offset_per_subsystem[i]);
+        }
+
+        auto total_rhs_count =
+            m_rhs_offset_per_subsystem.back() + m_rhs_count_per_subsystem.back();
+
+
+        if(gipc_global_triplet->global_triplet_offset == 0 || total_rhs_count == 0)
+        {
+            std::cout << "The global linear system is empty, skip *assembling, *solving and *solution distributing phase."
+                      << std::endl;
+            return false;
+        }
+
+
+        m_b.resize(total_rhs_count);
+        m_x.resize(total_rhs_count);
+
+        auto rhs_view = m_b.view();
+
+        for(auto& subsystem : m_subsystems)
+            subsystem->do_assemble(rhs_view);
     }
-
-    std::exclusive_scan(m_rhs_count_per_subsystem.begin(),
-                        m_rhs_count_per_subsystem.end(),
-                        m_rhs_offset_per_subsystem.begin(),
-                        0);
-
-    for(auto& gp : m_inner_subsystems)
-    {
-        auto i = gp->gid();
-        gp->dof_offset(m_rhs_offset_per_subsystem[i]);
-    }
-
-    auto total_rhs_count =
-        m_rhs_offset_per_subsystem.back() + m_rhs_count_per_subsystem.back();
-
-
-    if(gipc_global_triplet->global_triplet_offset == 0 || total_rhs_count == 0)
-    {
-        std::cout << "The global linear system is empty, skip *assembling, *solving and *solution distributing phase."
-                  << std::endl;
-        return false;
-    }
-
-
-    m_b.resize(total_rhs_count);
-    m_x.resize(total_rhs_count);
-
-    auto rhs_view = m_b.view();
-
-    for(auto& subsystem : m_subsystems)
-        subsystem->do_assemble(rhs_view);
 
     int start_preconditioner_id = 0;
     if(m_local_preconditioners.size() && m_local_preconditioners[0]->preconditioner_id == 0)
     {
+        Timer timer{"lsolver_preconditioner_assemble"};
         m_local_preconditioners[0]->assemble();
         start_preconditioner_id++;
     }
-    convert_new();
 
-    if(m_global_preconditioner)
-        m_global_preconditioner->do_assemble(*gipc_global_triplet);
-
-    for(int i = start_preconditioner_id; i < m_local_preconditioners.size(); i++)
     {
-        m_local_preconditioners[i]->assemble();
+        Timer timer{"lsolver_triplet_ops"};
+        convert_new();
+    }
+
+    {
+        Timer timer{"lsolver_preconditioner_assemble"};
+
+        if(m_global_preconditioner)
+            m_global_preconditioner->do_assemble(*gipc_global_triplet);
+
+        for(int i = start_preconditioner_id; i < m_local_preconditioners.size(); i++)
+        {
+            m_local_preconditioners[i]->assemble();
+        }
     }
 
     return true;
@@ -128,7 +140,10 @@ gipc::SizeT GlobalLinearSystem::solve_linear_system()
         return 0;
     MUDA_ASSERT(m_solver, "Solver is null, call create_solver() to setup a solver.");
     auto iter = m_solver->solve(m_x, m_b);
-    distribute_solution();
+    {
+        Timer timer{"lsolver_solution_distribute"};
+        distribute_solution();
+    }
     return iter;
 }
 

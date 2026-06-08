@@ -8,7 +8,7 @@
 void GIPC::build_gipc_system(device_TetraData& tet)
 {
     std::cout << "* Building GIPC system:" << std::endl;
-    gipc::Timer::disable_all();
+    gipc::Timer::enable_all();
     
     // set up debug
     muda::Debug::debug_sync_all(false);

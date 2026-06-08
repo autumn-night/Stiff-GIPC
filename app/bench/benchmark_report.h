@@ -28,6 +28,11 @@ struct BenchmarkSummaryRow
     double avg_cg               = 0.0;
     double avg_contact_pairs    = 0.0;
     double std_time_tot_ms      = 0.0;
+    double avg_lsolver_subsystem_assemble_ms      = 0.0;
+    double avg_lsolver_triplet_ops_ms             = 0.0;
+    double avg_lsolver_preconditioner_assemble_ms = 0.0;
+    double avg_lsolver_pcg_ms                     = 0.0;
+    double avg_lsolver_solution_distribute_ms     = 0.0;
 };
 
 BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,

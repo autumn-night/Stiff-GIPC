@@ -18,6 +18,7 @@
 #include <thrust/device_ptr.h>
 #include "FrictionUtils.cuh"
 #include <fstream>
+#include <string_view>
 #include "Eigen/Eigen"
 #include <gipc/statistics.h>
 #include <gipc_path.h>
@@ -27,6 +28,41 @@
 using namespace Eigen;
 #define RANK 2
 #define NEWF
+
+namespace
+{
+double merged_timer_duration_seconds(const gipc::Json& timer_json,
+                                     std::string_view  timer_name)
+{
+    if(timer_json.is_null())
+        return 0.0;
+
+    if(timer_json.is_array())
+    {
+        double total = 0.0;
+        for(const auto& timer_entry : timer_json)
+            total += merged_timer_duration_seconds(timer_entry, timer_name);
+        return total;
+    }
+
+    if(!timer_json.is_object())
+        return 0.0;
+
+    double total = 0.0;
+    if(timer_json.value("name", std::string{}) == timer_name)
+        total += timer_json.value("duration", 0.0);
+
+    for(const auto& child : timer_json.value("children", gipc::Json::array()))
+        total += merged_timer_duration_seconds(child, timer_name);
+
+    return total;
+}
+
+double merged_timer_duration_ms(const gipc::Json& timer_json, std::string_view timer_name)
+{
+    return merged_timer_duration_seconds(timer_json, timer_name) * 1000.0;
+}
+}  // namespace
 
 template <typename Scalar, int size>
 __device__ __host__ void makePDGeneral(Eigen::Matrix<Scalar, size, size>& symMtr)
@@ -11363,8 +11399,17 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
         outTime << "totalCgTime: " << total_Cg_count << std::endl;
     }
 
-    stats.at_current_frame()["timer"] =
-        gipc::GlobalTimer::current()->report_merged_as_json();
+    auto timer_json = gipc::GlobalTimer::current()->report_merged_as_json();
+    frame_stats["time_lsolver_subsystem_assemble_ms"] =
+        merged_timer_duration_ms(timer_json, "lsolver_subsystem_assemble");
+    frame_stats["time_lsolver_triplet_ops_ms"] =
+        merged_timer_duration_ms(timer_json, "lsolver_triplet_ops");
+    frame_stats["time_lsolver_preconditioner_assemble_ms"] =
+        merged_timer_duration_ms(timer_json, "lsolver_preconditioner_assemble");
+    frame_stats["time_lsolver_pcg_ms"] = merged_timer_duration_ms(timer_json, "pcg");
+    frame_stats["time_lsolver_solution_distribute_ms"] =
+        merged_timer_duration_ms(timer_json, "lsolver_solution_distribute");
+    frame_stats["timer"] = timer_json;
     if(verbose_output)
     {
         gipc::GlobalTimer::current()->print_merged_timings();

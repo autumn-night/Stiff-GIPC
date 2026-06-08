@@ -1,0 +1,34 @@
+{
+  "output_root": "Output/experiments/exp_0608/exp_sweep_bend",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e7.txt",
+      "notes": "stretch=5e4 (fixed), bend=1e7 (very flexible)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e7.txt",
+      "notes": "stretch=5e4 (fixed), bend=5e7 (flexible)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "notes": "stretch=5e4 (fixed), bend=1e8 (default)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "notes": "stretch=5e4 (fixed), bend=5e8 (stiff)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "notes": "stretch=5e4 (fixed), bend=1e9 (very stiff)"
+    }
+  ]
+}

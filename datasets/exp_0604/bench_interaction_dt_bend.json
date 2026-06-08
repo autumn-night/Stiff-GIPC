@@ -1,0 +1,51 @@
+{
+  "output_root": "Output/experiments/exp_0604/interaction_dt_bend",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "datasets/stanford",
+    "notes": "exp_0604 dt x bend interaction"
+  },
+  "runs": [
+    {
+      "settings": "settings/parameterSetting_dt_1e-2_bend_1e8.txt",
+      "notes": "dt=1e-2, bend=1e8 (default baseline)"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_5e-3_bend_1e8.txt",
+      "notes": "dt=5e-3, bend=1e8"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_2e-2_bend_1e8.txt",
+      "notes": "dt=2e-2, bend=1e8"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_1e-2_bend_1e9.txt",
+      "notes": "dt=1e-2, bend=1e9"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_5e-3_bend_1e9.txt",
+      "notes": "dt=5e-3, bend=1e9"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_2e-2_bend_1e9.txt",
+      "notes": "dt=2e-2, bend=1e9 (key combo)"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_1e-2_bend_5e7.txt",
+      "notes": "dt=1e-2, bend=5e7"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_5e-3_bend_5e7.txt",
+      "notes": "dt=5e-3, bend=5e7"
+    },
+    {
+      "settings": "settings/parameterSetting_dt_2e-2_bend_5e7.txt",
+      "notes": "dt=2e-2, bend=5e7"
+    }
+  ]
+}

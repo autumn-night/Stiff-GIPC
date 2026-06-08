@@ -1,0 +1,30 @@
+{
+  "output_root": "Output/experiments/exp_0608/exp_sweep_timestep",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_5e-3.txt",
+      "notes": "dt=5e-3"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_1e-2.txt",
+      "notes": "dt=1e-2 (default)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_2e-2.txt",
+      "notes": "dt=2e-2"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_4e-2.txt",
+      "notes": "dt=4e-2"
+    }
+  ]
+}

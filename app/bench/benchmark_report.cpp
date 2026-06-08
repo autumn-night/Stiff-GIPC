@@ -43,6 +43,11 @@ BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,
     std::vector<double> newton_values;
     std::vector<double> cg_values;
     std::vector<double> contact_values;
+    std::vector<double> lsolver_subsystem_assemble_values;
+    std::vector<double> lsolver_triplet_ops_values;
+    std::vector<double> lsolver_preconditioner_assemble_values;
+    std::vector<double> lsolver_pcg_values;
+    std::vector<double> lsolver_solution_distribute_values;
 
     for(const auto& frame : frames_json)
     {
@@ -54,6 +59,14 @@ BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,
         newton_values.push_back(frame.value("newton_count", 0.0));
         cg_values.push_back(frame.value("cg_total", 0.0));
         contact_values.push_back(frame.value("contact_pairs_avg", 0.0));
+        lsolver_subsystem_assemble_values.push_back(
+            frame.value("time_lsolver_subsystem_assemble_ms", 0.0));
+        lsolver_triplet_ops_values.push_back(frame.value("time_lsolver_triplet_ops_ms", 0.0));
+        lsolver_preconditioner_assemble_values.push_back(
+            frame.value("time_lsolver_preconditioner_assemble_ms", 0.0));
+        lsolver_pcg_values.push_back(frame.value("time_lsolver_pcg_ms", 0.0));
+        lsolver_solution_distribute_values.push_back(
+            frame.value("time_lsolver_solution_distribute_ms", 0.0));
     }
 
     BenchmarkSummaryRow row;
@@ -74,6 +87,13 @@ BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,
     row.avg_cg            = average(cg_values);
     row.avg_contact_pairs = average(contact_values);
     row.std_time_tot_ms   = stddev(total_values, row.avg_time_tot_ms);
+    row.avg_lsolver_subsystem_assemble_ms = average(lsolver_subsystem_assemble_values);
+    row.avg_lsolver_triplet_ops_ms = average(lsolver_triplet_ops_values);
+    row.avg_lsolver_preconditioner_assemble_ms =
+        average(lsolver_preconditioner_assemble_values);
+    row.avg_lsolver_pcg_ms = average(lsolver_pcg_values);
+    row.avg_lsolver_solution_distribute_ms =
+        average(lsolver_solution_distribute_values);
     return row;
 }
 
@@ -147,7 +167,7 @@ void write_summary_csv(const std::string& path,
     };
 
     std::ofstream output(path);
-    output << "dataset,task_id,scene,baseline,frames,warmup,avg_Hess_ms,avg_LSolver_ms,avg_LineS_ms,avg_Misc_ms,avg_TimeTot_ms,avg_newton,avg_cg,avg_contact_pairs,std_TimeTot_ms,asset_root,notes\n";
+    output << "dataset,task_id,scene,baseline,frames,warmup,avg_Hess_ms,avg_LSolver_ms,avg_LineS_ms,avg_Misc_ms,avg_TimeTot_ms,avg_newton,avg_cg,avg_contact_pairs,std_TimeTot_ms,asset_root,notes,avg_LSolver_SubsystemAssemble_ms,avg_LSolver_TripletOps_ms,avg_LSolver_PreconditionerAssemble_ms,avg_LSolver_PCG_ms,avg_LSolver_SolutionDistribute_ms\n";
     for(const auto& row : rows)
     {
         output << csv_field(row.dataset) << ','
@@ -160,7 +180,12 @@ void write_summary_csv(const std::string& path,
                << ',' << row.avg_newton << ',' << row.avg_cg << ','
                << row.avg_contact_pairs << ',' << row.std_time_tot_ms
                << ',' << csv_field(row.asset_root)
-               << ',' << csv_field(row.notes) << '\n';
+               << ',' << csv_field(row.notes)
+               << ',' << row.avg_lsolver_subsystem_assemble_ms
+               << ',' << row.avg_lsolver_triplet_ops_ms
+               << ',' << row.avg_lsolver_preconditioner_assemble_ms
+               << ',' << row.avg_lsolver_pcg_ms
+               << ',' << row.avg_lsolver_solution_distribute_ms << '\n';
     }
 }
 }  // namespace app::bench

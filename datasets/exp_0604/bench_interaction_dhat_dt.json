@@ -1,0 +1,51 @@
+{
+  "output_root": "Output/experiments/exp_0604/interaction_dhat_dt",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "datasets/stanford",
+    "notes": "exp_0604 dHat x dt interaction"
+  },
+  "runs": [
+    {
+      "settings": "settings/parameterSetting_dhat_1e-3_dt_1e-2.txt",
+      "notes": "dhat=1e-3, dt=1e-2 (default baseline)"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_1e-4_dt_1e-2.txt",
+      "notes": "dhat=1e-4, dt=1e-2"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_5e-3_dt_1e-2.txt",
+      "notes": "dhat=5e-3, dt=1e-2"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_1e-3_dt_2e-2.txt",
+      "notes": "dhat=1e-3, dt=2e-2"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_1e-4_dt_2e-2.txt",
+      "notes": "dhat=1e-4, dt=2e-2 (key combo)"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_5e-3_dt_2e-2.txt",
+      "notes": "dhat=5e-3, dt=2e-2"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_1e-3_dt_5e-3.txt",
+      "notes": "dhat=1e-3, dt=5e-3"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_1e-4_dt_5e-3.txt",
+      "notes": "dhat=1e-4, dt=5e-3"
+    },
+    {
+      "settings": "settings/parameterSetting_dhat_5e-3_dt_5e-3.txt",
+      "notes": "dhat=5e-3, dt=5e-3"
+    }
+  ]
+}
