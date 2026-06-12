@@ -22,6 +22,7 @@ struct BenchmarkRunConfig
     std::string task_id;
     std::string dataset;
     std::string asset_root;
+    std::string output_tag;
     std::string notes;
     std::string manifest_path;
 };

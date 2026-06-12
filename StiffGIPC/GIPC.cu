@@ -11409,6 +11409,11 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     frame_stats["time_lsolver_pcg_ms"] = merged_timer_duration_ms(timer_json, "pcg");
     frame_stats["time_lsolver_solution_distribute_ms"] =
         merged_timer_duration_ms(timer_json, "lsolver_solution_distribute");
+    frame_stats["time_pcg_preconditioner_apply_ms"] =
+        merged_timer_duration_ms(timer_json, "pcg_preconditioner_apply");
+    frame_stats["time_pcg_spmv_ms"] = merged_timer_duration_ms(timer_json, "pcg_spmv");
+    frame_stats["time_pcg_dot_ms"] = merged_timer_duration_ms(timer_json, "pcg_dot");
+    frame_stats["time_pcg_axpby_ms"] = merged_timer_duration_ms(timer_json, "pcg_axpby");
     frame_stats["timer"] = timer_json;
     if(verbose_output)
     {

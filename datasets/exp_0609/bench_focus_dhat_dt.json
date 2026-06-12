@@ -1,0 +1,24 @@
+{
+  "output_root": "Output/experiments/exp_0609/focus_dhat_dt",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dhat_1e-4_dt_2e-2.txt",
+      "output_tag": "dhat_1e-4_dt_2e-2",
+      "notes": "dhat=1e-4, dt=2e-2 (key combo)"
+    },
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dhat_5e-3_dt_2e-2.txt",
+      "output_tag": "dhat_5e-3_dt_2e-2",
+      "notes": "dhat=5e-3, dt=2e-2"
+    }
+  ]
+}

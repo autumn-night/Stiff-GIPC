@@ -1,5 +1,5 @@
 {
-  "output_root": "Output/experiments/exp_0608/exp_sweep_stretch",
+  "output_root": "Output/experiments/exp_0610/exp_sweep_stretch",
   "defaults": {
     "frames": 100,
     "warmup": 10,

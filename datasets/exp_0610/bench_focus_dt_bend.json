@@ -1,0 +1,34 @@
+{
+  "output_root": "Output/experiments/exp_0610/focus_dt_bend",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dt_1e-2_bend_1e8.txt",
+      "output_tag": "dt_1e-2_bend_1e8",
+      "notes": "dt=1e-2, bend=1e8 (default baseline)"
+    },
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dt_2e-2_bend_1e8.txt",
+      "output_tag": "dt_2e-2_bend_1e8",
+      "notes": "dt=2e-2, bend=1e8"
+    },
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dt_1e-2_bend_1e9.txt",
+      "output_tag": "dt_1e-2_bend_1e9",
+      "notes": "dt=1e-2, bend=1e9"
+    },
+    {
+      "settings": "../exp_0604/settings/parameterSetting_dt_2e-2_bend_1e9.txt",
+      "output_tag": "dt_2e-2_bend_1e9",
+      "notes": "dt=2e-2, bend=1e9 (key combo)"
+    }
+  ]
+}

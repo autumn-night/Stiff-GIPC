@@ -29,15 +29,19 @@ struct BenchmarkSimulationState
 std::string run_output_directory(const BenchmarkRunConfig& run_config)
 {
     std::filesystem::path output_root = run_config.output_root;
+    std::filesystem::path output_dir;
 
     // When dataset + task_id are available, organize by dataset/task_id/baseline
     if(!run_config.dataset.empty() && !run_config.task_id.empty())
-        return (output_root / run_config.dataset / run_config.task_id
-                / baseline_directory_name(run_config.baseline))
-            .string();
+        output_dir = output_root / run_config.dataset / run_config.task_id
+                     / baseline_directory_name(run_config.baseline);
+    else
+        output_dir = output_root / run_config.scene / baseline_directory_name(run_config.baseline);
 
-    // Fallback to scene/baseline for backward compatibility
-    return (output_root / run_config.scene / baseline_directory_name(run_config.baseline)).string();
+    if(!run_config.output_tag.empty())
+        output_dir /= run_config.output_tag;
+
+    return output_dir.string();
 }
 
 gipc::Json measured_frames_json()

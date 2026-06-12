@@ -33,6 +33,10 @@ struct BenchmarkSummaryRow
     double avg_lsolver_preconditioner_assemble_ms = 0.0;
     double avg_lsolver_pcg_ms                     = 0.0;
     double avg_lsolver_solution_distribute_ms     = 0.0;
+    double avg_pcg_preconditioner_apply_ms        = 0.0;
+    double avg_pcg_spmv_ms                        = 0.0;
+    double avg_pcg_dot_ms                         = 0.0;
+    double avg_pcg_axpby_ms                       = 0.0;
 };
 
 BenchmarkSummaryRow summarize_frames(const BenchmarkRunConfig& run_config,

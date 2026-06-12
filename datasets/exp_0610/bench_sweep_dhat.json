@@ -1,5 +1,5 @@
 {
-  "output_root": "Output/experiments/exp_0608/exp_sweep_dhat",
+  "output_root": "Output/experiments/exp_0610/exp_sweep_dhat",
   "defaults": {
     "frames": 100,
     "warmup": 10,

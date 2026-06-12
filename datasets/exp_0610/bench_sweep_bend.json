@@ -1,5 +1,5 @@
 {
-  "output_root": "Output/experiments/exp_0608/exp_sweep_bend",
+  "output_root": "Output/experiments/exp_0610/exp_sweep_bend",
   "defaults": {
     "frames": 100,
     "warmup": 10,

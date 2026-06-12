@@ -180,12 +180,12 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
     Float alpha, beta, rz, rz0;
 
     {
-        //Timer timer{"preconditioner"};
+        Timer timer{"pcg_preconditioner_apply"};
         apply_preconditioner(z, r);
     }
 
     {
-        //Timer timer{"dot"};
+        Timer timer{"pcg_dot"};
         rz = My_PCG_General_v_v_Reduction_Algorithm(p.buffer_view().data(),
                                                     r.buffer_view().data(),
                                                     z.buffer_view().data(),
@@ -198,13 +198,13 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
     for(k = 1; k < max_iter; ++k)
     {
         {
-            //Timer timer{"spmv"};
+            Timer timer{"pcg_spmv"};
             // Ap = A * p
             spmv(p.cview(), Ap.view());
         }
 
         {
-            //Timer timer{"dot"};
+            Timer timer{"pcg_dot"};
 
             Float dot_res =
                 My_PCG_General_v_v_Reduction_Algorithm(z.buffer_view().data(),
@@ -216,7 +216,7 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
         }
 
         {
-            //Timer timer{"axpby"};
+            Timer timer{"pcg_axpby"};
             LaunchCudaKernal_default(z.size(),
                                      256,
                                      0,
@@ -233,13 +233,13 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
             break;
 
         {
-            //Timer timer{"preconditioner"};
+            Timer timer{"pcg_preconditioner_apply"};
             apply_preconditioner(z, r);
         }
 
         Float rz_new = 0;
         {
-            //Timer timer{"dot"};
+            Timer timer{"pcg_dot"};
             rz_new = My_PCG_General_v_v_Reduction_Algorithm(Ap.buffer_view().data(),
                                                             r.buffer_view().data(),
                                                             z.buffer_view().data(),
@@ -249,7 +249,7 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
         beta = rz_new / rz;
 
         {
-            //Timer timer{"axpby"};
+            Timer timer{"pcg_axpby"};
             LaunchCudaKernal_default(z.size(),
                                      256,
                                      0,

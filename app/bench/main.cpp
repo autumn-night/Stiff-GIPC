@@ -125,6 +125,8 @@ int main(int argc, char** argv)
                 run_config.dataset = manifest_run.dataset;
             if(run_config.asset_root.empty())
                 run_config.asset_root = manifest_run.asset_root;
+            if(run_config.output_tag.empty())
+                run_config.output_tag = manifest_run.output_tag;
             if(run_config.notes.empty())
                 run_config.notes = manifest_run.notes;
             if(run_config.manifest_path.empty())

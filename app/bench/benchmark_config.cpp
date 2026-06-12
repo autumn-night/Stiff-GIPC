@@ -200,6 +200,8 @@ void apply_json_to_run(const gipc::Json& json, BenchmarkRunConfig& run)
         run.dataset = json["dataset"].get<std::string>();
     if(json.contains("asset_root"))
         run.asset_root = json["asset_root"].get<std::string>();
+    if(json.contains("output_tag"))
+        run.output_tag = json["output_tag"].get<std::string>();
     if(json.contains("notes"))
         run.notes = json["notes"].get<std::string>();
     if(json.contains("manifest"))
