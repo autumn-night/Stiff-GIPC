@@ -96,6 +96,13 @@ class GIPC
     uint32_t* _collisonPairs_lastH_gd = nullptr;
     uint32_t  h_gpNum_last;
 
+    // Pre-allocated buffer capacities (in number of contact pairs / ground pairs).
+    // Buffers are grown only when needed and never shrunk during simulation.
+    size_t m_friction_buf_capacity          = 0;
+    size_t m_friction_gd_capacity           = 0;
+    size_t m_close_constraint_cp_capacity   = 0;
+    size_t m_close_constraint_gd_capacity   = 0;
+
     uint32_t vertexNum      = 0;
     uint32_t surf_vertexNum = 0;
     uint32_t edge_Num       = 0;
@@ -151,8 +158,8 @@ class GIPC
 
     void MALLOC_DEVICE_MEM();
 
-    void tempMalloc_closeConstraint();
-    void tempFree_closeConstraint();
+    void ensureFrictionBuffers(size_t cpNum, size_t gpNum);
+    void ensureCloseConstraintBuffers(size_t cpNum, size_t gpNum);
 
     void FREE_DEVICE_MEM();
     void initBVH(int* _btype, int* _bodyId);

@@ -8574,20 +8574,61 @@ void GIPC::FREE_DEVICE_MEM()
     if(_surfVerts)
         CUDA_SAFE_CALL(cudaFree(_surfVerts));
 
+    // Free persistent friction buffers (kept across frames/substeps)
+    if(lambda_lastH_scalar)
+        CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar));
+    if(distCoord)
+        CUDA_SAFE_CALL(cudaFree(distCoord));
+    if(tanBasis)
+        CUDA_SAFE_CALL(cudaFree(tanBasis));
+    if(_collisonPairs_lastH)
+        CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH));
+    if(_MatIndex_last)
+        CUDA_SAFE_CALL(cudaFree(_MatIndex_last));
+    if(lambda_lastH_scalar_gd)
+        CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar_gd));
+    if(_collisonPairs_lastH_gd)
+        CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH_gd));
+
+    // Free persistent close-constraint buffers
+    if(_closeConstraintID)
+        CUDA_SAFE_CALL(cudaFree(_closeConstraintID));
+    if(_closeConstraintVal)
+        CUDA_SAFE_CALL(cudaFree(_closeConstraintVal));
+    if(_closeMConstraintID)
+        CUDA_SAFE_CALL(cudaFree(_closeMConstraintID));
+    if(_closeMConstraintVal)
+        CUDA_SAFE_CALL(cudaFree(_closeMConstraintVal));
+
     // Reset pointers to nullptr
-    _MatIndex                = nullptr;
-    _collisonPairs           = nullptr;
-    _ccd_collisonPairs       = nullptr;
-    _cpNum                   = nullptr;
-    _close_cpNum             = nullptr;
-    _close_gpNum             = nullptr;
+    _MatIndex                  = nullptr;
+    _collisonPairs             = nullptr;
+    _ccd_collisonPairs         = nullptr;
+    _cpNum                     = nullptr;
+    _close_cpNum               = nullptr;
+    _close_gpNum               = nullptr;
     _environment_collisionPair = nullptr;
-    _gpNum                   = nullptr;
-    _groundNormal            = nullptr;
-    _groundOffset            = nullptr;
-    _faces                   = nullptr;
-    _edges                   = nullptr;
-    _surfVerts               = nullptr;
+    _gpNum                     = nullptr;
+    _groundNormal              = nullptr;
+    _groundOffset              = nullptr;
+    _faces                     = nullptr;
+    _edges                     = nullptr;
+    _surfVerts                 = nullptr;
+    lambda_lastH_scalar        = nullptr;
+    distCoord                  = nullptr;
+    tanBasis                   = nullptr;
+    _collisonPairs_lastH       = nullptr;
+    _MatIndex_last             = nullptr;
+    lambda_lastH_scalar_gd     = nullptr;
+    _collisonPairs_lastH_gd    = nullptr;
+    _closeConstraintID         = nullptr;
+    _closeConstraintVal        = nullptr;
+    _closeMConstraintID        = nullptr;
+    _closeMConstraintVal       = nullptr;
+    m_friction_buf_capacity          = 0;
+    m_friction_gd_capacity           = 0;
+    m_close_constraint_cp_capacity   = 0;
+    m_close_constraint_gd_capacity   = 0;
 
     pcg_data.FREE_DEVICE_MEM();
 
@@ -10909,8 +10950,7 @@ void GIPC::postLineSearch(device_TetraData& TetMesh, double alpha)
             Kappa *= 2.0;
             upperBoundKappa(Kappa);
         }
-        tempFree_closeConstraint();
-        tempMalloc_closeConstraint();
+        ensureCloseConstraintBuffers(h_cpNum[0], h_gpNum);
         CUDA_SAFE_CALL(cudaMemset(_close_cpNum, 0, sizeof(uint32_t)));
         CUDA_SAFE_CALL(cudaMemset(_close_gpNum, 0, sizeof(uint32_t)));
 
@@ -10921,21 +10961,73 @@ void GIPC::postLineSearch(device_TetraData& TetMesh, double alpha)
     //printf("------------------------------------------Kappa: %f\n", Kappa);
 }
 
-void GIPC::tempMalloc_closeConstraint()
+void GIPC::ensureFrictionBuffers(size_t cpNum, size_t gpNum)
 {
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_closeConstraintID, h_gpNum * sizeof(uint32_t)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_closeConstraintVal, h_gpNum * sizeof(double)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_closeMConstraintID, h_cpNum[0] * sizeof(int4)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_closeMConstraintVal, h_cpNum[0] * sizeof(double)));
+    if(cpNum > m_friction_buf_capacity)
+    {
+        if(lambda_lastH_scalar)
+            CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar));
+        if(distCoord)
+            CUDA_SAFE_CALL(cudaFree(distCoord));
+        if(tanBasis)
+            CUDA_SAFE_CALL(cudaFree(tanBasis));
+        if(_collisonPairs_lastH)
+            CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH));
+        if(_MatIndex_last)
+            CUDA_SAFE_CALL(cudaFree(_MatIndex_last));
+
+        CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar, cpNum * sizeof(double)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&distCoord, cpNum * sizeof(double2)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&tanBasis, cpNum * sizeof(__GEIGEN__::Matrix3x2d)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH, cpNum * sizeof(int4)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_MatIndex_last, cpNum * sizeof(int)));
+
+        m_friction_buf_capacity = cpNum;
+    }
+
+    if(gpNum > m_friction_gd_capacity)
+    {
+        if(lambda_lastH_scalar_gd)
+            CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar_gd));
+        if(_collisonPairs_lastH_gd)
+            CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH_gd));
+
+        CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar_gd, gpNum * sizeof(double)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH_gd, gpNum * sizeof(uint32_t)));
+
+        m_friction_gd_capacity = gpNum;
+    }
 }
 
-void GIPC::tempFree_closeConstraint()
+void GIPC::ensureCloseConstraintBuffers(size_t cpNum, size_t gpNum)
 {
-    CUDA_SAFE_CALL(cudaFree(_closeConstraintID));
-    CUDA_SAFE_CALL(cudaFree(_closeConstraintVal));
-    CUDA_SAFE_CALL(cudaFree(_closeMConstraintID));
-    CUDA_SAFE_CALL(cudaFree(_closeMConstraintVal));
+    if(cpNum > m_close_constraint_cp_capacity)
+    {
+        if(_closeMConstraintID)
+            CUDA_SAFE_CALL(cudaFree(_closeMConstraintID));
+        if(_closeMConstraintVal)
+            CUDA_SAFE_CALL(cudaFree(_closeMConstraintVal));
+
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_closeMConstraintID, cpNum * sizeof(int4)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_closeMConstraintVal, cpNum * sizeof(double)));
+
+        m_close_constraint_cp_capacity = cpNum;
+    }
+
+    if(gpNum > m_close_constraint_gd_capacity)
+    {
+        if(_closeConstraintID)
+            CUDA_SAFE_CALL(cudaFree(_closeConstraintID));
+        if(_closeConstraintVal)
+            CUDA_SAFE_CALL(cudaFree(_closeConstraintVal));
+
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_closeConstraintID, gpNum * sizeof(uint32_t)));
+        CUDA_SAFE_CALL(cudaMalloc((void**)&_closeConstraintVal, gpNum * sizeof(double)));
+
+        m_close_constraint_gd_capacity = gpNum;
+    }
 }
+
 double maxCOllisionPairNum = 0;
 double totalCollisionPairs = 0;
 double total_Cg_count      = 0;
@@ -11233,14 +11325,7 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     initKappa(TetMesh);
     //Kappa = 1e4;
 #ifdef USE_FRICTION
-    CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar, h_cpNum[0] * sizeof(double)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&distCoord, h_cpNum[0] * sizeof(double2)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&tanBasis, h_cpNum[0] * sizeof(__GEIGEN__::Matrix3x2d)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH, h_cpNum[0] * sizeof(int4)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_MatIndex_last, h_cpNum[0] * sizeof(int)));
-
-    CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar_gd, h_gpNum * sizeof(double)));
-    CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH_gd, h_gpNum * sizeof(uint32_t)));
+    ensureFrictionBuffers(h_cpNum[0], h_gpNum);
     buildFrictionSets();
 #endif
     animation_fullRate = animation_subRate;
@@ -11253,7 +11338,7 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     while(true)
     {
         //if (h_cpNum[0] > 0) return;
-        tempMalloc_closeConstraint();
+        ensureCloseConstraintBuffers(h_cpNum[0], h_gpNum);
         CUDA_SAFE_CALL(cudaMemset(_close_cpNum, 0, sizeof(uint32_t)));
         CUDA_SAFE_CALL(cudaMemset(_close_gpNum, 0, sizeof(uint32_t)));
 
@@ -11270,13 +11355,8 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
 
         if(finishMotion)
         {
-            tempFree_closeConstraint();
             break;
             //}
-        }
-        else
-        {
-            tempFree_closeConstraint();
         }
 
         animation_fullRate += animation_subRate;
@@ -11284,38 +11364,13 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
 
         //computeXTilta(TetMesh, 1);
 #ifdef USE_FRICTION
-        CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar));
-        CUDA_SAFE_CALL(cudaFree(distCoord));
-        CUDA_SAFE_CALL(cudaFree(tanBasis));
-        CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH));
-        CUDA_SAFE_CALL(cudaFree(_MatIndex_last));
-
-        CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar_gd));
-        CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH_gd));
-
-        CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar, h_cpNum[0] * sizeof(double)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&distCoord, h_cpNum[0] * sizeof(double2)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&tanBasis,
-                                  h_cpNum[0] * sizeof(__GEIGEN__::Matrix3x2d)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH, h_cpNum[0] * sizeof(int4)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&_MatIndex_last, h_cpNum[0] * sizeof(int)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&lambda_lastH_scalar_gd, h_gpNum * sizeof(double)));
-        CUDA_SAFE_CALL(cudaMalloc((void**)&_collisonPairs_lastH_gd,
-                                  h_gpNum * sizeof(uint32_t)));
+        ensureFrictionBuffers(h_cpNum[0], h_gpNum);
         buildFrictionSets();
 #endif
     }
 
-#ifdef USE_FRICTION
-    CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar));
-    CUDA_SAFE_CALL(cudaFree(distCoord));
-    CUDA_SAFE_CALL(cudaFree(tanBasis));
-    CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH));
-    CUDA_SAFE_CALL(cudaFree(_MatIndex_last));
-
-    CUDA_SAFE_CALL(cudaFree(lambda_lastH_scalar_gd));
-    CUDA_SAFE_CALL(cudaFree(_collisonPairs_lastH_gd));
-#endif
+    // Friction and close-constraint buffers are kept persistent across frames;
+    // they will be freed in FREE_DEVICE_MEM() at program exit.
 
     updateVelocities(TetMesh);
 
@@ -11409,11 +11464,26 @@ void   GIPC::IPC_Solver(device_TetraData& TetMesh)
     frame_stats["time_lsolver_pcg_ms"] = merged_timer_duration_ms(timer_json, "pcg");
     frame_stats["time_lsolver_solution_distribute_ms"] =
         merged_timer_duration_ms(timer_json, "lsolver_solution_distribute");
-    frame_stats["time_pcg_preconditioner_apply_ms"] =
-        merged_timer_duration_ms(timer_json, "pcg_preconditioner_apply");
-    frame_stats["time_pcg_spmv_ms"] = merged_timer_duration_ms(timer_json, "pcg_spmv");
-    frame_stats["time_pcg_dot_ms"] = merged_timer_duration_ms(timer_json, "pcg_dot");
-    frame_stats["time_pcg_axpby_ms"] = merged_timer_duration_ms(timer_json, "pcg_axpby");
+    // Sum PCG sub-phase times from Newton step statistics (written by PCGSolver),
+    // instead of the timer tree which required cudaDeviceSynchronize per iteration.
+    // NOTE: nlohmann/json operator+= is push_back, NOT arithmetic addition.
+    //       Must accumulate in local doubles and assign once.
+    double time_pcg_preconditioner_apply = 0.0;
+    double time_pcg_spmv                 = 0.0;
+    double time_pcg_dot                  = 0.0;
+    double time_pcg_axpby                = 0.0;
+    for(const auto& newton_stats : frame_stats["newton"])
+    {
+        auto pcg_json = newton_stats.value("pcg", gipc::Json::object());
+        time_pcg_preconditioner_apply += pcg_json.value("preconditioner_apply_ms", 0.0);
+        time_pcg_spmv                 += pcg_json.value("spmv_ms", 0.0);
+        time_pcg_dot                  += pcg_json.value("dot_ms", 0.0);
+        time_pcg_axpby                += pcg_json.value("axpby_ms", 0.0);
+    }
+    frame_stats["time_pcg_preconditioner_apply_ms"] = time_pcg_preconditioner_apply;
+    frame_stats["time_pcg_spmv_ms"]                 = time_pcg_spmv;
+    frame_stats["time_pcg_dot_ms"]                  = time_pcg_dot;
+    frame_stats["time_pcg_axpby_ms"]                = time_pcg_axpby;
     frame_stats["timer"] = timer_json;
     if(verbose_output)
     {

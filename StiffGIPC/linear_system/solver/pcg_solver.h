@@ -34,6 +34,13 @@ class PCGSolver : public IterativeSolver
     DeviceDenseVector Ap;  // A*p
     PCGSolverConfig   m_config;
 
+    // Lightweight accumulated timing (milliseconds) for PCG sub-phases,
+    // collected without cudaDeviceSynchronize to avoid per-iteration sync overhead.
+    double m_time_preconditioner_apply = 0.0;
+    double m_time_spmv                 = 0.0;
+    double m_time_dot                  = 0.0;
+    double m_time_axpby                = 0.0;
+
   protected:
     SizeT solve(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Float> b) override;
 

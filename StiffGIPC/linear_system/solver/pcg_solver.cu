@@ -159,6 +159,12 @@ SizeT PCGSolver::solve(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Fl
 {
     Timer timer{"pcg"};
 
+    // Reset sub-phase accumulators for this solve
+    m_time_preconditioner_apply = 0.0;
+    m_time_spmv                 = 0.0;
+    m_time_dot                  = 0.0;
+    m_time_axpby                = 0.0;
+
     x.buffer_view().fill(0);
     z.resize(b.size());
     p.resize(b.size());
@@ -167,12 +173,28 @@ SizeT PCGSolver::solve(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Fl
     Ap.resize(b.size());
     auto iter = pcg(x, b, m_config.max_iter_ratio * b.size());
 
+    // Write accumulated sub-phase times into the current Newton step's statistics
+    auto& json = gipc::Statistics::instance().at_current_frame();
+    if(json.contains("newton") && json["newton"].is_array() && !json["newton"].empty())
+    {
+        auto& pcg_json = json["newton"].back()["pcg"];
+        pcg_json["preconditioner_apply_ms"] = m_time_preconditioner_apply;
+        pcg_json["spmv_ms"]                 = m_time_spmv;
+        pcg_json["dot_ms"]                  = m_time_dot;
+        pcg_json["axpby_ms"]                = m_time_axpby;
+    }
+
     return iter;
 }
 
 
 SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Float> b, SizeT max_iter)
 {
+    // Create CUDA events (reused across all iterations)
+    cudaEvent_t ev_start, ev_stop;
+    cudaEventCreate(&ev_start);
+    cudaEventCreate(&ev_stop);
+
     SizeT k = 0;
 
     r.buffer_view().copy_from(b.buffer_view());
@@ -180,16 +202,26 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
     Float alpha, beta, rz, rz0;
 
     {
-        Timer timer{"pcg_preconditioner_apply"};
+        cudaEventRecord(ev_start, 0);
         apply_preconditioner(z, r);
+        cudaEventRecord(ev_stop, 0);
+        cudaEventSynchronize(ev_stop);
+        float phase_ms = 0;
+        cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+        m_time_preconditioner_apply += phase_ms;
     }
 
     {
-        Timer timer{"pcg_dot"};
+        cudaEventRecord(ev_start, 0);
         rz = My_PCG_General_v_v_Reduction_Algorithm(p.buffer_view().data(),
                                                     r.buffer_view().data(),
                                                     z.buffer_view().data(),
                                                     z.size());
+        cudaEventRecord(ev_stop, 0);
+        cudaEventSynchronize(ev_stop);
+        float phase_ms = 0;
+        cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+        m_time_dot += phase_ms;
     }
 
     p   = z;
@@ -198,13 +230,18 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
     for(k = 1; k < max_iter; ++k)
     {
         {
-            Timer timer{"pcg_spmv"};
+            cudaEventRecord(ev_start, 0);
             // Ap = A * p
             spmv(p.cview(), Ap.view());
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_spmv += phase_ms;
         }
 
         {
-            Timer timer{"pcg_dot"};
+            cudaEventRecord(ev_start, 0);
 
             Float dot_res =
                 My_PCG_General_v_v_Reduction_Algorithm(z.buffer_view().data(),
@@ -213,10 +250,15 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
                                                        z.size());
 
             alpha = rz / dot_res;
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_dot += phase_ms;
         }
 
         {
-            Timer timer{"pcg_axpby"};
+            cudaEventRecord(ev_start, 0);
             LaunchCudaKernal_default(z.size(),
                                      256,
                                      0,
@@ -227,29 +269,44 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
                                      (const double*)Ap.buffer_view().data(),
                                      alpha,
                                      (int)z.size());
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_axpby += phase_ms;
         }
 
         if(std::abs(rz) <= m_config.global_tol_rate * rz0)
             break;
 
         {
-            Timer timer{"pcg_preconditioner_apply"};
+            cudaEventRecord(ev_start, 0);
             apply_preconditioner(z, r);
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_preconditioner_apply += phase_ms;
         }
 
         Float rz_new = 0;
         {
-            Timer timer{"pcg_dot"};
+            cudaEventRecord(ev_start, 0);
             rz_new = My_PCG_General_v_v_Reduction_Algorithm(Ap.buffer_view().data(),
                                                             r.buffer_view().data(),
                                                             z.buffer_view().data(),
                                                             z.size());
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_dot += phase_ms;
         }
 
         beta = rz_new / rz;
 
         {
-            Timer timer{"pcg_axpby"};
+            cudaEventRecord(ev_start, 0);
             LaunchCudaKernal_default(z.size(),
                                      256,
                                      0,
@@ -258,10 +315,18 @@ SizeT PCGSolver::pcg(muda::DenseVectorView<Float> x, muda::CDenseVectorView<Floa
                                      (const double*)z.buffer_view().data(),
                                      beta,
                                      (int)z.size());
+            cudaEventRecord(ev_stop, 0);
+            cudaEventSynchronize(ev_stop);
+            float phase_ms = 0;
+            cudaEventElapsedTime(&phase_ms, ev_start, ev_stop);
+            m_time_axpby += phase_ms;
         }
 
         rz = rz_new;
     }
+
+    cudaEventDestroy(ev_start);
+    cudaEventDestroy(ev_stop);
 
     return k;
 }
