@@ -80,6 +80,12 @@ BenchmarkSummaryRow BenchmarkRunner::run_single(const BenchmarkRunConfig& run_co
     options.task_id                = run_config.task_id;
     options.asset_root             = run_config.asset_root;
     options.runtime_backend_config = gipc::resolve_runtime_backend_config(run_config.baseline);
+
+    // Apply preconditioner improvement flags from benchmark config JSON
+    if(!run_config.preconditioner_config.is_null())
+        gipc::apply_preconditioner_config_from_json(run_config.preconditioner_config,
+                                                     options.runtime_backend_config);
+
     app::common::bootstrap_simulation(context, options);
 
     gipc::Statistics::instance().reset();

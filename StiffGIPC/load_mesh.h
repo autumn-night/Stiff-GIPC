@@ -18,6 +18,7 @@
 #include "eigen_data.h"
 #include <gipc/abd_fem_count_info.h>
 #include <gipc/body_type.h>
+#include <gipc/runtime_config.h>
 #include <Eigen/Core>
 #include <body_boundary_type.h>
 
@@ -120,6 +121,10 @@ class tetrahedra_obj
 
     tetrahedra_obj();
     int getVertNeighbors();
+
+    // Runtime config pointer for preconditioner improvement flags
+    // Set once during bootstrap, read by getVertNeighbors()
+    static const gipc::RuntimeBackendConfig* s_runtime_backend_config;
     //void InitMesh(int type, double scale);
     bool load_tetrahedraMesh(const std::string& filename,
                              double             scale,

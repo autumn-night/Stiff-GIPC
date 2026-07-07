@@ -26,6 +26,9 @@ class PCGSolver : public IterativeSolver
     void config(const PCGSolverConfig& config) { this->m_config = config; }
     const auto& config() const { return this->m_config; }
 
+    // Step 3: allow dynamic tolerance adjustment for inexact Newton
+    void set_tolerance(Float tol) { m_config.global_tol_rate = tol; }
+
   private:
 
     DeviceDenseVector z;   // preconditioned residual

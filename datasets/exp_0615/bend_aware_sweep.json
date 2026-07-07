@@ -1,0 +1,38 @@
+{
+  "output_root": "Output/experiments/exp_0615/bend_aware",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford",
+    "preconditioner_config": {
+      "bend_aware_neighbor": true,
+      "diag_cluster_stats": true
+    }
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e7.txt",
+      "output_tag": "bend_1e7",
+      "notes": "bend-aware ON, 低 bend"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "bend_1e8",
+      "notes": "bend-aware ON, 默认 bend"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend_5e8",
+      "notes": "bend-aware ON, 中等 bend"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend_1e9",
+      "notes": "bend-aware ON, 高 bend (关键验证)"
+    }
+  ]
+}

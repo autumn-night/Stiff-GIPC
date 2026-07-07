@@ -12,6 +12,7 @@
 #include <muda/launch/launch.h>
 #include <thrust/device_ptr.h>
 #include <thrust/sort.h>
+#include <gipc/statistics.h>
 
 #include <algorithm>
 #include <vector>
@@ -1844,6 +1845,55 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
 
     using namespace muda;
     int tripletNum = triplet_number;
+
+    // Step 0: diagnostic counters - zero them if enabled
+    bool diag_enabled = m_runtime_config && m_runtime_config->diag_cluster_stats;
+    if(diag_enabled)
+    {
+        if(!d_diag_same_cluster_triplets)
+        {
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_diag_same_cluster_triplets, sizeof(unsigned int)));
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_diag_cross_cluster_triplets, sizeof(unsigned int)));
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_diag_cross_level1_triplets, sizeof(unsigned int)));
+        }
+        CUDA_SAFE_CALL(cudaMemset(d_diag_same_cluster_triplets, 0, sizeof(unsigned int)));
+        CUDA_SAFE_CALL(cudaMemset(d_diag_cross_cluster_triplets, 0, sizeof(unsigned int)));
+        CUDA_SAFE_CALL(cudaMemset(d_diag_cross_level1_triplets, 0, sizeof(unsigned int)));
+    }
+
+    // Step 2: compute diagonal norms for contact-aware Schur complement
+    bool contact_aware_enabled = m_runtime_config && m_runtime_config->contact_aware_precond;
+    if(contact_aware_enabled)
+    {
+        if(!d_diagNorms || m_diagNorms_capacity < static_cast<size_t>(totalMapNodes))
+        {
+            if(d_diagNorms) { CUDA_SAFE_CALL(cudaFree(d_diagNorms)); d_diagNorms = nullptr; }
+            CUDA_SAFE_CALL(cudaMalloc((void**)&d_diagNorms, totalMapNodes * sizeof(float)));
+            m_diagNorms_capacity = totalMapNodes;
+        }
+        // Fill d_diagNorms with Frobenius norm of each vertex's diagonal 3x3 block
+        int diagNum = totalMapNodes;
+        ParallelFor()
+            .file_line(__FILE__, __LINE__)
+            .apply(diagNum,
+                   [_invMatrix       = d_inverseMatMas,
+                    _real_map_partId = d_real_map_partId,
+                    _diagNorms       = d_diagNorms] __device__(int v) mutable
+                   {
+                       int pid = _real_map_partId[v];
+                       if(pid < 0) { _diagNorms[v] = 1e-10f; return; }
+                       int cPid  = pid / BANKSIZE;
+                       int bvRid = pid % BANKSIZE;
+                       int index = BANKSIZE * bvRid - bvRid * (bvRid + 1) / 2 + bvRid;
+                       auto& diag = _invMatrix[cPid].M[index];
+                       float norm2 = 0.0f;
+                       for(int i = 0; i < 3; i++)
+                           for(int j = 0; j < 3; j++)
+                               norm2 += static_cast<float>(diag(i, j) * diag(i, j));
+                       _diagNorms[v] = sqrtf(norm2);
+                   });
+    }
+
     if(true)
     {
         ParallelFor()
@@ -1855,6 +1905,12 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
                  _goingNext       = d_goingNext,
                  _invMatrix       = d_inverseMatMas,
                  _real_map_partId = d_real_map_partId,
+                 _diag_same       = d_diag_same_cluster_triplets,
+                 _diag_cross      = d_diag_cross_cluster_triplets,
+                 _diag_level1     = d_diag_cross_level1_triplets,
+                 _diagNorms       = d_diagNorms,
+                 _contact_aware   = contact_aware_enabled,
+                 _diag_enabled    = diag_enabled,
                  indices,
                  triplet_values, row_ids, col_ids] __device__(int I) mutable
                 {
@@ -1872,6 +1928,9 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
 
                     if(vertCid / BANKSIZE == vertRid / BANKSIZE)
                     {
+                        // Step 0: diagnostic
+                        if(_diag_enabled) atomicAdd(_diag_same, 1u);
+
                         if(vertCid >= vertRid)
                         {
                             int bvRid = vertRid % BANKSIZE;
@@ -1883,6 +1942,31 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
                     }
                     else
                     {
+                        // Step 0: diagnostic
+                        if(_diag_enabled) atomicAdd(_diag_cross, 1u);
+
+                        // Step 2: contact-aware Schur complement enhancement
+                        if(_contact_aware)
+                        {
+                            // Simplified diagonal Schur complement:
+                            // ΔH_ii += ||H_ij||² / max(diag_norm_j, 1e-10) * I
+                            // Use double precision to match the inverse matrix type
+                            double h_norm2 = 0.0;
+                            for(int i = 0; i < 3; i++)
+                                for(int j = 0; j < 3; j++)
+                                    h_norm2 += H(i, j) * H(i, j);
+                            double diag_norm_j = _diagNorms ? fmax(static_cast<double>(_diagNorms[vertCid_real]), 1e-10) : 1e-10;
+                            double diagEnhance = h_norm2 / diag_norm_j;
+                            int   rPid  = vertRid / BANKSIZE;
+                            int   bvRid = vertRid % BANKSIZE;
+                            int   diagIdx = BANKSIZE * bvRid - bvRid * (bvRid + 1) / 2 + bvRid;
+                            for(int i = 0; i < 3; i++)
+                            {
+                                atomicAdd(&(_invMatrix[rPid].M[diagIdx](i, i)),
+                                          diagEnhance);
+                            }
+                        }
+
                         int level = 0;
                         while(level < levelNum - 1)
                         {
@@ -1900,6 +1984,8 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
                             cPid = vertCid / BANKSIZE;
                             if(vertCid / BANKSIZE == vertRid / BANKSIZE)
                             {
+                                // Step 0: diagnostic - triplet resolved at this aggregation level
+                                if(_diag_enabled && level == 1) atomicAdd(_diag_level1, 1u);
 
                                 if(vertCid >= vertRid)
                                 {
@@ -2103,6 +2189,22 @@ void MASPreconditioner::PrepareHessian_bcoo(Eigen::Matrix3d* triplet_values,
     //(cudaEventDestroy(end0));
     //(cudaEventDestroy(end1));
     //(cudaEventDestroy(end2));
+
+    // Step 0: write diagnostic stats if enabled
+    if(diag_enabled && d_diag_same_cluster_triplets && d_diag_cross_cluster_triplets && d_diag_cross_level1_triplets)
+    {
+        unsigned int h_same = 0, h_cross = 0, h_level1 = 0;
+        CUDA_SAFE_CALL(cudaMemcpy(&h_same, d_diag_same_cluster_triplets, sizeof(unsigned int), cudaMemcpyDeviceToHost));
+        CUDA_SAFE_CALL(cudaMemcpy(&h_cross, d_diag_cross_cluster_triplets, sizeof(unsigned int), cudaMemcpyDeviceToHost));
+        CUDA_SAFE_CALL(cudaMemcpy(&h_level1, d_diag_cross_level1_triplets, sizeof(unsigned int), cudaMemcpyDeviceToHost));
+        auto& stats = gipc::Statistics::instance().at_current_frame();
+        if(stats.contains("newton") && stats["newton"].is_array() && !stats["newton"].empty())
+        {
+            stats["newton"].back()["mas_diag"]["same_cluster_triplets"]  = h_same;
+            stats["newton"].back()["mas_diag"]["cross_cluster_triplets"] = h_cross;
+            stats["newton"].back()["mas_diag"]["cross_level1_triplets"]  = h_level1;
+        }
+    }
 }
 
 
@@ -2214,6 +2316,11 @@ void MASPreconditioner::setPreconditioner_bcoo(Eigen::Matrix3d* triplet_values,
 {
     if(totalNodes < 1)
         return;
+
+    bool precond_reuse_enabled = m_runtime_config && m_runtime_config->precond_reuse;
+    double reuse_threshold = precond_reuse_enabled ? m_runtime_config->precond_reuse_cpnum_threshold : 0.0;
+    int    reuse_interval  = precond_reuse_enabled ? m_runtime_config->precond_reuse_interval : 0;
+
     CUDA_SAFE_CALL(cudaMemcpy(d_neighborList,
                               d_neighborListInit,
                               neighborListSize * sizeof(unsigned int),
@@ -2227,7 +2334,21 @@ void MASPreconditioner::setPreconditioner_bcoo(Eigen::Matrix3d* triplet_values,
 
     //CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
-    ReorderRealtime(cpNum);
+    // Step 4: preconditioner reuse - skip ReorderRealtime if aggregation is still valid
+    if(precond_reuse_enabled && is_aggregation_valid(cpNum, reuse_threshold, reuse_interval))
+    {
+        // Lightweight path: skip ReorderRealtime, only update values
+        // Aggregation structure is still valid, cpNum change is within threshold and interval not exceeded
+        m_reuse_step_counter++;
+    }
+    else
+    {
+        // Full reassemble path
+        ReorderRealtime(cpNum);
+        m_aggregation_valid  = true;
+        m_last_cpNum         = cpNum;
+        m_reuse_step_counter = 0;
+    }
 
     //CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
@@ -2395,4 +2516,10 @@ void MASPreconditioner::FreeMAS()
     safe_free(d_precondMatMas);
     safe_free(d_multiLevelR);
     safe_free(d_multiLevelZ);
+
+    // Step 0/2: free diagnostic and contact-aware buffers
+    safe_free(d_diag_same_cluster_triplets);
+    safe_free(d_diag_cross_cluster_triplets);
+    safe_free(d_diag_cross_level1_triplets);
+    safe_free(d_diagNorms);
 }

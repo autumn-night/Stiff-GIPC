@@ -206,6 +206,8 @@ void apply_json_to_run(const gipc::Json& json, BenchmarkRunConfig& run)
         run.notes = json["notes"].get<std::string>();
     if(json.contains("manifest"))
         run.manifest_path = json["manifest"].get<std::string>();
+    if(json.contains("preconditioner_config"))
+        run.preconditioner_config = json["preconditioner_config"];
 }
 
 void discover_manifest_runs(const BenchmarkSuiteConfig& suite,

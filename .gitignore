@@ -5,3 +5,9 @@ Output/*
 *.md
 *.tar.gz
 *.sh
+summary*
+
+# Agent instruction files (override *.md ignore above)
+!AGENTS.md
+!docs/agent-guides/
+!docs/agent-guides/*.md

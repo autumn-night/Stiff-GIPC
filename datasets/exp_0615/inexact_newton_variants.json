@@ -1,0 +1,41 @@
+{
+  "output_root": "Output/experiments/exp_0615/inexact_newton_variants",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford",
+    "preconditioner_config": {
+      "inexact_newton": true
+    }
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_inexact_5e-3_5e-4",
+      "notes": "高 bend: 温和版 Inexact [0~5=5e-3, 6~15=5e-4, 16+=1e-4]",
+      "preconditioner_config": {
+        "inexact_newton": true,
+        "inexact_eta_early": 0.005,
+        "inexact_eta_mid": 0.0005,
+        "inexact_early_steps": 5,
+        "inexact_mid_steps": 15
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_inexact_5e-2_5e-3",
+      "notes": "高 bend: 激进版 Inexact [0~5=5e-2, 6~15=5e-3, 16+=1e-4]",
+      "preconditioner_config": {
+        "inexact_newton": true,
+        "inexact_eta_early": 0.05,
+        "inexact_eta_mid": 0.005,
+        "inexact_early_steps": 5,
+        "inexact_mid_steps": 15
+      }
+    }
+  ]
+}

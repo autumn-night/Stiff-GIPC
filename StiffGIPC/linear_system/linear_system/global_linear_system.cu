@@ -1,6 +1,7 @@
 #include <linear_system/linear_system/global_linear_system.h>
 #include <linear_system/linear_system/i_linear_system_solver.h>
 #include <linear_system/linear_system/i_preconditioner.h>
+#include <linear_system/solver/pcg_solver.h>
 #include <gipc/utils/timer.h>
 
 namespace gipc
@@ -145,6 +146,17 @@ gipc::SizeT GlobalLinearSystem::solve_linear_system()
         distribute_solution();
     }
     return iter;
+}
+
+void GlobalLinearSystem::set_solver_tolerance(Float tol)
+{
+    if(m_solver)
+    {
+        // The solver is an IterativeSolver; try to cast to PCGSolver
+        auto* pcg = dynamic_cast<PCGSolver*>(m_solver.get());
+        if(pcg)
+            pcg->set_tolerance(tol);
+    }
 }
 
 Json GlobalLinearSystem::as_json() const

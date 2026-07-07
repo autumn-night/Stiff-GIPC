@@ -1,0 +1,1501 @@
+{
+  "group": "exp_0528_0604",
+  "analysis_type": "total_time_breakdown",
+  "generated_at": "2026-06-22T09:57:57.542431",
+  "experiments": [
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_bend",
+      "json_file": "exp_0528__exp_sweep_bend.json",
+      "rows": [
+        {
+          "notes": "stretch=5e4 (fixed), bend=5e7 (flexible)",
+          "avg_TimeTot_ms": 4265.3,
+          "avg_newton": 45.58,
+          "avg_cg": 34650.7,
+          "avg_contact_pairs": 3480.9,
+          "cg_per_newton": 760.22,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 62.9205,
+              "ratio": 0.0148
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 2814.47,
+              "ratio": 0.6599
+            },
+            "avg_LineS_ms": {
+              "value_ms": 518.446,
+              "ratio": 0.1215
+            },
+            "avg_Misc_ms": {
+              "value_ms": 869.461,
+              "ratio": 0.2038
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e7 (very flexible)",
+          "avg_TimeTot_ms": 2044.19,
+          "avg_newton": 39.12,
+          "avg_cg": 17605.6,
+          "avg_contact_pairs": 934.342,
+          "cg_per_newton": 450.04,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 50.8656,
+              "ratio": 0.0249
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 1455.95,
+              "ratio": 0.7122
+            },
+            "avg_LineS_ms": {
+              "value_ms": 155.913,
+              "ratio": 0.0763
+            },
+            "avg_Misc_ms": {
+              "value_ms": 381.459,
+              "ratio": 0.1866
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e8 (default)",
+          "avg_TimeTot_ms": 5237.24,
+          "avg_newton": 44.85,
+          "avg_cg": 45043.6,
+          "avg_contact_pairs": 5520.23,
+          "cg_per_newton": 1004.32,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 62.9415,
+              "ratio": 0.012
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3632.09,
+              "ratio": 0.6935
+            },
+            "avg_LineS_ms": {
+              "value_ms": 542.595,
+              "ratio": 0.1036
+            },
+            "avg_Misc_ms": {
+              "value_ms": 999.614,
+              "ratio": 0.1909
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e9 (very stiff)",
+          "avg_TimeTot_ms": 36212.2,
+          "avg_newton": 38.21,
+          "avg_cg": 453478,
+          "avg_contact_pairs": 16732.9,
+          "cg_per_newton": 11868.05,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 49.6583,
+              "ratio": 0.0014
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 35779.7,
+              "ratio": 0.9881
+            },
+            "avg_LineS_ms": {
+              "value_ms": 232.617,
+              "ratio": 0.0064
+            },
+            "avg_Misc_ms": {
+              "value_ms": 150.274,
+              "ratio": 0.0041
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=5e8 (stiff)",
+          "avg_TimeTot_ms": 28619,
+          "avg_newton": 27.35,
+          "avg_cg": 347705,
+          "avg_contact_pairs": 8699.75,
+          "cg_per_newton": 12713.16,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 35.6824,
+              "ratio": 0.0012
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 27409.6,
+              "ratio": 0.9577
+            },
+            "avg_LineS_ms": {
+              "value_ms": 246.712,
+              "ratio": 0.0086
+            },
+            "avg_Misc_ms": {
+              "value_ms": 927.028,
+              "ratio": 0.0324
+            }
+          },
+          "breakdown_sum": 0.9999
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_dhat",
+      "json_file": "exp_0528__exp_sweep_dhat.json",
+      "rows": [
+        {
+          "notes": "dhat=2e-3",
+          "avg_TimeTot_ms": 6077.24,
+          "avg_newton": 55.27,
+          "avg_cg": 44822.4,
+          "avg_contact_pairs": 427048,
+          "cg_per_newton": 810.97,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 419.426,
+              "ratio": 0.069
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3832.98,
+              "ratio": 0.6307
+            },
+            "avg_LineS_ms": {
+              "value_ms": 865.795,
+              "ratio": 0.1425
+            },
+            "avg_Misc_ms": {
+              "value_ms": 959.037,
+              "ratio": 0.1578
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-3 (default)",
+          "avg_TimeTot_ms": 5316.65,
+          "avg_newton": 46.14,
+          "avg_cg": 45075.7,
+          "avg_contact_pairs": 4731.27,
+          "cg_per_newton": 976.93,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 64.5673,
+              "ratio": 0.0121
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3635.54,
+              "ratio": 0.6838
+            },
+            "avg_LineS_ms": {
+              "value_ms": 584.951,
+              "ratio": 0.11
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1031.59,
+              "ratio": 0.194
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dhat=5e-4",
+          "avg_TimeTot_ms": 5737.85,
+          "avg_newton": 50.86,
+          "avg_cg": 48455.9,
+          "avg_contact_pairs": 1819.05,
+          "cg_per_newton": 952.73,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 68.0437,
+              "ratio": 0.0119
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3908.35,
+              "ratio": 0.6812
+            },
+            "avg_LineS_ms": {
+              "value_ms": 519.133,
+              "ratio": 0.0905
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1242.32,
+              "ratio": 0.2165
+            }
+          },
+          "breakdown_sum": 1.0001
+        },
+        {
+          "notes": "dhat=1e-4",
+          "avg_TimeTot_ms": 6143.57,
+          "avg_newton": 47.65,
+          "avg_cg": 46120.6,
+          "avg_contact_pairs": 705.708,
+          "cg_per_newton": 967.9,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 62.6979,
+              "ratio": 0.0102
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3717.6,
+              "ratio": 0.6051
+            },
+            "avg_LineS_ms": {
+              "value_ms": 487.303,
+              "ratio": 0.0793
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1875.97,
+              "ratio": 0.3054
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_friction",
+      "json_file": "exp_0528__exp_sweep_friction.json",
+      "rows": [
+        {
+          "notes": "friction=0.0",
+          "avg_TimeTot_ms": 6108.58,
+          "avg_newton": 51.58,
+          "avg_cg": 50875,
+          "avg_contact_pairs": 4407.88,
+          "cg_per_newton": 986.33,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 74.342,
+              "ratio": 0.0122
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4223.42,
+              "ratio": 0.6914
+            },
+            "avg_LineS_ms": {
+              "value_ms": 689.251,
+              "ratio": 0.1128
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1121.57,
+              "ratio": 0.1836
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "friction=0.1",
+          "avg_TimeTot_ms": 5919.56,
+          "avg_newton": 54.75,
+          "avg_cg": 49016.3,
+          "avg_contact_pairs": 4889.71,
+          "cg_per_newton": 895.27,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 78.2335,
+              "ratio": 0.0132
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4066.99,
+              "ratio": 0.687
+            },
+            "avg_LineS_ms": {
+              "value_ms": 749.338,
+              "ratio": 0.1266
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1025,
+              "ratio": 0.1732
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "friction=0.2 (default)",
+          "avg_TimeTot_ms": 5508.11,
+          "avg_newton": 48.19,
+          "avg_cg": 46472.1,
+          "avg_contact_pairs": 4400.47,
+          "cg_per_newton": 964.35,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 67.3551,
+              "ratio": 0.0122
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3848.69,
+              "ratio": 0.6987
+            },
+            "avg_LineS_ms": {
+              "value_ms": 574.205,
+              "ratio": 0.1042
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1017.86,
+              "ratio": 0.1848
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "friction=0.5",
+          "avg_TimeTot_ms": 4894.25,
+          "avg_newton": 42.07,
+          "avg_cg": 41187,
+          "avg_contact_pairs": 4316.93,
+          "cg_per_newton": 979.01,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 56.8673,
+              "ratio": 0.0116
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3410.5,
+              "ratio": 0.6968
+            },
+            "avg_LineS_ms": {
+              "value_ms": 432.636,
+              "ratio": 0.0884
+            },
+            "avg_Misc_ms": {
+              "value_ms": 994.238,
+              "ratio": 0.2031
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "friction=1.0",
+          "avg_TimeTot_ms": 4608.54,
+          "avg_newton": 39.86,
+          "avg_cg": 36978,
+          "avg_contact_pairs": 4404.93,
+          "cg_per_newton": 927.7,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 53.8797,
+              "ratio": 0.0117
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3066.92,
+              "ratio": 0.6655
+            },
+            "avg_LineS_ms": {
+              "value_ms": 470.127,
+              "ratio": 0.102
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1017.61,
+              "ratio": 0.2208
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_stiffness",
+      "json_file": "exp_0528__exp_sweep_stiffness.json",
+      "rows": [
+        {
+          "notes": "poisson=0.2",
+          "avg_TimeTot_ms": 5478.8,
+          "avg_newton": 52.89,
+          "avg_cg": 46236.1,
+          "avg_contact_pairs": 3610.48,
+          "cg_per_newton": 874.19,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 72.5023,
+              "ratio": 0.0132
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3729.93,
+              "ratio": 0.6808
+            },
+            "avg_LineS_ms": {
+              "value_ms": 619.645,
+              "ratio": 0.1131
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1056.72,
+              "ratio": 0.1929
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "poisson=0.3",
+          "avg_TimeTot_ms": 5510.61,
+          "avg_newton": 49.96,
+          "avg_cg": 46035.6,
+          "avg_contact_pairs": 3912.84,
+          "cg_per_newton": 921.45,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 67.9159,
+              "ratio": 0.0123
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3707.65,
+              "ratio": 0.6728
+            },
+            "avg_LineS_ms": {
+              "value_ms": 595.349,
+              "ratio": 0.108
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1139.7,
+              "ratio": 0.2068
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "poisson=0.4",
+          "avg_TimeTot_ms": 5220.68,
+          "avg_newton": 46.72,
+          "avg_cg": 45479.2,
+          "avg_contact_pairs": 3984.58,
+          "cg_per_newton": 973.44,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 63.0397,
+              "ratio": 0.0121
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3659.28,
+              "ratio": 0.7009
+            },
+            "avg_LineS_ms": {
+              "value_ms": 493.407,
+              "ratio": 0.0945
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1004.95,
+              "ratio": 0.1925
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "poisson=0.45",
+          "avg_TimeTot_ms": 5247.59,
+          "avg_newton": 46.54,
+          "avg_cg": 45829.5,
+          "avg_contact_pairs": 4199.14,
+          "cg_per_newton": 984.73,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 62.6594,
+              "ratio": 0.0119
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3683.84,
+              "ratio": 0.702
+            },
+            "avg_LineS_ms": {
+              "value_ms": 505.63,
+              "ratio": 0.0964
+            },
+            "avg_Misc_ms": {
+              "value_ms": 995.457,
+              "ratio": 0.1897
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "poisson=0.49 (default)",
+          "avg_TimeTot_ms": 5279.73,
+          "avg_newton": 45.54,
+          "avg_cg": 45233.6,
+          "avg_contact_pairs": 4509.78,
+          "cg_per_newton": 993.27,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 63.5363,
+              "ratio": 0.012
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3636.96,
+              "ratio": 0.6889
+            },
+            "avg_LineS_ms": {
+              "value_ms": 549.939,
+              "ratio": 0.1042
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1029.29,
+              "ratio": 0.195
+            }
+          },
+          "breakdown_sum": 1.0001
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_stretch",
+      "json_file": "exp_0528__exp_sweep_stretch.json",
+      "rows": [
+        {
+          "notes": "stretch=5e3 (very soft), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 2520.81,
+          "avg_newton": 18.77,
+          "avg_cg": 21053.9,
+          "avg_contact_pairs": 17773.2,
+          "cg_per_newton": 1121.68,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 24.3745,
+              "ratio": 0.0097
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 1750.99,
+              "ratio": 0.6946
+            },
+            "avg_LineS_ms": {
+              "value_ms": 128.464,
+              "ratio": 0.051
+            },
+            "avg_Misc_ms": {
+              "value_ms": 616.983,
+              "ratio": 0.2448
+            }
+          },
+          "breakdown_sum": 1.0001
+        },
+        {
+          "notes": "stretch=1e4 (soft), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 4630.97,
+          "avg_newton": 29.99,
+          "avg_cg": 38690.5,
+          "avg_contact_pairs": 9260.54,
+          "cg_per_newton": 1290.11,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 39.5906,
+              "ratio": 0.0085
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3199.36,
+              "ratio": 0.6909
+            },
+            "avg_LineS_ms": {
+              "value_ms": 282.305,
+              "ratio": 0.061
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1109.72,
+              "ratio": 0.2396
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e4 (default), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 5518.58,
+          "avg_newton": 47.74,
+          "avg_cg": 46917.7,
+          "avg_contact_pairs": 4429.96,
+          "cg_per_newton": 982.78,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 65.8043,
+              "ratio": 0.0119
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3896.74,
+              "ratio": 0.7061
+            },
+            "avg_LineS_ms": {
+              "value_ms": 537.729,
+              "ratio": 0.0974
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1018.31,
+              "ratio": 0.1845
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "stretch=1e5 (stiff), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 6624.52,
+          "avg_newton": 51.77,
+          "avg_cg": 58925.7,
+          "avg_contact_pairs": 2729.18,
+          "cg_per_newton": 1138.22,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 68.4024,
+              "ratio": 0.0103
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4880.16,
+              "ratio": 0.7367
+            },
+            "avg_LineS_ms": {
+              "value_ms": 546.063,
+              "ratio": 0.0824
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1129.9,
+              "ratio": 0.1706
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "stretch=5e5 (very stiff), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 4635.54,
+          "avg_newton": 60.17,
+          "avg_cg": 46664.7,
+          "avg_contact_pairs": 736.841,
+          "cg_per_newton": 775.55,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 79.5869,
+              "ratio": 0.0172
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3895.9,
+              "ratio": 0.8404
+            },
+            "avg_LineS_ms": {
+              "value_ms": 252.061,
+              "ratio": 0.0544
+            },
+            "avg_Misc_ms": {
+              "value_ms": 407.989,
+              "ratio": 0.088
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_timestep",
+      "json_file": "exp_0528__exp_sweep_timestep.json",
+      "rows": [
+        {
+          "notes": "dt=5e-3",
+          "avg_TimeTot_ms": 1113.46,
+          "avg_newton": 15.39,
+          "avg_cg": 12198.2,
+          "avg_contact_pairs": 3352.84,
+          "cg_per_newton": 792.61,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 18.7203,
+              "ratio": 0.0168
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 988.757,
+              "ratio": 0.888
+            },
+            "avg_LineS_ms": {
+              "value_ms": 76.4472,
+              "ratio": 0.0687
+            },
+            "avg_Misc_ms": {
+              "value_ms": 29.5391,
+              "ratio": 0.0265
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=1e-2 (default)",
+          "avg_TimeTot_ms": 5467.2,
+          "avg_newton": 49.67,
+          "avg_cg": 46651.9,
+          "avg_contact_pairs": 4387.59,
+          "cg_per_newton": 939.24,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 69.4151,
+              "ratio": 0.0127
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3771.15,
+              "ratio": 0.6898
+            },
+            "avg_LineS_ms": {
+              "value_ms": 601.628,
+              "ratio": 0.11
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1025,
+              "ratio": 0.1875
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=2e-2",
+          "avg_TimeTot_ms": 18440.4,
+          "avg_newton": 36.39,
+          "avg_cg": 209645,
+          "avg_contact_pairs": 4714.51,
+          "cg_per_newton": 5761.06,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 47.7915,
+              "ratio": 0.0026
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 16572.4,
+              "ratio": 0.8987
+            },
+            "avg_LineS_ms": {
+              "value_ms": 354.909,
+              "ratio": 0.0192
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1465.33,
+              "ratio": 0.0795
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=5e-2",
+          "avg_TimeTot_ms": 14383.7,
+          "avg_newton": 60.99,
+          "avg_cg": 141500,
+          "avg_contact_pairs": 4450.71,
+          "cg_per_newton": 2320.05,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 80.3548,
+              "ratio": 0.0056
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 11243.9,
+              "ratio": 0.7817
+            },
+            "avg_LineS_ms": {
+              "value_ms": 552.34,
+              "ratio": 0.0384
+            },
+            "avg_Misc_ms": {
+              "value_ms": 2507.1,
+              "ratio": 0.1743
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dhat_bend",
+      "json_file": "exp_0604__interaction_dhat_bend.json",
+      "rows": [
+        {
+          "notes": "dhat=1e-3, bend=1e8 (default baseline)",
+          "avg_TimeTot_ms": 24533.3,
+          "avg_newton": 45.67,
+          "avg_cg": 45428.9,
+          "avg_contact_pairs": 4496.56,
+          "cg_per_newton": 994.72,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 88.4239,
+              "ratio": 0.0036
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 22549.4,
+              "ratio": 0.9191
+            },
+            "avg_LineS_ms": {
+              "value_ms": 740.751,
+              "ratio": 0.0302
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1154.76,
+              "ratio": 0.0471
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-4, bend=1e8",
+          "avg_TimeTot_ms": 28191.2,
+          "avg_newton": 50.78,
+          "avg_cg": 50635.6,
+          "avg_contact_pairs": 707.121,
+          "cg_per_newton": 997.16,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 93.1208,
+              "ratio": 0.0033
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 25107.6,
+              "ratio": 0.8906
+            },
+            "avg_LineS_ms": {
+              "value_ms": 725.189,
+              "ratio": 0.0257
+            },
+            "avg_Misc_ms": {
+              "value_ms": 2265.23,
+              "ratio": 0.0804
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=2e-3, bend=1e8",
+          "avg_TimeTot_ms": 25359.9,
+          "avg_newton": 56.55,
+          "avg_cg": 45249.2,
+          "avg_contact_pairs": 427038,
+          "cg_per_newton": 800.16,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 479.684,
+              "ratio": 0.0189
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 22696.3,
+              "ratio": 0.895
+            },
+            "avg_LineS_ms": {
+              "value_ms": 1175.14,
+              "ratio": 0.0463
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1008.77,
+              "ratio": 0.0398
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-3, bend=1e9",
+          "avg_TimeTot_ms": 176319,
+          "avg_newton": 32.36,
+          "avg_cg": 357034,
+          "avg_contact_pairs": 16691.6,
+          "cg_per_newton": 11033.19,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 59.8206,
+              "ratio": 0.0003
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 175808,
+              "ratio": 0.9971
+            },
+            "avg_LineS_ms": {
+              "value_ms": 297.092,
+              "ratio": 0.0017
+            },
+            "avg_Misc_ms": {
+              "value_ms": 153.996,
+              "ratio": 0.0009
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-4, bend=1e9 (key combo)",
+          "avg_TimeTot_ms": 143258,
+          "avg_newton": 26.42,
+          "avg_cg": 290018,
+          "avg_contact_pairs": 901.702,
+          "cg_per_newton": 10977.21,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 46.3623,
+              "ratio": 0.0003
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 142831,
+              "ratio": 0.997
+            },
+            "avg_LineS_ms": {
+              "value_ms": 205.281,
+              "ratio": 0.0014
+            },
+            "avg_Misc_ms": {
+              "value_ms": 175.443,
+              "ratio": 0.0012
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dhat=2e-3, bend=1e9",
+          "avg_TimeTot_ms": 198245,
+          "avg_newton": 36.95,
+          "avg_cg": 399670,
+          "avg_contact_pairs": 587428,
+          "cg_per_newton": 10816.51,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 387.906,
+              "ratio": 0.002
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 196936,
+              "ratio": 0.9934
+            },
+            "avg_LineS_ms": {
+              "value_ms": 420.985,
+              "ratio": 0.0021
+            },
+            "avg_Misc_ms": {
+              "value_ms": 500.021,
+              "ratio": 0.0025
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-3, bend=5e7",
+          "avg_TimeTot_ms": 18404.3,
+          "avg_newton": 42.82,
+          "avg_cg": 33497.2,
+          "avg_contact_pairs": 3475.48,
+          "cg_per_newton": 782.28,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 82.6536,
+              "ratio": 0.0045
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 16672.3,
+              "ratio": 0.9059
+            },
+            "avg_LineS_ms": {
+              "value_ms": 646.121,
+              "ratio": 0.0351
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1003.18,
+              "ratio": 0.0545
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-4, bend=5e7",
+          "avg_TimeTot_ms": 18981.2,
+          "avg_newton": 40.2,
+          "avg_cg": 33328.6,
+          "avg_contact_pairs": 489.471,
+          "cg_per_newton": 829.07,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 73.5341,
+              "ratio": 0.0039
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 16569.9,
+              "ratio": 0.873
+            },
+            "avg_LineS_ms": {
+              "value_ms": 518.139,
+              "ratio": 0.0273
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1819.61,
+              "ratio": 0.0959
+            }
+          },
+          "breakdown_sum": 1.0001
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dhat_dt",
+      "json_file": "exp_0604__interaction_dhat_dt.json",
+      "rows": [
+        {
+          "notes": "dhat=1e-3, dt=1e-2 (default baseline)",
+          "avg_TimeTot_ms": 5380.3,
+          "avg_newton": 46.07,
+          "avg_cg": 45665.2,
+          "avg_contact_pairs": 4427.71,
+          "cg_per_newton": 991.21,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 63.2618,
+              "ratio": 0.0118
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3794.59,
+              "ratio": 0.7053
+            },
+            "avg_LineS_ms": {
+              "value_ms": 523.464,
+              "ratio": 0.0973
+            },
+            "avg_Misc_ms": {
+              "value_ms": 998.98,
+              "ratio": 0.1857
+            }
+          },
+          "breakdown_sum": 1.0001
+        },
+        {
+          "notes": "dhat=1e-4, dt=1e-2",
+          "avg_TimeTot_ms": 6338.4,
+          "avg_newton": 47.61,
+          "avg_cg": 48355.8,
+          "avg_contact_pairs": 758.621,
+          "cg_per_newton": 1015.66,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 62.89,
+              "ratio": 0.0099
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4015.04,
+              "ratio": 0.6334
+            },
+            "avg_LineS_ms": {
+              "value_ms": 492.772,
+              "ratio": 0.0777
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1767.7,
+              "ratio": 0.2789
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dhat=2e-3, dt=1e-2",
+          "avg_TimeTot_ms": 6072.41,
+          "avg_newton": 54.69,
+          "avg_cg": 45225.2,
+          "avg_contact_pairs": 427046,
+          "cg_per_newton": 826.94,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 416.146,
+              "ratio": 0.0685
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3949.82,
+              "ratio": 0.6505
+            },
+            "avg_LineS_ms": {
+              "value_ms": 833.772,
+              "ratio": 0.1373
+            },
+            "avg_Misc_ms": {
+              "value_ms": 872.677,
+              "ratio": 0.1437
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-3, dt=2e-2",
+          "avg_TimeTot_ms": 19107.8,
+          "avg_newton": 31.87,
+          "avg_cg": 212358,
+          "avg_contact_pairs": 4656.31,
+          "cg_per_newton": 6663.26,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 42.0116,
+              "ratio": 0.0022
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 17306.5,
+              "ratio": 0.9057
+            },
+            "avg_LineS_ms": {
+              "value_ms": 292.159,
+              "ratio": 0.0153
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1467.09,
+              "ratio": 0.0768
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-4, dt=2e-2 (key combo)",
+          "avg_TimeTot_ms": 21714.1,
+          "avg_newton": 25.06,
+          "avg_cg": 221386,
+          "avg_contact_pairs": 589.828,
+          "cg_per_newton": 8834.24,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 32.4442,
+              "ratio": 0.0015
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 18100.5,
+              "ratio": 0.8336
+            },
+            "avg_LineS_ms": {
+              "value_ms": 168.211,
+              "ratio": 0.0077
+            },
+            "avg_Misc_ms": {
+              "value_ms": 3412.99,
+              "ratio": 0.1572
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=2e-3, dt=2e-2",
+          "avg_TimeTot_ms": 20730.1,
+          "avg_newton": 55.66,
+          "avg_cg": 217476,
+          "avg_contact_pairs": 428347,
+          "cg_per_newton": 3907.22,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 408.044,
+              "ratio": 0.0197
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 18022.7,
+              "ratio": 0.8694
+            },
+            "avg_LineS_ms": {
+              "value_ms": 1120.34,
+              "ratio": 0.054
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1179.01,
+              "ratio": 0.0569
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-3, dt=5e-3",
+          "avg_TimeTot_ms": 1166.38,
+          "avg_newton": 15.62,
+          "avg_cg": 12416.6,
+          "avg_contact_pairs": 3355.15,
+          "cg_per_newton": 794.92,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 19.1143,
+              "ratio": 0.0164
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 1034.32,
+              "ratio": 0.8868
+            },
+            "avg_LineS_ms": {
+              "value_ms": 80.5828,
+              "ratio": 0.0691
+            },
+            "avg_Misc_ms": {
+              "value_ms": 32.3657,
+              "ratio": 0.0277
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dhat=1e-4, dt=5e-3",
+          "avg_TimeTot_ms": 1231.94,
+          "avg_newton": 16.83,
+          "avg_cg": 13015.9,
+          "avg_contact_pairs": 392.093,
+          "cg_per_newton": 773.37,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 20.7939,
+              "ratio": 0.0169
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 1085.34,
+              "ratio": 0.881
+            },
+            "avg_LineS_ms": {
+              "value_ms": 88.0508,
+              "ratio": 0.0715
+            },
+            "avg_Misc_ms": {
+              "value_ms": 37.7464,
+              "ratio": 0.0306
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dt_bend",
+      "json_file": "exp_0604__interaction_dt_bend.json",
+      "rows": [
+        {
+          "notes": "dt=1e-2, bend=1e8 (default baseline)",
+          "avg_TimeTot_ms": 5447.32,
+          "avg_newton": 48.4,
+          "avg_cg": 46626,
+          "avg_contact_pairs": 4462.18,
+          "cg_per_newton": 963.35,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 67.7608,
+              "ratio": 0.0124
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3781.17,
+              "ratio": 0.6941
+            },
+            "avg_LineS_ms": {
+              "value_ms": 577.772,
+              "ratio": 0.1061
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1020.62,
+              "ratio": 0.1874
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=5e-3, bend=1e8",
+          "avg_TimeTot_ms": 1109.51,
+          "avg_newton": 15.32,
+          "avg_cg": 12220.7,
+          "avg_contact_pairs": 3355.31,
+          "cg_per_newton": 797.7,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 18.5795,
+              "ratio": 0.0167
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 988.041,
+              "ratio": 0.8905
+            },
+            "avg_LineS_ms": {
+              "value_ms": 74.777,
+              "ratio": 0.0674
+            },
+            "avg_Misc_ms": {
+              "value_ms": 28.112,
+              "ratio": 0.0253
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dt=2e-2, bend=1e8",
+          "avg_TimeTot_ms": 19610.4,
+          "avg_newton": 32.47,
+          "avg_cg": 223460,
+          "avg_contact_pairs": 4754.43,
+          "cg_per_newton": 6882.04,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 42.4404,
+              "ratio": 0.0022
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 17740.5,
+              "ratio": 0.9046
+            },
+            "avg_LineS_ms": {
+              "value_ms": 284.021,
+              "ratio": 0.0145
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1543.42,
+              "ratio": 0.0787
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=1e-2, bend=1e9",
+          "avg_TimeTot_ms": 21487.6,
+          "avg_newton": 24.65,
+          "avg_cg": 262076,
+          "avg_contact_pairs": 16786,
+          "cg_per_newton": 10631.89,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 31.9111,
+              "ratio": 0.0015
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 21197.1,
+              "ratio": 0.9865
+            },
+            "avg_LineS_ms": {
+              "value_ms": 139.572,
+              "ratio": 0.0065
+            },
+            "avg_Misc_ms": {
+              "value_ms": 119.047,
+              "ratio": 0.0055
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=5e-3, bend=1e9",
+          "avg_TimeTot_ms": 12183.8,
+          "avg_newton": 23.08,
+          "avg_cg": 147881,
+          "avg_contact_pairs": 16467.1,
+          "cg_per_newton": 6407.32,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 29.4717,
+              "ratio": 0.0024
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 11942.9,
+              "ratio": 0.9802
+            },
+            "avg_LineS_ms": {
+              "value_ms": 156.488,
+              "ratio": 0.0128
+            },
+            "avg_Misc_ms": {
+              "value_ms": 54.9495,
+              "ratio": 0.0045
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dt=2e-2, bend=1e9 (key combo)",
+          "avg_TimeTot_ms": 675245,
+          "avg_newton": 123.43,
+          "avg_cg": 1978970.0,
+          "avg_contact_pairs": 16415.6,
+          "cg_per_newton": 16033.14,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 203.547,
+              "ratio": 0.0003
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 672241,
+              "ratio": 0.9956
+            },
+            "avg_LineS_ms": {
+              "value_ms": 731.937,
+              "ratio": 0.0011
+            },
+            "avg_Misc_ms": {
+              "value_ms": 2067.87,
+              "ratio": 0.0031
+            }
+          },
+          "breakdown_sum": 1.0001
+        },
+        {
+          "notes": "dt=1e-2, bend=5e7",
+          "avg_TimeTot_ms": 4469.23,
+          "avg_newton": 40.66,
+          "avg_cg": 33025.1,
+          "avg_contact_pairs": 3335.24,
+          "cg_per_newton": 812.23,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 55.9664,
+              "ratio": 0.0125
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3068.19,
+              "ratio": 0.6865
+            },
+            "avg_LineS_ms": {
+              "value_ms": 443.113,
+              "ratio": 0.0991
+            },
+            "avg_Misc_ms": {
+              "value_ms": 901.961,
+              "ratio": 0.2018
+            }
+          },
+          "breakdown_sum": 0.9999
+        },
+        {
+          "notes": "dt=5e-3, bend=5e7",
+          "avg_TimeTot_ms": 1016.16,
+          "avg_newton": 15.89,
+          "avg_cg": 9721.92,
+          "avg_contact_pairs": 2432.89,
+          "cg_per_newton": 611.83,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 19.9026,
+              "ratio": 0.0196
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 907.664,
+              "ratio": 0.8932
+            },
+            "avg_LineS_ms": {
+              "value_ms": 60.566,
+              "ratio": 0.0596
+            },
+            "avg_Misc_ms": {
+              "value_ms": 28.0224,
+              "ratio": 0.0276
+            }
+          },
+          "breakdown_sum": 1.0
+        },
+        {
+          "notes": "dt=2e-2, bend=5e7",
+          "avg_TimeTot_ms": 10430.9,
+          "avg_newton": 39.03,
+          "avg_cg": 98344.7,
+          "avg_contact_pairs": 3399.36,
+          "cg_per_newton": 2519.72,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 51.8368,
+              "ratio": 0.005
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 9002.16,
+              "ratio": 0.863
+            },
+            "avg_LineS_ms": {
+              "value_ms": 276.72,
+              "ratio": 0.0265
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1100.2,
+              "ratio": 0.1055
+            }
+          },
+          "breakdown_sum": 1.0
+        }
+      ]
+    }
+  ]
+}

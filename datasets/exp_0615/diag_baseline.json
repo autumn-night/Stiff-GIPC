@@ -1,0 +1,32 @@
+{
+  "output_root": "Output/experiments/exp_0615/diag_baseline",
+  "defaults": {
+    "frames": 10,
+    "warmup": 2,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford",
+    "preconditioner_config": {
+      "diag_cluster_stats": true
+    }
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "bend_1e8_default",
+      "notes": "默认参数基线，诊断开启"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend_1e9",
+      "notes": "高 bend 病态，诊断开启"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_2e-2.txt",
+      "output_tag": "dt_2e-2",
+      "notes": "大时间步，诊断开启"
+    }
+  ]
+}

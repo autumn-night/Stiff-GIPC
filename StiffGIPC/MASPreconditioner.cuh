@@ -44,6 +44,23 @@ class MASPreconditioner
     Precision_T3*              d_multiLevelZ   = nullptr;
     gipc::MasBackend           m_backend       = gipc::MasBackend::CEMAS;
 
+    // Preconditioner improvement: config pointer for runtime flags
+    const gipc::RuntimeBackendConfig* m_runtime_config = nullptr;
+
+    // Step 0: diagnostic counters (device-side)
+    unsigned int* d_diag_same_cluster_triplets  = nullptr;
+    unsigned int* d_diag_cross_cluster_triplets = nullptr;
+    unsigned int* d_diag_cross_level1_triplets  = nullptr;
+
+    // Step 2: diagonal norms buffer for contact-aware Schur complement
+    float* d_diagNorms           = nullptr;
+    int    m_diagNorms_capacity  = 0;  // track allocated size for reallocation
+
+    // Step 4: aggregation reuse tracking
+    bool m_aggregation_valid = false;
+    int  m_last_cpNum        = 0;
+    int  m_reuse_step_counter = 0;
+
   public:
     int           neighborListSize   = 0;
     unsigned int* d_neighborList     = nullptr;
@@ -67,6 +84,22 @@ class MASPreconditioner
 
     void set_backend(gipc::MasBackend backend) { m_backend = backend; }
     auto backend() const { return m_backend; }
+
+    void set_runtime_config(const gipc::RuntimeBackendConfig* config) { m_runtime_config = config; }
+    const gipc::RuntimeBackendConfig* runtime_config() const { return m_runtime_config; }
+
+    // Step 4: aggregation validity
+    bool is_aggregation_valid(int current_cpNum, double threshold, int reuse_interval) const
+    {
+        if(!m_aggregation_valid || m_last_cpNum == 0)
+            return false;
+        // If interval-based reuse is enabled, reaggregate every N steps
+        if(reuse_interval > 0 && m_reuse_step_counter >= reuse_interval)
+            return false;
+        double rel_change = std::abs(current_cpNum - m_last_cpNum) / std::max(m_last_cpNum, 1);
+        return rel_change <= threshold;
+    }
+    void invalidate_aggregation() { m_aggregation_valid = false; m_reuse_step_counter = 0; }
 
 
     int  ReorderRealtime(int cpNum);

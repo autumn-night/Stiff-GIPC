@@ -1,0 +1,230 @@
+{
+  "generated_at": "2026-06-21T22:05:18.284779",
+  "total_files": 32,
+  "experiments": [
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_bend",
+      "json_file": "exp_0528__exp_sweep_bend.json",
+      "row_count": 5,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_dhat",
+      "json_file": "exp_0528__exp_sweep_dhat.json",
+      "row_count": 4,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_friction",
+      "json_file": "exp_0528__exp_sweep_friction.json",
+      "row_count": 5,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_stiffness",
+      "json_file": "exp_0528__exp_sweep_stiffness.json",
+      "row_count": 5,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_stretch",
+      "json_file": "exp_0528__exp_sweep_stretch.json",
+      "row_count": 5,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0528",
+      "subdir": "exp_sweep_timestep",
+      "json_file": "exp_0528__exp_sweep_timestep.json",
+      "row_count": 4,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dhat_bend",
+      "json_file": "exp_0604__interaction_dhat_bend.json",
+      "row_count": 8,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dhat_dt",
+      "json_file": "exp_0604__interaction_dhat_dt.json",
+      "row_count": 8,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0604",
+      "subdir": "interaction_dt_bend",
+      "json_file": "exp_0604__interaction_dt_bend.json",
+      "row_count": 9,
+      "column_count": 17
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_bend",
+      "json_file": "exp_0608__exp_sweep_bend.json",
+      "row_count": 5,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_dhat",
+      "json_file": "exp_0608__exp_sweep_dhat.json",
+      "row_count": 4,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_friction",
+      "json_file": "exp_0608__exp_sweep_friction.json",
+      "row_count": 5,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_stiffness",
+      "json_file": "exp_0608__exp_sweep_stiffness.json",
+      "row_count": 5,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_stretch",
+      "json_file": "exp_0608__exp_sweep_stretch.json",
+      "row_count": 5,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0608",
+      "subdir": "exp_sweep_timestep",
+      "json_file": "exp_0608__exp_sweep_timestep.json",
+      "row_count": 4,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0609",
+      "subdir": "focus_dhat_dt",
+      "json_file": "exp_0609__focus_dhat_dt.json",
+      "row_count": 1,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0609",
+      "subdir": "focus_dt_bend",
+      "json_file": "exp_0609__focus_dt_bend.json",
+      "row_count": 4,
+      "column_count": 22
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_bend",
+      "json_file": "exp_0610__exp_sweep_bend.json",
+      "row_count": 5,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_dhat",
+      "json_file": "exp_0610__exp_sweep_dhat.json",
+      "row_count": 4,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_friction",
+      "json_file": "exp_0610__exp_sweep_friction.json",
+      "row_count": 5,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_stiffness",
+      "json_file": "exp_0610__exp_sweep_stiffness.json",
+      "row_count": 5,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_stretch",
+      "json_file": "exp_0610__exp_sweep_stretch.json",
+      "row_count": 5,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_timestep",
+      "json_file": "exp_0610__exp_sweep_timestep.json",
+      "row_count": 4,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "focus_dhat_dt",
+      "json_file": "exp_0610__focus_dhat_dt.json",
+      "row_count": 1,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "focus_dt_bend",
+      "json_file": "exp_0610__focus_dt_bend.json",
+      "row_count": 4,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "bend_aware",
+      "json_file": "exp_0615__bend_aware.json",
+      "row_count": 4,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "contact_aware",
+      "json_file": "exp_0615__contact_aware.json",
+      "row_count": 2,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "diag_baseline",
+      "json_file": "exp_0615__diag_baseline.json",
+      "row_count": 3,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "inexact_newton",
+      "json_file": "exp_0615__inexact_newton.json",
+      "row_count": 3,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "inexact_newton_variants",
+      "json_file": "exp_0615__inexact_newton_variants.json",
+      "row_count": 2,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "precond_reuse",
+      "json_file": "exp_0615__precond_reuse.json",
+      "row_count": 1,
+      "column_count": 26
+    },
+    {
+      "experiment": "exp_0615",
+      "subdir": "supplement_5e8",
+      "json_file": "exp_0615__supplement_5e8.json",
+      "row_count": 6,
+      "column_count": 26
+    }
+  ]
+}

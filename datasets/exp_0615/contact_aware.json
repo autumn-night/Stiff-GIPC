@@ -1,0 +1,33 @@
+{
+  "output_root": "Output/experiments/exp_0615/contact_aware",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford",
+    "preconditioner_config": {
+      "contact_aware_precond": true,
+      "diag_cluster_stats": true
+    }
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "default_contact_aware",
+      "notes": "默认参数: contact-aware Schur 补增强"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_contact_aware",
+      "notes": "高 bend: contact-aware Schur 补增强 (关键验证)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dhat_5e-3.txt",
+      "output_tag": "dhat5e-3_contact_aware",
+      "notes": "大 dHat (多接触): contact-aware Schur 补增强"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "output_root": "Output/experiments/exp_0615/supplement_5e8",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_clean_baseline",
+      "notes": "纯净基线 (无改进), 用于隔离代码修改本身的开销"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_reuse_cpnum_threshold",
+      "notes": "Step 4: cpNum 变化>10% 才 reaggre",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 0.1,
+        "precond_reuse_interval": 0
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_reuse_every_5",
+      "notes": "Step 4: 每 5 步 reaggre 一次",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 1.0,
+        "precond_reuse_interval": 5
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_inexact_1e-2_1e-3",
+      "notes": "Step 3 标准: [0~5步=1e-2, 6~15步=1e-3, 16+步=1e-4]",
+      "preconditioner_config": {
+        "inexact_newton": true,
+        "inexact_eta_early": 0.01,
+        "inexact_eta_mid": 0.001,
+        "inexact_early_steps": 5,
+        "inexact_mid_steps": 15
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_inexact_5e-2_5e-3",
+      "notes": "Step 3 激进: [0~5步=5e-2, 6~15步=5e-3, 16+步=1e-4]",
+      "preconditioner_config": {
+        "inexact_newton": true,
+        "inexact_eta_early": 0.05,
+        "inexact_eta_mid": 0.005,
+        "inexact_early_steps": 5,
+        "inexact_mid_steps": 15
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_5e8.txt",
+      "output_tag": "bend5e8_inexact_aggressive_reuse",
+      "notes": "组合: 激进 Inexact (5e-2/5e-3) + Reuse (threshold=0.1)",
+      "preconditioner_config": {
+        "inexact_newton": true,
+        "inexact_eta_early": 0.05,
+        "inexact_eta_mid": 0.005,
+        "inexact_early_steps": 5,
+        "inexact_mid_steps": 15,
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 0.1,
+        "precond_reuse_interval": 0
+      }
+    }
+  ]
+}

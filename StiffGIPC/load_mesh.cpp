@@ -13,6 +13,10 @@
 #include <set>
 #include <queue>
 #include <map>
+
+// Static member definition for bend-aware neighbor access
+const gipc::RuntimeBackendConfig* tetrahedra_obj::s_runtime_backend_config = nullptr;
+
 #include <iostream>
 #include <cfloat>
 #include "gpu_eigen_libs.cuh"
@@ -1010,6 +1014,44 @@ int tetrahedra_obj::getVertNeighbors()
                       == Edges_set.end())
             {
                 Edges_set.insert(pair<uint32_t, uint32_t>(cTri.z, cTri.x));
+            }
+        }
+    }
+
+    // --- Bend-Aware: for each hinge edge (shared by two surface triangles),
+    // add the two opposite vertices as neighbors ---
+    if(s_runtime_backend_config && s_runtime_backend_config->bend_aware_neighbor)
+    {
+        // Build edge-to-opposite-vertex mapping for surface triangles
+        // Key: (min_vertex_id, max_vertex_id) for each edge
+        // Value: vector of (triangle_index, opposite_vertex) pairs
+        auto make_edge_key = [](uint32_t a, uint32_t b) -> uint64_t {
+            uint32_t lo = std::min(a, b);
+            uint32_t hi = std::max(a, b);
+            return (static_cast<uint64_t>(hi) << 32) | lo;
+        };
+        std::unordered_map<uint64_t, std::vector<uint32_t>> edge_to_opp_verts;
+        for(const auto& cTri : triangles)
+        {
+            uint32_t v0 = cTri.x, v1 = cTri.y, v2 = cTri.z;
+            // edge v0-v1, opposite is v2
+            edge_to_opp_verts[make_edge_key(v0, v1)].push_back(v2);
+            // edge v0-v2, opposite is v1
+            edge_to_opp_verts[make_edge_key(v0, v2)].push_back(v1);
+            // edge v1-v2, opposite is v0
+            edge_to_opp_verts[make_edge_key(v1, v2)].push_back(v0);
+        }
+        // For edges shared by exactly 2 triangles, add the two opposite vertices as neighbors
+        for(const auto& [edge_key, opp_verts] : edge_to_opp_verts)
+        {
+            if(opp_verts.size() == 2)
+            {
+                uint32_t opp_v0 = opp_verts[0];
+                uint32_t opp_v1 = opp_verts[1];
+                if(opp_v0 != opp_v1)
+                {
+                    Edges_set.insert(pair<uint64_t, uint64_t>(opp_v0, opp_v1));
+                }
             }
         }
     }

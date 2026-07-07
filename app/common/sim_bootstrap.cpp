@@ -281,6 +281,9 @@ void upload_host_mesh_to_device(SimulationContext& context)
                                                     ipc._collisonPairs,
                                                     tet_mesh.part_offset * BANKSIZE);
 
+        // Pass runtime config to MAS preconditioner for preconditioner improvement flags
+        ipc.pcg_data.MP.set_runtime_config(&ipc.runtime_backend_config);
+
         ipc.pcg_data.MP.neighborListSize = neighbor_list_size;
         CUDA_SAFE_CALL(cudaMemcpy(ipc.pcg_data.MP.d_neighborListInit,
                                   tet_mesh.neighborList.data(),
@@ -360,6 +363,9 @@ void apply_runtime_backend_config(SimulationContext& context,
 {
     context.ipc.runtime_backend_config = config;
     context.ipc.pcg_data.P_type        = 1;
+
+    // Set static pointer so tetrahedra_obj::getVertNeighbors() can access runtime config
+    tetrahedra_obj::s_runtime_backend_config = &context.ipc.runtime_backend_config;
 }
 
 void bootstrap_simulation(SimulationContext& context,

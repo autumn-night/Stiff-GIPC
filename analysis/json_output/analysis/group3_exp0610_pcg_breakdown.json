@@ -1,0 +1,2406 @@
+{
+  "group": "exp_0610",
+  "analysis_type": "pcg_breakdown",
+  "generated_at": "2026-06-22T09:57:57.542431",
+  "experiments": [
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_bend",
+      "json_file": "exp_0610__exp_sweep_bend.json",
+      "rows": [
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e7 (very flexible)",
+          "avg_TimeTot_ms": 2552.99,
+          "avg_LSolver_ms": 1890.1,
+          "avg_LSolver_PCG_ms": 1804.41,
+          "avg_newton": 39.72,
+          "avg_cg": 18119.2,
+          "avg_contact_pairs": 925.346,
+          "cg_per_newton": 456.17,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 52.682,
+              "ratio": 0.0206
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 1890.1,
+              "ratio": 0.7403
+            },
+            "avg_LineS_ms": {
+              "value_ms": 183.739,
+              "ratio": 0.072
+            },
+            "avg_Misc_ms": {
+              "value_ms": 426.471,
+              "ratio": 0.167
+            }
+          },
+          "breakdown_sum": 0.9999,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.458931,
+              "ratio": 0.0002
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 36.1963,
+              "ratio": 0.0192
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 48.1651,
+              "ratio": 0.0255
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 1804.41,
+              "ratio": 0.9547
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.401673,
+              "ratio": 0.0002
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 574.394,
+              "ratio": 0.3183
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 422.251,
+              "ratio": 0.234
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 484.584,
+              "ratio": 0.2686
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 237.802,
+              "ratio": 0.1318
+            }
+          },
+          "pcg_breakdown_sum": 0.9527
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=5e7 (flexible)",
+          "avg_TimeTot_ms": 4936.75,
+          "avg_LSolver_ms": 3338.34,
+          "avg_LSolver_PCG_ms": 3250.28,
+          "avg_newton": 41.56,
+          "avg_cg": 32490.7,
+          "avg_contact_pairs": 3453.04,
+          "cg_per_newton": 781.78,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 58.9116,
+              "ratio": 0.0119
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 3338.34,
+              "ratio": 0.6762
+            },
+            "avg_LineS_ms": {
+              "value_ms": 542.993,
+              "ratio": 0.11
+            },
+            "avg_Misc_ms": {
+              "value_ms": 996.503,
+              "ratio": 0.2019
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.492636,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 30.0483,
+              "ratio": 0.009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 56.5732,
+              "ratio": 0.0169
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 3250.28,
+              "ratio": 0.9736
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.427549,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9997,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1031.94,
+              "ratio": 0.3175
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 758.319,
+              "ratio": 0.2333
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 878.956,
+              "ratio": 0.2704
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 427.537,
+              "ratio": 0.1315
+            }
+          },
+          "pcg_breakdown_sum": 0.9527
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e8 (default)",
+          "avg_TimeTot_ms": 6524.76,
+          "avg_LSolver_ms": 4786.14,
+          "avg_LSolver_PCG_ms": 4696.84,
+          "avg_newton": 49.45,
+          "avg_cg": 46999.5,
+          "avg_contact_pairs": 4390.19,
+          "cg_per_newton": 950.44,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 70.2244,
+              "ratio": 0.0108
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4786.14,
+              "ratio": 0.7335
+            },
+            "avg_LineS_ms": {
+              "value_ms": 598.758,
+              "ratio": 0.0918
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1069.64,
+              "ratio": 0.1639
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.583775,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 25.0838,
+              "ratio": 0.0052
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 62.5407,
+              "ratio": 0.0131
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 4696.84,
+              "ratio": 0.9813
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.508184,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1490.75,
+              "ratio": 0.3174
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1099.23,
+              "ratio": 0.234
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1268.18,
+              "ratio": 0.27
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 617.505,
+              "ratio": 0.1315
+            }
+          },
+          "pcg_breakdown_sum": 0.9529
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=5e8 (stiff)",
+          "avg_TimeTot_ms": 33980.2,
+          "avg_LSolver_ms": 32556.8,
+          "avg_LSolver_PCG_ms": 32457.4,
+          "avg_newton": 25.75,
+          "avg_cg": 324521,
+          "avg_contact_pairs": 8597.48,
+          "cg_per_newton": 12602.76,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 34.3923,
+              "ratio": 0.001
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 32556.8,
+              "ratio": 0.9581
+            },
+            "avg_LineS_ms": {
+              "value_ms": 324.959,
+              "ratio": 0.0096
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1064.04,
+              "ratio": 0.0313
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.315856,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 12.8089,
+              "ratio": 0.0004
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 110.944,
+              "ratio": 0.0034
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 32457.4,
+              "ratio": 0.9969
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.275878,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 1.0007,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 10304.3,
+              "ratio": 0.3175
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 7610.36,
+              "ratio": 0.2345
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 8734.15,
+              "ratio": 0.2691
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 4271.52,
+              "ratio": 0.1316
+            }
+          },
+          "pcg_breakdown_sum": 0.9527
+        },
+        {
+          "notes": "stretch=5e4 (fixed), bend=1e9 (very stiff)",
+          "avg_TimeTot_ms": 40355.5,
+          "avg_LSolver_ms": 39516,
+          "avg_LSolver_PCG_ms": 39358.7,
+          "avg_newton": 33.8,
+          "avg_cg": 392803,
+          "avg_contact_pairs": 16820,
+          "cg_per_newton": 11621.39,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 45.3425,
+              "ratio": 0.0011
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 39516,
+              "ratio": 0.9792
+            },
+            "avg_LineS_ms": {
+              "value_ms": 350.536,
+              "ratio": 0.0087
+            },
+            "avg_Misc_ms": {
+              "value_ms": 443.626,
+              "ratio": 0.011
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.419941,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 18.0833,
+              "ratio": 0.0005
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 163.674,
+              "ratio": 0.0041
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 39358.7,
+              "ratio": 0.996
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.369458,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 1.0006,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 12494.9,
+              "ratio": 0.3175
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 9208.51,
+              "ratio": 0.234
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 10622.6,
+              "ratio": 0.2699
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 5179.46,
+              "ratio": 0.1316
+            }
+          },
+          "pcg_breakdown_sum": 0.953
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_dhat",
+      "json_file": "exp_0610__exp_sweep_dhat.json",
+      "rows": [
+        {
+          "notes": "dhat=2e-3",
+          "avg_TimeTot_ms": 73398.8,
+          "avg_LSolver_ms": 70235.9,
+          "avg_LSolver_PCG_ms": 69726.1,
+          "avg_newton": 53.68,
+          "avg_cg": 44427.8,
+          "avg_contact_pairs": 427032,
+          "cg_per_newton": 827.64,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 536.406,
+              "ratio": 0.0073
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 70235.9,
+              "ratio": 0.9569
+            },
+            "avg_LineS_ms": {
+              "value_ms": 1195.41,
+              "ratio": 0.0163
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1431.07,
+              "ratio": 0.0195
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 11.6459,
+              "ratio": 0.0002
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 231.354,
+              "ratio": 0.0033
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 243.898,
+              "ratio": 0.0035
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 69726.1,
+              "ratio": 0.9927
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 11.4891,
+              "ratio": 0.0002
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 20186.4,
+              "ratio": 0.2895
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 10337.4,
+              "ratio": 0.1483
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 20219,
+              "ratio": 0.29
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 18729.7,
+              "ratio": 0.2686
+            }
+          },
+          "pcg_breakdown_sum": 0.9964
+        },
+        {
+          "notes": "dhat=1e-3 (default)",
+          "avg_TimeTot_ms": 75240.3,
+          "avg_LSolver_ms": 72882.4,
+          "avg_LSolver_PCG_ms": 72620.7,
+          "avg_newton": 49.45,
+          "avg_cg": 47650.4,
+          "avg_contact_pairs": 4390.92,
+          "cg_per_newton": 963.61,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 173.813,
+              "ratio": 0.0023
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 72882.4,
+              "ratio": 0.9687
+            },
+            "avg_LineS_ms": {
+              "value_ms": 901.66,
+              "ratio": 0.012
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1282.37,
+              "ratio": 0.017
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 10.4456,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 45.8392,
+              "ratio": 0.0006
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 184.795,
+              "ratio": 0.0025
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 72620.7,
+              "ratio": 0.9964
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 10.3745,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9997,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 20953.2,
+              "ratio": 0.2885
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 10756.9,
+              "ratio": 0.1481
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 21108.8,
+              "ratio": 0.2907
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 19527.8,
+              "ratio": 0.2689
+            }
+          },
+          "pcg_breakdown_sum": 0.9962
+        },
+        {
+          "notes": "dhat=5e-4",
+          "avg_TimeTot_ms": 77298.2,
+          "avg_LSolver_ms": 74731.4,
+          "avg_LSolver_PCG_ms": 74474.8,
+          "avg_newton": 49.29,
+          "avg_cg": 48896.7,
+          "avg_contact_pairs": 1749.51,
+          "cg_per_newton": 992.02,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 166.756,
+              "ratio": 0.0022
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 74731.4,
+              "ratio": 0.9668
+            },
+            "avg_LineS_ms": {
+              "value_ms": 837.357,
+              "ratio": 0.0108
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1562.62,
+              "ratio": 0.0202
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 10.2412,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 43.9594,
+              "ratio": 0.0006
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 182.154,
+              "ratio": 0.0024
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 74474.8,
+              "ratio": 0.9966
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 10.1848,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 21465.5,
+              "ratio": 0.2882
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 11047.6,
+              "ratio": 0.1483
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 21674.2,
+              "ratio": 0.291
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 20005.9,
+              "ratio": 0.2686
+            }
+          },
+          "pcg_breakdown_sum": 0.9961
+        },
+        {
+          "notes": "dhat=1e-4",
+          "avg_TimeTot_ms": 77188.8,
+          "avg_LSolver_ms": 74105.2,
+          "avg_LSolver_PCG_ms": 73859.1,
+          "avg_newton": 47.77,
+          "avg_cg": 48581.9,
+          "avg_contact_pairs": 805.827,
+          "cg_per_newton": 1017.0,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 159.192,
+              "ratio": 0.0021
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 74105.2,
+              "ratio": 0.9601
+            },
+            "avg_LineS_ms": {
+              "value_ms": 779.94,
+              "ratio": 0.0101
+            },
+            "avg_Misc_ms": {
+              "value_ms": 2144.39,
+              "ratio": 0.0278
+            }
+          },
+          "breakdown_sum": 1.0001,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 9.88357,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 41.7918,
+              "ratio": 0.0006
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 175.423,
+              "ratio": 0.0024
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 73859.1,
+              "ratio": 0.9967
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 9.61906,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 21316.9,
+              "ratio": 0.2886
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 10942.6,
+              "ratio": 0.1482
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 21457.2,
+              "ratio": 0.2905
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 19858.1,
+              "ratio": 0.2689
+            }
+          },
+          "pcg_breakdown_sum": 0.9962
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_friction",
+      "json_file": "exp_0610__exp_sweep_friction.json",
+      "rows": [
+        {
+          "notes": "friction=0.0",
+          "avg_TimeTot_ms": 52937.6,
+          "avg_LSolver_ms": 50279.2,
+          "avg_LSolver_PCG_ms": 50039.4,
+          "avg_newton": 53.5,
+          "avg_cg": 51731.8,
+          "avg_contact_pairs": 4392.69,
+          "cg_per_newton": 966.95,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 148.675,
+              "ratio": 0.0028
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 50279.2,
+              "ratio": 0.9498
+            },
+            "avg_LineS_ms": {
+              "value_ms": 1074.42,
+              "ratio": 0.0203
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1435.3,
+              "ratio": 0.0271
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 7.01988,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 67.1371,
+              "ratio": 0.0013
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 151.852,
+              "ratio": 0.003
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 50039.4,
+              "ratio": 0.9952
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 6.92541,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9997,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 14473,
+              "ratio": 0.2892
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 7541.67,
+              "ratio": 0.1507
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 14694.9,
+              "ratio": 0.2937
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 13065.2,
+              "ratio": 0.2611
+            }
+          },
+          "pcg_breakdown_sum": 0.9947
+        },
+        {
+          "notes": "friction=0.1",
+          "avg_TimeTot_ms": 45693.6,
+          "avg_LSolver_ms": 43528.5,
+          "avg_LSolver_PCG_ms": 43337.9,
+          "avg_newton": 48.58,
+          "avg_cg": 46044,
+          "avg_contact_pairs": 4269.98,
+          "cg_per_newton": 947.8,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 130.951,
+              "ratio": 0.0029
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 43528.5,
+              "ratio": 0.9526
+            },
+            "avg_LineS_ms": {
+              "value_ms": 840.092,
+              "ratio": 0.0184
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1194.07,
+              "ratio": 0.0261
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 6.07785,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 37.3269,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 134.934,
+              "ratio": 0.0031
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 43337.9,
+              "ratio": 0.9956
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 6.11348,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 12546.2,
+              "ratio": 0.2895
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6547.5,
+              "ratio": 0.1511
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 12692.3,
+              "ratio": 0.2929
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 11300.3,
+              "ratio": 0.2607
+            }
+          },
+          "pcg_breakdown_sum": 0.9942
+        },
+        {
+          "notes": "friction=0.2 (default)",
+          "avg_TimeTot_ms": 41806.9,
+          "avg_LSolver_ms": 39743.6,
+          "avg_LSolver_PCG_ms": 39563.8,
+          "avg_newton": 48.56,
+          "avg_cg": 46875,
+          "avg_contact_pairs": 4388.27,
+          "cg_per_newton": 965.3,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 124.46,
+              "ratio": 0.003
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 39743.6,
+              "ratio": 0.9506
+            },
+            "avg_LineS_ms": {
+              "value_ms": 763.104,
+              "ratio": 0.0183
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1175.77,
+              "ratio": 0.0281
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.58833,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 35.732,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 127.633,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 39563.8,
+              "ratio": 0.9955
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.38762,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 11467.1,
+              "ratio": 0.2898
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6017.65,
+              "ratio": 0.1521
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 11608.6,
+              "ratio": 0.2934
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 10219.1,
+              "ratio": 0.2583
+            }
+          },
+          "pcg_breakdown_sum": 0.9936
+        },
+        {
+          "notes": "friction=0.5",
+          "avg_TimeTot_ms": 39254.6,
+          "avg_LSolver_ms": 37187,
+          "avg_LSolver_PCG_ms": 37028.4,
+          "avg_newton": 41.34,
+          "avg_cg": 40273.3,
+          "avg_contact_pairs": 4324.39,
+          "cg_per_newton": 974.2,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 107.55,
+              "ratio": 0.0027
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 37187,
+              "ratio": 0.9473
+            },
+            "avg_LineS_ms": {
+              "value_ms": 685.478,
+              "ratio": 0.0175
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1274.61,
+              "ratio": 0.0325
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.10722,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 30.4633,
+              "ratio": 0.0008
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 112.93,
+              "ratio": 0.003
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 37028.4,
+              "ratio": 0.9957
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.04049,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9997,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 10718.3,
+              "ratio": 0.2895
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 5606.53,
+              "ratio": 0.1514
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 10871.8,
+              "ratio": 0.2936
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 9609.02,
+              "ratio": 0.2595
+            }
+          },
+          "pcg_breakdown_sum": 0.994
+        },
+        {
+          "notes": "friction=1.0",
+          "avg_TimeTot_ms": 36162.1,
+          "avg_LSolver_ms": 34292.8,
+          "avg_LSolver_PCG_ms": 34139.6,
+          "avg_newton": 40.43,
+          "avg_cg": 37177.4,
+          "avg_contact_pairs": 4510.39,
+          "cg_per_newton": 919.55,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 105.029,
+              "ratio": 0.0029
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 34292.8,
+              "ratio": 0.9483
+            },
+            "avg_LineS_ms": {
+              "value_ms": 629.745,
+              "ratio": 0.0174
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1134.53,
+              "ratio": 0.0314
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 4.97645,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 29.9365,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 108.516,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 34139.6,
+              "ratio": 0.9955
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 4.89477,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 9881.54,
+              "ratio": 0.2894
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 5164.53,
+              "ratio": 0.1513
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 10006.3,
+              "ratio": 0.2931
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 8880.79,
+              "ratio": 0.2601
+            }
+          },
+          "pcg_breakdown_sum": 0.9939
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_stiffness",
+      "json_file": "exp_0610__exp_sweep_stiffness.json",
+      "rows": [
+        {
+          "notes": "poisson=0.2",
+          "avg_TimeTot_ms": 41015.7,
+          "avg_LSolver_ms": 38766.3,
+          "avg_LSolver_PCG_ms": 38551.9,
+          "avg_newton": 50.98,
+          "avg_cg": 44962.8,
+          "avg_contact_pairs": 3618.97,
+          "cg_per_newton": 881.97,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 130.945,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 38766.3,
+              "ratio": 0.9452
+            },
+            "avg_LineS_ms": {
+              "value_ms": 832.938,
+              "ratio": 0.0203
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1285.48,
+              "ratio": 0.0313
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.97359,
+              "ratio": 0.0002
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 61.8706,
+              "ratio": 0.0016
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 134.952,
+              "ratio": 0.0035
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 38551.9,
+              "ratio": 0.9945
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.76382,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 11171.1,
+              "ratio": 0.2898
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 5863.57,
+              "ratio": 0.1521
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 11296.5,
+              "ratio": 0.293
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 9992.78,
+              "ratio": 0.2592
+            }
+          },
+          "pcg_breakdown_sum": 0.9941
+        },
+        {
+          "notes": "poisson=0.3",
+          "avg_TimeTot_ms": 43060.4,
+          "avg_LSolver_ms": 40980.7,
+          "avg_LSolver_PCG_ms": 40796.1,
+          "avg_newton": 48.64,
+          "avg_cg": 45671.1,
+          "avg_contact_pairs": 4090.05,
+          "cg_per_newton": 938.96,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 125.919,
+              "ratio": 0.0029
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 40980.7,
+              "ratio": 0.9517
+            },
+            "avg_LineS_ms": {
+              "value_ms": 758.813,
+              "ratio": 0.0176
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1194.99,
+              "ratio": 0.0278
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.82326,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 35.9622,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 131.463,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 40796.1,
+              "ratio": 0.9955
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.65881,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 11807,
+              "ratio": 0.2894
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6176.74,
+              "ratio": 0.1514
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 11985.3,
+              "ratio": 0.2938
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 10586.5,
+              "ratio": 0.2595
+            }
+          },
+          "pcg_breakdown_sum": 0.9941
+        },
+        {
+          "notes": "poisson=0.4",
+          "avg_TimeTot_ms": 42561.4,
+          "avg_LSolver_ms": 40675.5,
+          "avg_LSolver_PCG_ms": 40505.3,
+          "avg_newton": 44.81,
+          "avg_cg": 44927.5,
+          "avg_contact_pairs": 4079.6,
+          "cg_per_newton": 1002.62,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 115.303,
+              "ratio": 0.0027
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 40675.5,
+              "ratio": 0.9557
+            },
+            "avg_LineS_ms": {
+              "value_ms": 631.375,
+              "ratio": 0.0148
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1139.3,
+              "ratio": 0.0268
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.3827,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 32.8672,
+              "ratio": 0.0008
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 121.268,
+              "ratio": 0.003
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 40505.3,
+              "ratio": 0.9958
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.30472,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 11729.5,
+              "ratio": 0.2896
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6142.11,
+              "ratio": 0.1516
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 11894.6,
+              "ratio": 0.2937
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 10498.4,
+              "ratio": 0.2592
+            }
+          },
+          "pcg_breakdown_sum": 0.9941
+        },
+        {
+          "notes": "poisson=0.45",
+          "avg_TimeTot_ms": 43161.8,
+          "avg_LSolver_ms": 41003.3,
+          "avg_LSolver_PCG_ms": 40831.5,
+          "avg_newton": 44.93,
+          "avg_cg": 45265.9,
+          "avg_contact_pairs": 4133.75,
+          "cg_per_newton": 1007.48,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 116.446,
+              "ratio": 0.0027
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 41003.3,
+              "ratio": 0.95
+            },
+            "avg_LineS_ms": {
+              "value_ms": 751.403,
+              "ratio": 0.0174
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1290.66,
+              "ratio": 0.0299
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.45117,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 33.1725,
+              "ratio": 0.0008
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 122.31,
+              "ratio": 0.003
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 40831.5,
+              "ratio": 0.9958
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.38625,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 11809.1,
+              "ratio": 0.2892
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6181.93,
+              "ratio": 0.1514
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 12000.6,
+              "ratio": 0.2939
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 10594.5,
+              "ratio": 0.2595
+            }
+          },
+          "pcg_breakdown_sum": 0.994
+        },
+        {
+          "notes": "poisson=0.49 (default)",
+          "avg_TimeTot_ms": 44661.9,
+          "avg_LSolver_ms": 42555.8,
+          "avg_LSolver_PCG_ms": 42366.2,
+          "avg_newton": 49.56,
+          "avg_cg": 47067.5,
+          "avg_contact_pairs": 4467.69,
+          "cg_per_newton": 949.71,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 130.652,
+              "ratio": 0.0029
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 42555.8,
+              "ratio": 0.9528
+            },
+            "avg_LineS_ms": {
+              "value_ms": 781.32,
+              "ratio": 0.0175
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1194.14,
+              "ratio": 0.0267
+            }
+          },
+          "breakdown_sum": 0.9999,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 6.05741,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 37.3856,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 134.366,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 42366.2,
+              "ratio": 0.9955
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.89339,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 12261.6,
+              "ratio": 0.2894
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6417.06,
+              "ratio": 0.1515
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 12456.9,
+              "ratio": 0.294
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 10975,
+              "ratio": 0.2591
+            }
+          },
+          "pcg_breakdown_sum": 0.994
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_stretch",
+      "json_file": "exp_0610__exp_sweep_stretch.json",
+      "rows": [
+        {
+          "notes": "stretch=5e3 (very soft), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 3078.09,
+          "avg_LSolver_ms": 2264.91,
+          "avg_LSolver_PCG_ms": 2220.49,
+          "avg_newton": 19.25,
+          "avg_cg": 21481.8,
+          "avg_contact_pairs": 17796.9,
+          "cg_per_newton": 1115.94,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 25.6156,
+              "ratio": 0.0083
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 2264.91,
+              "ratio": 0.7358
+            },
+            "avg_LineS_ms": {
+              "value_ms": 143.962,
+              "ratio": 0.0468
+            },
+            "avg_Misc_ms": {
+              "value_ms": 643.61,
+              "ratio": 0.2091
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.224559,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 20.1825,
+              "ratio": 0.0089
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 24.5706,
+              "ratio": 0.0108
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 2220.49,
+              "ratio": 0.9804
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.197901,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 1.0003,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 706.457,
+              "ratio": 0.3182
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 495.559,
+              "ratio": 0.2232
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 615.765,
+              "ratio": 0.2773
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 304.759,
+              "ratio": 0.1372
+            }
+          },
+          "pcg_breakdown_sum": 0.9559
+        },
+        {
+          "notes": "stretch=1e4 (soft), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 5607.91,
+          "avg_LSolver_ms": 4112.13,
+          "avg_LSolver_PCG_ms": 4054.32,
+          "avg_newton": 30.78,
+          "avg_cg": 39221.9,
+          "avg_contact_pairs": 9273.91,
+          "cg_per_newton": 1274.27,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 41.6591,
+              "ratio": 0.0074
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4112.13,
+              "ratio": 0.7333
+            },
+            "avg_LineS_ms": {
+              "value_ms": 314.664,
+              "ratio": 0.0561
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1139.46,
+              "ratio": 0.2032
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.37143,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 18.2818,
+              "ratio": 0.0044
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 38.4528,
+              "ratio": 0.0094
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 4054.32,
+              "ratio": 0.9859
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.325108,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1293.6,
+              "ratio": 0.3191
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 904.376,
+              "ratio": 0.2231
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1119.69,
+              "ratio": 0.2762
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 556.777,
+              "ratio": 0.1373
+            }
+          },
+          "pcg_breakdown_sum": 0.9557
+        },
+        {
+          "notes": "stretch=5e4 (default), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 6733.33,
+          "avg_LSolver_ms": 4946.54,
+          "avg_LSolver_PCG_ms": 4855.75,
+          "avg_newton": 50.45,
+          "avg_cg": 46928.6,
+          "avg_contact_pairs": 4409.6,
+          "cg_per_newton": 930.2,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 72.7104,
+              "ratio": 0.0108
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4946.54,
+              "ratio": 0.7346
+            },
+            "avg_LineS_ms": {
+              "value_ms": 633.51,
+              "ratio": 0.0941
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1080.57,
+              "ratio": 0.1605
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.612638,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 25.9508,
+              "ratio": 0.0052
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 63.0558,
+              "ratio": 0.0127
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 4855.75,
+              "ratio": 0.9816
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.535811,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9997,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1551.86,
+              "ratio": 0.3196
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1082.13,
+              "ratio": 0.2229
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1337.16,
+              "ratio": 0.2754
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 666.395,
+              "ratio": 0.1372
+            }
+          },
+          "pcg_breakdown_sum": 0.9551
+        },
+        {
+          "notes": "stretch=1e5 (stiff), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 6990.74,
+          "avg_LSolver_ms": 4906.41,
+          "avg_LSolver_PCG_ms": 4809.5,
+          "avg_newton": 51.38,
+          "avg_cg": 46449.1,
+          "avg_contact_pairs": 2716.76,
+          "cg_per_newton": 904.03,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 69.5549,
+              "ratio": 0.0099
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4906.41,
+              "ratio": 0.7018
+            },
+            "avg_LineS_ms": {
+              "value_ms": 711.795,
+              "ratio": 0.1018
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1302.98,
+              "ratio": 0.1864
+            }
+          },
+          "breakdown_sum": 0.9999,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.659703,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 24.3391,
+              "ratio": 0.005
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 70.6736,
+              "ratio": 0.0144
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 4809.5,
+              "ratio": 0.9802
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.5497,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1533.2,
+              "ratio": 0.3188
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1071.07,
+              "ratio": 0.2227
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1325.31,
+              "ratio": 0.2756
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 660.629,
+              "ratio": 0.1374
+            }
+          },
+          "pcg_breakdown_sum": 0.9545
+        },
+        {
+          "notes": "stretch=5e5 (very stiff), bend=1e8 (fixed)",
+          "avg_TimeTot_ms": 6979.98,
+          "avg_LSolver_ms": 5708.37,
+          "avg_LSolver_PCG_ms": 5597.69,
+          "avg_newton": 63.59,
+          "avg_cg": 54019.9,
+          "avg_contact_pairs": 756.94,
+          "cg_per_newton": 849.5,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 86.5458,
+              "ratio": 0.0124
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 5708.37,
+              "ratio": 0.8178
+            },
+            "avg_LineS_ms": {
+              "value_ms": 472.065,
+              "ratio": 0.0676
+            },
+            "avg_Misc_ms": {
+              "value_ms": 712.995,
+              "ratio": 0.1021
+            }
+          },
+          "breakdown_sum": 0.9999,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.79102,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 29.0599,
+              "ratio": 0.0051
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 79.3045,
+              "ratio": 0.0139
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 5597.69,
+              "ratio": 0.9806
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.68137,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1785.36,
+              "ratio": 0.3189
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1248.39,
+              "ratio": 0.223
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1533.91,
+              "ratio": 0.274
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 770.817,
+              "ratio": 0.1377
+            }
+          },
+          "pcg_breakdown_sum": 0.9536
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "exp_sweep_timestep",
+      "json_file": "exp_0610__exp_sweep_timestep.json",
+      "rows": [
+        {
+          "notes": "dt=5e-3",
+          "avg_TimeTot_ms": 11515.3,
+          "avg_LSolver_ms": 11226.9,
+          "avg_LSolver_PCG_ms": 11172.5,
+          "avg_newton": 15.43,
+          "avg_cg": 12240,
+          "avg_contact_pairs": 3353.7,
+          "cg_per_newton": 793.26,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 36.6974,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 11226.9,
+              "ratio": 0.975
+            },
+            "avg_LineS_ms": {
+              "value_ms": 149.267,
+              "ratio": 0.013
+            },
+            "avg_Misc_ms": {
+              "value_ms": 102.496,
+              "ratio": 0.0089
+            }
+          },
+          "breakdown_sum": 1.0001,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 1.78232,
+              "ratio": 0.0002
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 10.4017,
+              "ratio": 0.0009
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 38.5967,
+              "ratio": 0.0034
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 11172.5,
+              "ratio": 0.9952
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 1.77471,
+              "ratio": 0.0002
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 3229.43,
+              "ratio": 0.2891
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1695.08,
+              "ratio": 0.1517
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 3275.56,
+              "ratio": 0.2932
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 2906.41,
+              "ratio": 0.2601
+            }
+          },
+          "pcg_breakdown_sum": 0.9941
+        },
+        {
+          "notes": "dt=1e-2 (default)",
+          "avg_TimeTot_ms": 45132,
+          "avg_LSolver_ms": 43031.7,
+          "avg_LSolver_PCG_ms": 42811.1,
+          "avg_newton": 49.17,
+          "avg_cg": 47137,
+          "avg_contact_pairs": 4454.77,
+          "cg_per_newton": 958.65,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 130.035,
+              "ratio": 0.0029
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 43031.7,
+              "ratio": 0.9535
+            },
+            "avg_LineS_ms": {
+              "value_ms": 783.899,
+              "ratio": 0.0174
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1186.41,
+              "ratio": 0.0263
+            }
+          },
+          "breakdown_sum": 1.0001,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 5.90945,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 62.4809,
+              "ratio": 0.0015
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 140.374,
+              "ratio": 0.0033
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 42811.1,
+              "ratio": 0.9949
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 5.93496,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 12368.1,
+              "ratio": 0.2889
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 6484.23,
+              "ratio": 0.1515
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 12566.7,
+              "ratio": 0.2935
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 11135.8,
+              "ratio": 0.2601
+            }
+          },
+          "pcg_breakdown_sum": 0.994
+        },
+        {
+          "notes": "dt=2e-2",
+          "avg_TimeTot_ms": 75064.8,
+          "avg_LSolver_ms": 73117.8,
+          "avg_LSolver_PCG_ms": 72854.8,
+          "avg_newton": 33.99,
+          "avg_cg": 230676,
+          "avg_contact_pairs": 4434.82,
+          "cg_per_newton": 6786.58,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 54.1717,
+              "ratio": 0.0007
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 73117.8,
+              "ratio": 0.9741
+            },
+            "avg_LineS_ms": {
+              "value_ms": 366.197,
+              "ratio": 0.0049
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1526.62,
+              "ratio": 0.0203
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 1.12909,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 17.9976,
+              "ratio": 0.0002
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 242.385,
+              "ratio": 0.0033
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 72854.8,
+              "ratio": 0.9964
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.907553,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 21491.1,
+              "ratio": 0.295
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 12296.7,
+              "ratio": 0.1688
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 21276,
+              "ratio": 0.292
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 16586.3,
+              "ratio": 0.2277
+            }
+          },
+          "pcg_breakdown_sum": 0.9835
+        },
+        {
+          "notes": "dt=4e-2",
+          "avg_TimeTot_ms": 21676.8,
+          "avg_LSolver_ms": 17958.3,
+          "avg_LSolver_PCG_ms": 17819.2,
+          "avg_newton": 61.09,
+          "avg_cg": 161858,
+          "avg_contact_pairs": 4654.4,
+          "cg_per_newton": 2649.5,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 84.5042,
+              "ratio": 0.0039
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 17958.3,
+              "ratio": 0.8285
+            },
+            "avg_LineS_ms": {
+              "value_ms": 726.074,
+              "ratio": 0.0335
+            },
+            "avg_Misc_ms": {
+              "value_ms": 2907.85,
+              "ratio": 0.1341
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.79547,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 30.1564,
+              "ratio": 0.0017
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 107.626,
+              "ratio": 0.006
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 17819.2,
+              "ratio": 0.9923
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.690293,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 1.0,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 5572.03,
+              "ratio": 0.3127
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 3942.1,
+              "ratio": 0.2212
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 5091.13,
+              "ratio": 0.2857
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 2398.72,
+              "ratio": 0.1346
+            }
+          },
+          "pcg_breakdown_sum": 0.9542
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "focus_dhat_dt",
+      "json_file": "exp_0610__focus_dhat_dt.json",
+      "rows": [
+        {
+          "notes": "dhat=1e-4, dt=2e-2 (key combo)",
+          "avg_TimeTot_ms": 24589,
+          "avg_LSolver_ms": 21026.8,
+          "avg_LSolver_PCG_ms": 20960.1,
+          "avg_newton": 24.59,
+          "avg_cg": 209233,
+          "avg_contact_pairs": 636.094,
+          "cg_per_newton": 8508.87,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 32.4393,
+              "ratio": 0.0013
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 21026.8,
+              "ratio": 0.8551
+            },
+            "avg_LineS_ms": {
+              "value_ms": 184.778,
+              "ratio": 0.0075
+            },
+            "avg_Misc_ms": {
+              "value_ms": 3344.92,
+              "ratio": 0.136
+            }
+          },
+          "breakdown_sum": 0.9999,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.298696,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 28.0763,
+              "ratio": 0.0013
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 37.8973,
+              "ratio": 0.0018
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 20960.1,
+              "ratio": 0.9968
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.262403,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 6659.58,
+              "ratio": 0.3177
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 4889.27,
+              "ratio": 0.2333
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 5628.61,
+              "ratio": 0.2685
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 2757.42,
+              "ratio": 0.1316
+            }
+          },
+          "pcg_breakdown_sum": 0.9511
+        }
+      ]
+    },
+    {
+      "experiment": "exp_0610",
+      "subdir": "focus_dt_bend",
+      "json_file": "exp_0610__focus_dt_bend.json",
+      "rows": [
+        {
+          "notes": "dt=1e-2, bend=1e8 (default baseline)",
+          "avg_TimeTot_ms": 6757.73,
+          "avg_LSolver_ms": 4756.73,
+          "avg_LSolver_PCG_ms": 4636.56,
+          "avg_newton": 49.55,
+          "avg_cg": 46752.3,
+          "avg_contact_pairs": 4430.88,
+          "cg_per_newton": 943.54,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 70.7484,
+              "ratio": 0.0105
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 4756.73,
+              "ratio": 0.7039
+            },
+            "avg_LineS_ms": {
+              "value_ms": 712.938,
+              "ratio": 0.1055
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1217.32,
+              "ratio": 0.1801
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.596241,
+              "ratio": 0.0001
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 55.0241,
+              "ratio": 0.0116
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 63.4166,
+              "ratio": 0.0133
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 4636.56,
+              "ratio": 0.9747
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.503469,
+              "ratio": 0.0001
+            }
+          },
+          "lsolver_breakdown_sum": 0.9998,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 1480.45,
+              "ratio": 0.3193
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 1091.18,
+              "ratio": 0.2353
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 1237.48,
+              "ratio": 0.2669
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 614.248,
+              "ratio": 0.1325
+            }
+          },
+          "pcg_breakdown_sum": 0.954
+        },
+        {
+          "notes": "dt=2e-2, bend=1e8",
+          "avg_TimeTot_ms": 23344.6,
+          "avg_LSolver_ms": 21459.8,
+          "avg_LSolver_PCG_ms": 21250.8,
+          "avg_newton": 34.51,
+          "avg_cg": 211330,
+          "avg_contact_pairs": 4800.76,
+          "cg_per_newton": 6123.73,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 46.9739,
+              "ratio": 0.002
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 21459.8,
+              "ratio": 0.9193
+            },
+            "avg_LineS_ms": {
+              "value_ms": 343.267,
+              "ratio": 0.0147
+            },
+            "avg_Misc_ms": {
+              "value_ms": 1494.54,
+              "ratio": 0.064
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.407945,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 16.7079,
+              "ratio": 0.0008
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 191.182,
+              "ratio": 0.0089
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 21250.8,
+              "ratio": 0.9903
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.351323,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 1.0,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 6716.33,
+              "ratio": 0.3161
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 5013.53,
+              "ratio": 0.2359
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 5674.76,
+              "ratio": 0.267
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 2787.38,
+              "ratio": 0.1312
+            }
+          },
+          "pcg_breakdown_sum": 0.9502
+        },
+        {
+          "notes": "dt=1e-2, bend=1e9",
+          "avg_TimeTot_ms": 30569.4,
+          "avg_LSolver_ms": 30145.1,
+          "avg_LSolver_PCG_ms": 29992.9,
+          "avg_newton": 26.94,
+          "avg_cg": 297589,
+          "avg_contact_pairs": 16756.1,
+          "cg_per_newton": 11046.36,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 36.405,
+              "ratio": 0.0012
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 30145.1,
+              "ratio": 0.9861
+            },
+            "avg_LineS_ms": {
+              "value_ms": 178.541,
+              "ratio": 0.0058
+            },
+            "avg_Misc_ms": {
+              "value_ms": 209.41,
+              "ratio": 0.0069
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 0.353254,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 14.3006,
+              "ratio": 0.0005
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 137.183,
+              "ratio": 0.0046
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 29992.9,
+              "ratio": 0.995
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 0.282303,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 1.0001,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 9510.8,
+              "ratio": 0.3171
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 7011.26,
+              "ratio": 0.2338
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 8088.99,
+              "ratio": 0.2697
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 3958.35,
+              "ratio": 0.132
+            }
+          },
+          "pcg_breakdown_sum": 0.9526
+        },
+        {
+          "notes": "dt=2e-2, bend=1e9 (key combo)",
+          "avg_TimeTot_ms": 189164,
+          "avg_LSolver_ms": 185037,
+          "avg_LSolver_PCG_ms": 184380,
+          "avg_newton": 116.5,
+          "avg_cg": 1724000.0,
+          "avg_contact_pairs": 17235.4,
+          "cg_per_newton": 14798.28,
+          "breakdown": {
+            "avg_Hess_ms": {
+              "value_ms": 159.642,
+              "ratio": 0.0008
+            },
+            "avg_LSolver_ms": {
+              "value_ms": 185037,
+              "ratio": 0.9782
+            },
+            "avg_LineS_ms": {
+              "value_ms": 700.362,
+              "ratio": 0.0037
+            },
+            "avg_Misc_ms": {
+              "value_ms": 3267.7,
+              "ratio": 0.0173
+            }
+          },
+          "breakdown_sum": 1.0,
+          "lsolver_breakdown": {
+            "avg_LSolver_SubsystemAssemble_ms": {
+              "value_ms": 1.77279,
+              "ratio": 0.0
+            },
+            "avg_LSolver_TripletOps_ms": {
+              "value_ms": 61.174,
+              "ratio": 0.0003
+            },
+            "avg_LSolver_PreconditionerAssemble_ms": {
+              "value_ms": 594.096,
+              "ratio": 0.0032
+            },
+            "avg_LSolver_PCG_ms": {
+              "value_ms": 184380,
+              "ratio": 0.9964
+            },
+            "avg_LSolver_SolutionDistribute_ms": {
+              "value_ms": 1.33,
+              "ratio": 0.0
+            }
+          },
+          "lsolver_breakdown_sum": 0.9999,
+          "pcg_breakdown": {
+            "avg_PCG_PreconditionerApply_ms": {
+              "value_ms": 57997.1,
+              "ratio": 0.3146
+            },
+            "avg_PCG_SpMV_ms": {
+              "value_ms": 42346.3,
+              "ratio": 0.2297
+            },
+            "avg_PCG_Dot_ms": {
+              "value_ms": 51003.3,
+              "ratio": 0.2766
+            },
+            "avg_PCG_Axpby_ms": {
+              "value_ms": 24428.6,
+              "ratio": 0.1325
+            }
+          },
+          "pcg_breakdown_sum": 0.9534
+        }
+      ]
+    }
+  ]
+}

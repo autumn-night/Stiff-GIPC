@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gipc/runtime_config.h>
+#include <gipc/utils/json.h>
 
 #include <string>
 #include <vector>
@@ -25,6 +26,9 @@ struct BenchmarkRunConfig
     std::string output_tag;
     std::string notes;
     std::string manifest_path;
+
+    // Preconditioner improvement flags (passed through to RuntimeBackendConfig)
+    gipc::Json preconditioner_config;
 };
 
 struct BenchmarkSuiteConfig

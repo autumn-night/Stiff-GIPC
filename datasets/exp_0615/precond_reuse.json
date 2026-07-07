@@ -1,0 +1,54 @@
+{
+  "output_root": "Output/experiments/exp_0615/precond_reuse",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford"
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "bend1e8_reuse_cpnum_threshold",
+      "notes": "默认参数: cpNum 变化>10% 才 reaggre",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 0.1,
+        "precond_reuse_interval": 0
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_reuse_cpnum_threshold",
+      "notes": "高 bend: cpNum 变化>10% 才 reaggre",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 0.1,
+        "precond_reuse_interval": 0
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "bend1e8_reuse_every_5",
+      "notes": "默认参数: 每 5 步 reaggre 一次",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 1.0,
+        "precond_reuse_interval": 5
+      }
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_reuse_every_5",
+      "notes": "高 bend: 每 5 步 reaggre 一次",
+      "preconditioner_config": {
+        "precond_reuse": true,
+        "precond_reuse_cpnum_threshold": 1.0,
+        "precond_reuse_interval": 5
+      }
+    }
+  ]
+}

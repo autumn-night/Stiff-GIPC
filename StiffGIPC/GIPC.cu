@@ -11051,6 +11051,11 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
 
     stats_at_current_frame["newton"] = gipc::Json::array();
 
+    // Step 3: reset PCG tolerance to default at the start of each solve_subIP call
+    // (inexact Newton may have changed it in a previous call)
+    if(m_global_linear_system)
+        m_global_linear_system->set_solver_tolerance(pcg_threshold);
+
     int iterCap = 10000, k = 0;
 
     CUDA_SAFE_CALL(cudaMemset(_moveDir, 0, vertexNum * sizeof(double3)));
@@ -11098,6 +11103,17 @@ int              GIPC::solve_subIP(device_TetraData& TetMesh,
             break;
         }
         cudaEventRecord(end0);
+
+        // Step 3: inexact Newton CG tolerance adjustment
+        if(runtime_backend_config.inexact_newton && m_global_linear_system)
+        {
+            double eta = pcg_threshold;  // default tolerance
+            if(k < runtime_backend_config.inexact_early_steps)
+                eta = runtime_backend_config.inexact_eta_early;
+            else if(k < runtime_backend_config.inexact_mid_steps)
+                eta = runtime_backend_config.inexact_eta_mid;
+            m_global_linear_system->set_solver_tolerance(eta);
+        }
 
         auto cg_count = calculateMovingDirection(TetMesh, h_cpNum[0], pcg_data.P_type);
         //std::cout << "[" << k << "]"

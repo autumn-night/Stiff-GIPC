@@ -68,6 +68,9 @@ class GlobalLinearSystem
      */
     gipc::SizeT solve_linear_system();
 
+    // Step 3: allow dynamic tolerance adjustment for inexact Newton
+    void set_solver_tolerance(Float tol);
+
     Json               as_json() const;
     GIPCTripletMatrix* gipc_global_triplet = nullptr;
 

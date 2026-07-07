@@ -130,4 +130,30 @@ bool try_parse_mas_backend(std::string_view value, MasBackend& backend)
     }
     return false;
 }
+
+void apply_preconditioner_config_from_json(const Json& json, RuntimeBackendConfig& config)
+{
+    if(json.contains("bend_aware_neighbor"))
+        config.bend_aware_neighbor = json["bend_aware_neighbor"].get<bool>();
+    if(json.contains("contact_aware_precond"))
+        config.contact_aware_precond = json["contact_aware_precond"].get<bool>();
+    if(json.contains("inexact_newton"))
+        config.inexact_newton = json["inexact_newton"].get<bool>();
+    if(json.contains("inexact_eta_early"))
+        config.inexact_eta_early = json["inexact_eta_early"].get<double>();
+    if(json.contains("inexact_eta_mid"))
+        config.inexact_eta_mid = json["inexact_eta_mid"].get<double>();
+    if(json.contains("inexact_early_steps"))
+        config.inexact_early_steps = json["inexact_early_steps"].get<int>();
+    if(json.contains("inexact_mid_steps"))
+        config.inexact_mid_steps = json["inexact_mid_steps"].get<int>();
+    if(json.contains("precond_reuse"))
+        config.precond_reuse = json["precond_reuse"].get<bool>();
+    if(json.contains("precond_reuse_interval"))
+        config.precond_reuse_interval = json["precond_reuse_interval"].get<int>();
+    if(json.contains("precond_reuse_cpnum_threshold"))
+        config.precond_reuse_cpnum_threshold = json["precond_reuse_cpnum_threshold"].get<double>();
+    if(json.contains("diag_cluster_stats"))
+        config.diag_cluster_stats = json["diag_cluster_stats"].get<bool>();
+}
 }  // namespace gipc

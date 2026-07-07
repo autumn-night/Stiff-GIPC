@@ -1,0 +1,36 @@
+{
+  "output_root": "Output/experiments/exp_0615/inexact_newton",
+  "defaults": {
+    "frames": 100,
+    "warmup": 10,
+    "baseline": "StiffGIPC_CEMAS_SRBK",
+    "dataset": "stanford",
+    "task_id": "ArmadilloStand_0",
+    "scene": "local_dataset",
+    "asset_root": "../stanford",
+    "preconditioner_config": {
+      "inexact_newton": true,
+      "inexact_eta_early": 0.01,
+      "inexact_eta_mid": 0.001,
+      "inexact_early_steps": 5,
+      "inexact_mid_steps": 15
+    }
+  },
+  "runs": [
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e8.txt",
+      "output_tag": "default_inexact_1e-2_1e-3",
+      "notes": "Inexact Newton: [0~5步=1e-2, 6~15步=1e-3, 16+步=1e-4]"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_bend_1e9.txt",
+      "output_tag": "bend1e9_inexact_1e-2_1e-3",
+      "notes": "高 bend: Inexact Newton (关键验证)"
+    },
+    {
+      "settings": "../exp_0528/settings/parameterSetting_dt_2e-2.txt",
+      "output_tag": "dt2e-2_inexact_1e-2_1e-3",
+      "notes": "大 dt: Inexact Newton"
+    }
+  ]
+}
